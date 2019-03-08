@@ -93,3 +93,7 @@ form div rightToLeftDiv {
         border-bottom: 0;
     }
 }
+
+li a{
+    text-align:right;
+}
