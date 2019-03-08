@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="he">
 <head>
 
     <meta charset="utf-8" />
@@ -9,11 +9,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../Scripts/ajaxCall.js"></script>
+    <link href="../stylesheets/rgister.css" rel="stylesheet" />
     <title>Registration Page</title>
     <script>
         $(document).ready(function () {
 
             $("#pForm").submit(formSubmited);
+            //document.getElementById("pForm").submit(formSubmited);
+           
         });
 
         function AddUser() {
@@ -51,8 +54,7 @@
 <body>
     <div class="container">
         <h1 class="well">טופס הרשמה</h1>
-        <div class="col-lg-12 well">
-            <div class="row">
+        
                 <form id="pForm">
                     <div class="col-sm-12">
                         
@@ -181,10 +183,8 @@
                             </div>
                         </div>
                     
-                    <submit id="sub" type="submit" class="btn btn-lg btn-info">שלח</submit>
+                    <button type="submit" class="btn btn-lg btn-info">שלח</button>
                 </form>
             </div>
-        </div>
-    </div>
 </body>
 </html>
