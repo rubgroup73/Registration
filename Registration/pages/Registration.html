@@ -3,21 +3,89 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <link href="../stylesheets/rgister.css" rel="stylesheet" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
     <script src="../Scripts/ajaxCalls.js"></script>
-    <title></title>
+    <title>Registration Page</title>
+    <script>
+
+    </script>
 </head>
 <body>
-
+    <div class="container">
+        <h1 class="well">טופס הרשמה</h1>
+        <div class="col-lg-12 well">
+            <div class="row">
+                <form>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-6 form-group rightToLeftDiv">
+                                <label>שם מלא</label>
+                                <input id="fullname" type="text" placeholder="הכנס שם מלא כאן.." class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label>סיסמא</label>
+                                <input id="password" type="text" placeholder="הכנס הסיסמא כאן.." class="form-control">
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label id="username">שם משתמש</label>
+                                <input type="text" placeholder="הכנס שם משתמש כאן.." class="form-control">
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-sm-6 form-group rightToLeftDiv">
+                                <label>עיר</label>
+                                <input type="text" placeholder="הכנס עיר כאן" class="form-control">
+                            </div>
+                            
+                            <div dir="rtl" class="col-sm-3 form-group ">
+                                <label>מין</label>
+                                <label class="radio-inline"><input type="radio" name="optradio" checked>זכר</label>
+                                <label class="radio-inline"><input type="radio" name="optradio" checked>נקבה</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label>Title</label>
+                                <input type="text" placeholder="Enter Designation Here.." class="form-control">
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label>Company</label>
+                                <input type="text" placeholder="Enter Company Name Here.." class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" placeholder="Enter Phone Number Here.." class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="text" placeholder="Enter Email Address Here.." class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="text" placeholder="Enter Website Name Here.." class="form-control">
+                        </div>
+                        <button type="button" class="btn btn-lg btn-info">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
