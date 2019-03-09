@@ -7,16 +7,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="../stylesheets/rgister.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCall.js"></script>
     <link href="../stylesheets/rgister.css" rel="stylesheet" />
     <title>Registration Page</title>
     <script>
+        hourArr = ["8:00","8:30","9:00","9:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00"]
         $(document).ready(function () {
-
+            createHourList();
             $("#pForm").submit(formSubmited);
-            //document.getElementById("pForm").submit(formSubmited);
-           
         });
 
         function AddUser() {
@@ -48,29 +47,39 @@
             AddUser();
             return false;
         }
+        function createHourList() {
+            var hourList1 = "<option value='-1' selected>בחר</option>";
+            var hourList2 = "<option value='-1' selected>בחר</option>";
+            
+            for (let i = 0; i < hourArr.length; i++) {
+                hourList1 += "<option value = '" + i + "'>" + hourArr[i] + "</option>";
+                hourList2 += "<option value = '" + i + "'>" + hourArr[i] + "</option>";
+            }
+            document.getElementById("prefhour1").innerHTML = hourList1;
+            document.getElementById("prefhour2").innerHTML = hourList1;
+
+        }
+
     </script>
 
 </head>
 <body>
     <div class="container">
         <h1 class="well">טופס הרשמה</h1>
-        
                 <form id="pForm">
                     <div class="col-sm-12">
-                        
+                        <div class="col-sm-6">
+                            <label>תאריך לידה</label><br/>
+                            <input type="date"id="birth" class="form-control"/>
+                        </div>
                         <div class="row">
-                            <div class="col-sm-6 form-group rightToLeftDiv">
+                            <div class="col-sm-6 form-group"style="padding-right:0px;">
                                 <label>שם מלא</label>
                                 <input id="fullname" type="text" placeholder="הכנס שם מלא כאן" class="form-control">
                             </div>
-                            <div class="col-sm-6">
-                                <label>תאריך לידה</label>
-                                
 
-                            </div>
-                            </div>
                         </div>
-
+                    </div>
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label>סיסמא</label>
@@ -83,15 +92,15 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-6 form-group rightToLeftDiv">
-                                <label>עיר</label>
-                                <input type="number" id="city" placeholder="הכנס עיר כאן" class="form-control">
+                            <div class="col-sm-6 form-group ui-widget">
+                                <label for="city">עיר</label>
+                                <input id="city" type="text" placeholder="הכנס שם משתמש כאן" class="form-control">
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-sm-6">
                                 <label for="residence">סוג דיור</label>
                                 <select id="residence" class="form-control">
                                     <option value="-1" selected>בחר</option>
-                                    <option value="0" >בית אבות</option>
+                                    <option value="0">בית אבות</option>
                                     <option value="1">דיור מוגן</option>
                                     <option value="2">פרטי</option>
 
@@ -139,10 +148,9 @@
                             </div>
                         </div>
                     
-                   
-
                         <div class="row">
-                            <div class="form-group col-md-3">
+
+                            <div class="form-group col-sm-6">
                                 <label for="prefday1">יום מועדף ראשון</label>
                                 <select id="prefday1" class="form-control">
                                     <option value="-1" selected>בחר</option>
@@ -155,16 +163,21 @@
                                     <option value="6">שבת</option>
                                 </select>
                             </div>
-                            <div id="prefhour1" class=" rightToLeftDiv col-sm-3 form-group">
-                               
-
-
-
-
-
-
+                            <div class=" rightToLeftDiv col-sm-6 form-group">
+                                <label for="prefhour1">שעה מועדפת</label>
+                                <select id="prefhour1" value="-1" class="form-control"></select>
                             </div>
-                            <div class="form-group col-md-3">
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class=" rightToLeftDiv col-sm-6 form-group">
+                                <label for="prefhour2">שעה מועדפת</label>
+                                <select id="prefhour2" class="form-control"></select>
+                            </div>
+
+                            <div class="form-group col-sm-6 rightToLeftDiv">
                                 <label for="prefday2">יום מועדף שני</label>
                                 <select id="prefday2" class="form-control">
                                     <option value="-1" selected>בחר</option>
@@ -177,10 +190,9 @@
                                     <option value="6">שבת</option>
                                 </select>
                             </div>
-                            <div id="prefhour1" class=" rightToLeftDiv col-sm-3 form-group">
 
 
-                            </div>
+
                         </div>
                     
                     <button type="submit" class="btn btn-lg btn-info">שלח</button>
