@@ -58,7 +58,7 @@ namespace Registration.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},'{13}','{14}',{15})", user.FullName, user.Gender, user.BirthDate.Date.ToString("yyyy-MM-dd"), user.Status,user.YearsOfEducation, user.UserName, user.Password, user.Mail,user.Phone,user.Residence,user.City ,user.PrefDay1, user.PrefDay2, user.PrefHour1.Date.ToString("HH:mm"), user.PrefHour2.Date.ToString("HH:mm"),user.Score);
+            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},'{13}','{14}',{15})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status,user.YearsOfEducation, user.UserName, user.Password, user.Mail,user.Phone,user.Residence,user.City ,user.PrefDay1, user.PrefDay2, user.PrefHour1, user.PrefHour2,user.Score);
             String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefday2,prefhour1,prefhour2,score)";
             command = prefix + sb.ToString();
 

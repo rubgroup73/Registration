@@ -9,7 +9,7 @@ namespace Registration.Models
     public class User
     {
         
-        public User(string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1, int prefDay2,string phone,int city, DateTime birthDate, DateTime prefHour1 =default(DateTime), DateTime prefHour2 = default(DateTime), int score=0 ,string mail = "NO" )
+        public User(string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1, int prefDay2,string phone,int city, string birthDate, string prefHour1 , string prefHour2 , string mail,int score=0 )
         {
             FullName = fullName;
             BirthDate = birthDate;
@@ -34,7 +34,7 @@ namespace Registration.Models
         }
 
         public string FullName { get; set; }
-        public DateTime BirthDate { get; set; }
+        public string BirthDate { get; set; }
         public string Gender { get; set; }
         public string Status { get; set; }
         public int YearsOfEducation { get; set; }
@@ -45,8 +45,8 @@ namespace Registration.Models
         public int PrefDay2 { get; set; }
         public string Phone { get; set; }
         public int City { get; set; }
-        public DateTime PrefHour1 { get; set; }
-        public DateTime PrefHour2 { get; set; }
+        public string PrefHour1 { get; set; }
+        public string PrefHour2 { get; set; }
         public int Score { get; set; }
         public string Mail { get; set; }
 
