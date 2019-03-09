@@ -10,10 +10,11 @@ namespace Registration.Controllers
 {
     public class UserController : ApiController
     {
-        public void PostAdd([FromBody]User u)
+        public int PostAdd([FromBody]User u)
         {
 
-            u.insert();
+           int num = u.insert();
+            return num;
         }
     }
 }

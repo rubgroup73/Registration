@@ -16,7 +16,6 @@ namespace Registration.Models.DAL
             SqlConnection con;
             SqlCommand cmd;
 
-
             try
             {
                 con = connect("ConnectionStringPerson"); // create the connection
@@ -28,28 +27,20 @@ namespace Registration.Models.DAL
             }
 
             String cStr = BuildInsertCommand(user);      // helper method to build the insert string
+
             cmd = CreateCommand(cStr, con);             // create the command
 
             try
             {
-                cmd = CreateCommand(cStr, con);
-                int numAffected = cmd.ExecuteNonQuery();
-                return numAffected;
-            }
-            catch (SqlException ex)
-            {
-                // the exception alone won't tell you why it failed...
-                if (ex.Number == 2627)
-                {
-                    throw new Exception("The user is already exists");
-                }
-                return 0;
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
             }
             catch (Exception ex)
             {
-                return 0;
+                
                 throw (ex);
             }
+
             finally
             {
                 if (con != null)
@@ -67,8 +58,8 @@ namespace Registration.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}','{1}','{2}',{3},'{4}','{5}',{6},{7},{8},'{9}','{10}','{11}',{12},'{13})", user.FullName, user.Gender, user.Status,user.YearsOfEducation, user.UserName, user.Password, user.Residence, user.PrefDay1, user.PrefDay2, user.BirthDate.Date.ToString("yyyy-MM-dd"), user.PrefHour1.Date.ToString("HH:mm"), user.PrefHour2.Date.ToString("HH:mm"),user.Score,user.Mail);
-            String prefix = "INSERT INTO personTblNew " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail ,Residence,phone,username,password)";
+            sb.AppendFormat("Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},'{13}','{14}',{15})", user.FullName, user.Gender, user.BirthDate.Date.ToString("yyyy-MM-dd"), user.Status,user.YearsOfEducation, user.UserName, user.Password, user.Mail,user.Phone,user.Residence,user.City ,user.PrefDay1, user.PrefDay2, user.PrefHour1.Date.ToString("HH:mm"), user.PrefHour2.Date.ToString("HH:mm"),user.Score);
+            String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefday2,prefhour1,prefhour2,score)";
             command = prefix + sb.ToString();
 
             return command;
