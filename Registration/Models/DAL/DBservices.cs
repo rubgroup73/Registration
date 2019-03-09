@@ -56,14 +56,14 @@ namespace Registration.Models.DAL
         /***********************************User Confirmation In React App********************************/
         public User GetUserForConfirmation(string username, string constring, string tableName)
         {
-
+            username = username.Trim();
             User user = new User();
             SqlConnection con = null;
             try
             {
 
                 con = connect(constring); // create a connection to the database using the connection String defined in the web config file
-                string getQuery = "SELECT * FROM " + tableName + " WHERE UserName='" + username + "'";
+                string getQuery = "SELECT * FROM " + tableName + " WHERE UserName='"+ username+"'";
 
                 SqlCommand cmd = new SqlCommand(getQuery, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
