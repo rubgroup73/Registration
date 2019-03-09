@@ -7,59 +7,28 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../JSscripts/oursScripts.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link href="../stylesheets/rgister.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCall.js"></script>
-    <link href="../stylesheets/rgister.css" rel="stylesheet" />
     <title>Registration Page</title>
     <script>
-        hourArr = ["8:00","8:30","9:00","9:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00"]
+        hourArr = ["8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"]
         $(document).ready(function () {
             createHourList();
+            autofillScript();
             $("#pForm").submit(formSubmited);
         });
-
-        function AddUser() {
-            User = { // Note that the name of the fields must be identical to the names of the properties of the object in the server
-                FullName: $("#fullname").val(),
-                Gender: $("#gender").val(),
-                Status: $("#famstatus").val(),
-                YearsOfEducation: $("#education").val(),
-                UserName: $("#username").val(),
-                Password: $("#password").val(),
-                Residence: $("#residence").val()
-            }
-
-            ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
-        }
-        function userAddSuccefully(data) {
-            swal("Added!", "User is successfully Added!", "success");
-        }
-        function userNotAdded() {
-            Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong!'
-
-            })
-        }
-
-        function formSubmited() {
-            AddUser();
-            return false;
-        }
-        function createHourList() {
-            var hourList1 = "<option value='-1' selected>בחר</option>";
-            var hourList2 = "<option value='-1' selected>בחר</option>";
-            
-            for (let i = 0; i < hourArr.length; i++) {
-                hourList1 += "<option value = '" + i + "'>" + hourArr[i] + "</option>";
-                hourList2 += "<option value = '" + i + "'>" + hourArr[i] + "</option>";
-            }
-            document.getElementById("prefhour1").innerHTML = hourList1;
-            document.getElementById("prefhour2").innerHTML = hourList1;
+        function autofillScript() {
+            document.getElementById("password").value = "passwordForTest";
+            document.getElementById("username").value = "geeeveeer";
+            document.getElementById("city").value = "Tel-Aviv";
+            document.getElementById("mail").value = "ruppin@gmail.com";
+            document.getElementById("phone").value = "0987654321";
+            document.getElementById("fullname").value = "test name";
 
         }
-
     </script>
 
 </head>
@@ -86,8 +55,8 @@
                                 <input id="password" type="text" placeholder="הכנס הסיסמא כאן" class="form-control">
                             </div>
                             <div class="col-sm-6 form-group">
-                                <label id="username">שם משתמש</label>
-                                <input type="text" placeholder="הכנס שם משתמש כאן" class="form-control">
+                                <label >שם משתמש</label>
+                                <input id="username" type="text" placeholder="הכנס שם משתמש כאן" class="form-control">
                             </div>
                         </div>
 
