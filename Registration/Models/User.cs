@@ -56,5 +56,13 @@ namespace Registration.Models
             int numEffected = dbs.insert(this);
             return numEffected;
         }
+
+        public User UserConfirmation(string username)
+        {
+            User user = new User();
+            DBservices dbs = new DBservices();
+            user = dbs.GetUserForConfirmation(username, "ConnectionStringPerson", "AppUser");
+            return user;
+        }
     }
 }

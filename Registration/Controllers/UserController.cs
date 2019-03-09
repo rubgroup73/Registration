@@ -16,5 +16,14 @@ namespace Registration.Controllers
            int num = u.insert();
             return num;
         }
+
+        [HttpGet]
+        [Route("api/user/inDB")]
+        public User GetPerson(string username)
+        {
+            User p = new User();
+
+            return p.UserConfirmation(username);
+        }
     }
 }

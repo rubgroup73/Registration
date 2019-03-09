@@ -18,8 +18,17 @@
         $(document).ready(function () {
             createHourList();
             autofillScript();
+            ajaxCall("GET", "../api/User/inDB?username= geeeveeer","", userAdd, user);
             $("#pForm").submit(formSubmited);
         });
+
+        function userAdd(data) {
+            alert("success");
+        }
+        function user() {
+            alert("failed");
+        }
+
         function AddUser() {
             User = { // Note that the name of the fields must be identical to the names of the properties of the object in the server
                 FullName: document.getElementById("fullname").value,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Web.Configuration;
 
 namespace Registration.Models.DAL
 {
+/***********************************Insert User*******************/
     public class DBservices
     {
         public int insert(User user)
@@ -50,6 +52,48 @@ namespace Registration.Models.DAL
                 }
             }
         }
+        /***********************************End Insert User********************************************/
+        /***********************************User Confirmation In React App********************************/
+        public User GetUserForConfirmation(string username, string constring, string tableName)
+        {
+
+            User user = new User();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(constring); // create a connection to the database using the connection String defined in the web config file
+                string getQuery = "SELECT * FROM " + tableName + " WHERE UserName='" + username + "'";
+
+                SqlCommand cmd = new SqlCommand(getQuery, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+
+                    user.UserName = (string)(dr["UserName"]);
+                    user.Password = (string)(dr["User_password"]);
+     
+                }
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        /*******************************End User Confirmation In React App********************************/
+
 
         /*************************END Build the Insert command String**********************************/
         private String BuildInsertCommand(User user)
