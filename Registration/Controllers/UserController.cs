@@ -11,8 +11,9 @@ namespace Registration.Controllers
     public class UserController : ApiController
     {
         public void PostAdd([FromBody]User u)
-        { 
-            //u.insert();
+        {
+
+            u.insert();
         }
     }
 }

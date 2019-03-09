@@ -13,34 +13,7 @@ function createHourList() {
 
 }
 /*************************Ajax User Registration******************/
-function AddUser() {
-    User = { // Note that the name of the fields must be identical to the names of the properties of the object in the server
-        FullName: $("#fullname").val(),
-        Gender: $("#gender").val(),
-        Status: $("#famstatus").val(),
-        YearsOfEducation: $("#education").val(),
-        UserName: $("#username").val(),
-        Password: $("#password").val(),
-        Residence: $("#residence").val()
-    }
 
-    ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
-}
-function userAddSuccefully(data) {
-    swal("Added!", "User is successfully Added!", "success");
-}
-function userNotAdded() {
-    Swal.fire({
-        type: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!'
-
-    })
-}
-function formSubmited() {
-    AddUser();
-    return false;
-}
 /*************************Auto Fill Script******************/
 function autofillScript() {
     document.getElementById("password").value = "passwordForTest";

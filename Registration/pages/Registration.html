@@ -20,15 +20,35 @@
             autofillScript();
             $("#pForm").submit(formSubmited);
         });
-        function autofillScript() {
-            document.getElementById("password").value = "passwordForTest";
-            document.getElementById("username").value = "geeeveeer";
-            document.getElementById("city").value = "Tel-Aviv";
-            document.getElementById("mail").value = "ruppin@gmail.com";
-            document.getElementById("phone").value = "0987654321";
-            document.getElementById("fullname").value = "test name";
+        function AddUser() {
+            User = { // Note that the name of the fields must be identical to the names of the properties of the object in the server
+                FullName: document.getElementById("fullname").value,
+                Gender: $("#gender").val(),
+                Status: $("#famstatus").val(),
+                YearsOfEducation: $("#education").val(),
+                UserName: $("#username").val(),
+                Password: $("#password").val(),
+                Residence: $("#residence").val()
+            }
 
+            ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
         }
+        function userAddSuccefully(data) {
+            swal("Added!", "User is successfully Added!", "success");
+        }
+        function userNotAdded() {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!'
+
+            })
+        }
+        function formSubmited() {
+            AddUser();
+            return false;
+        }
+      
     </script>
 
 </head>
