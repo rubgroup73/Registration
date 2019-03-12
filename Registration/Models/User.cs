@@ -9,7 +9,7 @@ namespace Registration.Models
     public class User
     {
         
-        public User(string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1, int prefDay2,string phone,int city, string birthDate, string prefHour1 , string prefHour2 , string mail,int score=0 )
+        public User(string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1, int prefDay2,string phone,int city, string birthDate, string prefHour1 , string prefHour2 , string mail,int score=0,bool credentials = false )
         {
             FullName = fullName;
             BirthDate = birthDate;
@@ -26,6 +26,7 @@ namespace Registration.Models
             PrefHour1 = prefHour1;
             PrefHour2 = prefHour2;
             Score = score;
+            Credentials1 = credentials;
             Mail = mail;
         }
         public User()
@@ -48,21 +49,40 @@ namespace Registration.Models
         public string PrefHour1 { get; set; }
         public string PrefHour2 { get; set; }
         public int Score { get; set; }
+        public bool Credentials1 { get; set; }
         public string Mail { get; set; }
-
+        /***************************************************************/
+        /********Insert New User Into DB********************************/
+        /***************************************************************/
         public int insert()
         {
             DBservices dbs = new DBservices();
             int numEffected = dbs.insert(this);
             return numEffected;
         }
-
-        public User UserConfirmation(string username)
+        /***************************************************************/
+        /*Return True or False - check if User exists in DB*/
+        /***************************************************************/
+        public User UserConfirmation(string username, string password)
         {
             User user = new User();
             DBservices dbs = new DBservices();
             user = dbs.GetUserForConfirmation(username, "ConnectionStringPerson", "AppUser");
-            return user;
+            
+            return Credentials(user,username,password);
         }
+        
+        public User Credentials(User DBuser,string username,string password)
+        {
+            User u = new User();
+            u = DBuser;
+            if (DBuser.UserName == username && DBuser.Password == password)
+            { u.Credentials1 = true; return u; }
+
+            else
+            { u.Credentials1 = false; return u; }
+        }
+        /***************************************************************/
+
     }
 }

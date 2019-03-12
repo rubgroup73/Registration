@@ -17,13 +17,6 @@ namespace Registration.Controllers
             return num;
         }
 
-        [HttpGet]
-        [Route("api/user/inDB")]
-        public User GetPerson(string username)
-        {
-            User p = new User();
-
-            return p.UserConfirmation(username);
-        }
+       
     }
 }

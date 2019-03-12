@@ -19,7 +19,7 @@ function autofillScript() {
     document.getElementById("password").value = "passwordForTest";
     document.getElementById("username").value = "geeeveeer";
     document.getElementById("city").value = 1;
-    document.getElementById("mail").value = "ruppin@gmail.com";
+    document.getElementById("mail").value = "rrrrrr@gmail.com";
     document.getElementById("phone").value = "0987654321";
     document.getElementById("fullname").value = "test name";
 }

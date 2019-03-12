@@ -57,6 +57,7 @@ namespace Registration.Models.DAL
         public User GetUserForConfirmation(string username, string constring, string tableName)
         {
             username = username.Trim();
+            
             User user = new User();
             SqlConnection con = null;
             try
@@ -92,6 +93,8 @@ namespace Registration.Models.DAL
 
             }
         }
+
+
         /*******************************End User Confirmation In React App********************************/
 
 
