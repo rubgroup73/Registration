@@ -13,9 +13,10 @@ namespace Registration.Models
         public int Status { get; set; }
         public int Position { get; set; }
         public bool HasFeedback { get; set; }
-        public int[] Media { get; set; }
+        public int ClassId { get; set; }
+      
 
-        public Section(int id, string description, string title, int status, int position,bool hasFeedback,int [] media)
+        public Section(int id, string description, string title, int status, int position,bool hasFeedback,int classId)
         {
             Id = id;
             Description = description;
@@ -23,7 +24,8 @@ namespace Registration.Models
             Status = status;
             Position = position;
             HasFeedback = hasFeedback;
-            Media = media;
+            ClassId = classId;
+       
         }
         public Section()
         {

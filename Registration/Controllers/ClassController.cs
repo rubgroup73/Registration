@@ -17,5 +17,14 @@ namespace Registration.Controllers
          int numEffected = appClass.InsertClassToDB(appClass);
             return numEffected;
         }
+
+        [HttpGet]
+        [Route("api/class")]
+        public List<AppClass> GetAllClass()
+        {
+            AppClass appClass = new AppClass();
+           return appClass.GetAllClassFromDB();
+            
+        }
     }
 }

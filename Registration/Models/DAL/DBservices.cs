@@ -171,7 +171,57 @@ namespace Registration.Models.DAL
         /*******************************END Insert Class*******************************************************/
         /*************************************************************************************************/
 
+        /**************************************************************************************************/
+        /*******************************Get All Classes From DB********************************************/
+        /*************************************************************************************************/
 
+        public List<AppClass> GetAllClassFromDB(string tableName, string connectionString)
+        {
+             
+            List<AppClass> allClass = new List<AppClass>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getClasses = "SELECT * FROM " + tableName;
+
+                SqlCommand cmd = new SqlCommand(getClasses, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    AppClass appClass = new AppClass();
+                    appClass.Id = Convert.ToInt32(dr["class_id"]);
+                    appClass.Description = (string)(dr["class_desc"]);
+                    appClass.Title = (string)dr["class_title"];
+                    appClass.Status = Convert.ToInt32(dr["class_status"]);
+                    appClass.Position = Convert.ToInt32(dr["approved_class_position"]);
+                    appClass.Score = Convert.ToInt32(dr["score"]);
+                    appClass.Version = Convert.ToInt32(dr["score"]);
+                    //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
+                    allClass.Add(appClass);
+                }
+
+                return allClass;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        /**************************************************************************************************/
+        /******************************* END Get All Classes From DB***************************************/
+        /*************************************************************************************************/
 
         /*************************************Create Sql Command*******************************/
         private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)

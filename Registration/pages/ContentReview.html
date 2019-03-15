@@ -4,10 +4,12 @@
 <head>
     <meta charset='UTF-8'>
     <meta name="robots" content="noindex">
-    
+
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../Scripts/ajaxCall.js"></script>
     <style class="cp-pen-styles">
         * {
             box-sizing: border-box;
@@ -195,6 +197,7 @@
                 .section h4 a {
                     font-weight: 600;
                 }
+
         .drag-column-needs-trash {
             background-color: rgb(202, 60, 60);
         }
@@ -224,8 +227,41 @@
             background: rgb(66, 184, 221); /* this is a light blue */
         }
 
-              /********************************************************************************************/
+        /********************************************************************************************/
     </style>
+    <script>
+        var classes = [];
+
+        $(document).ready(function () {
+
+            ajaxCall("GET", "../api/class", "", getAllClassFromDb, ErrorgetAllClassFromDb);
+
+        });
+        function getAllClassFromDb(data) {
+            
+            
+            ShowClassesFromDB(data);
+
+        }
+        function ErrorgetAllClassFromDb() {
+            alert("Error get Class");
+        }
+
+        function ShowClassesFromDB(data) {
+
+            classes = data;
+            for (var i = 0; i < classes.length; i++) {
+                let status = classes[i].Status;
+                let id = classes[i].Id;
+                let title = classes[i].Title;
+                var list = document.getElementById(status);
+                
+                temp = list.innerHTML;
+                temp = temp + "<li id=class" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "</li > ";
+                list.innerHTML = temp;
+            }
+        }
+    </script>
 </head>
 <body>
     <section class="section">
@@ -277,8 +313,6 @@
     </div>
 
     
-
-    <input id="class-title" type="text" />
 
     <button id="addlesson" class="button-success pure-button" onclick="window.location='SectionEditor.html'">צור שיעור</button>
     <button class="button-secondary pure-button">שמור שינויים</button>

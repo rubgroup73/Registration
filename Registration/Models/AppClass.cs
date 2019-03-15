@@ -15,10 +15,9 @@ namespace Registration.Models
         public int Position { get; set; }
         public int Score { get; set; }
         public int Version { get; set; }
-        public DateTime CreationDate { get; set; }
-        public int[] Sections { get; set;}
+        
 
-        public AppClass(int id,string description,string title,int status,int position,int score,int version,DateTime creationDate,int [] sections)
+        public AppClass(int id,string description,string title,int status,int position,int score,int version)
         {
             Id = id;
             Description = description;
@@ -27,8 +26,7 @@ namespace Registration.Models
             Position = position;
             Score = score;
             Version = version;
-            CreationDate = creationDate;
-            Sections = sections;
+            
         }
         public AppClass()
         {
@@ -40,6 +38,12 @@ namespace Registration.Models
         {
             DBservices db = new DBservices();
             return db.InsertClassToDB(appClass);
+        }
+
+        public List<AppClass> GetAllClassFromDB()
+        {
+            DBservices db = new DBservices();
+            return db.GetAllClassFromDB("Class", "ConnectionStringPerson");
         }
     }
 }
