@@ -94,24 +94,84 @@ namespace Registration.Models.DAL
             }
         }
 
-
-        /*******************************End User Confirmation In React App********************************/
-
-
-        /*************************END Build the Insert command String**********************************/
+        /*************************Build the Insert command User String**********************************/
         private String BuildInsertCommand(User user)
         {
             String command;
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},'{13}','{14}',{15})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status,user.YearsOfEducation, user.UserName, user.Password, user.Mail,user.Phone,user.Residence,user.City ,user.PrefDay1, user.PrefDay2, user.PrefHour1, user.PrefHour2,user.Score);
+            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},'{13}','{14}',{15})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status, user.YearsOfEducation, user.UserName, user.Password, user.Mail, user.Phone, user.Residence, user.City, user.PrefDay1, user.PrefDay2, user.PrefHour1, user.PrefHour2, user.Score);
             String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefday2,prefhour1,prefhour2,score)";
             command = prefix + sb.ToString();
 
             return command;
         }
-        /*********************END Build the Insert command String*************************************/
+        /*********************END Build the Insert command User String*************************************/
+        /*******************************End User Confirmation In React App********************************/
+
+        /**************************************************************************************************/
+        /*******************************Insert Class*******************************************************/
+        /*************************************************************************************************/
+        public int InsertClassToDB(AppClass appClass)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("ConnectionStringPerson"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommandClass(appClass);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+
+        private String BuildInsertCommandClass(AppClass appClass)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat(" Values('{0}','{1}')", appClass.Description,appClass.Title);
+            String prefix = "INSERT INTO Class " + "( class_desc,class_title)";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
+        /**************************************************************************************************/
+        /*******************************END Insert Class*******************************************************/
+        /*************************************************************************************************/
+
+
 
         /*************************************Create Sql Command*******************************/
         private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)

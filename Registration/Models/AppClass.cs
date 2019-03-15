@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Registration.Models.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -33,6 +34,12 @@ namespace Registration.Models
         {
                 
         
+        }
+
+        public int InsertClassToDB(AppClass appClass)
+        {
+            DBservices db = new DBservices();
+            return db.InsertClassToDB(appClass);
         }
     }
 }

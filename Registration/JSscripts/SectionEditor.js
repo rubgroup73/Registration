@@ -1,5 +1,6 @@
 ﻿
 
+
         dragula([
             document.getElementById('1'),
             document.getElementById('2'),
@@ -78,25 +79,62 @@ function Delete(e) {
 }
 
 var counter2;
+var notReady;
+var waiting;
+var ready;
+
 
 //Printing the sections one by one
-function alertName() {
+function SaveLesson() {
     counter2 = 1;
     var ct = document.getElementById("class-title").value;
     var cd = document.getElementById("class-desc").value;
-    alert("כותרת השיעור: "+ct);
-    alert("תיאור השיעור: "+cd);
-    readySectionsArr = document.getElementById("4").children;
-    for (var i = 0; i < readySectionsArr.length; i++) {
+    notReady = document.getElementById("2").children;
+    waiting = document.getElementById("3").children;
+    ready = document.getElementById("4").children;
+
+    for (var i = 0; i < notReady.length; i++) {
         for (var j = 0; j < generalSectionsArr.length; j++) {
-            if (generalSectionsArr[j].id == readySectionsArr[i].id) {
-                alert("Section Number " + counter2 + " - " + generalSectionsArr[j].title);
-                counter2++;
+            if (generalSectionsArr[j].id == notReady[i].id) {
+                generalSectionsArr[j].status = 2;
+            }
+
+        }
+
+    }
+    for (var i = 0; i < waiting.length; i++) {
+        for (var j = 0; j < generalSectionsArr.length; j++) {
+            if (generalSectionsArr[j].id == waiting[i].id) {
+                generalSectionsArr[j].status = 3;
             }
 
         }
     }
+    for (var i = 0; i < ready.length; i++) {
+        for (var j = 0; j < generalSectionsArr.length; j++) {
+            if (generalSectionsArr[j].id == ready[i].id) {
+                generalSectionsArr[j].status = 4;
+            }
+
+        }
+    }
+    AddClass(ct, cd);
+    
 }
 
-                                //**********************************************************************************************************************
+function AddClass(title,description) {
+    Class = {
+        Description : description,
+        Title : title
+    }
+    ajaxCall("POST", "../api/class", JSON.stringify(Class), ClassAddSuccess, CalssAddError);
+}
+
+function ClassAddSuccess(data) {
+    alert("Success add Class");
+}
+function CalssAddError() {
+    alert("Error add Class");
+}
+   //**********************************************************************************************************************
 
