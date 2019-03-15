@@ -231,6 +231,8 @@
     </style>
     <script>
         var classes = [];
+        var cApprovedOrder = [];
+        var cNotApproved = [];
 
         $(document).ready(function () {
 
@@ -250,15 +252,51 @@
         function ShowClassesFromDB(data) {
 
             classes = data;
-            for (var i = 0; i < classes.length; i++) {
-                let status = classes[i].Status;
-                let id = classes[i].Id;
-                let title = classes[i].Title;
-                var list = document.getElementById(status);
-                
+            CheckStatus();
+            let status;
+            let id;
+            let title;
+            var list;
+            
+            for (var i = 0; i < cNotApproved.length; i++) {
+                status = cNotApproved[i].Status;
+                id = cNotApproved[i].Id;
+                title = cNotApproved[i].Title;
+                list = document.getElementById(status);
+
+               
+                        temp = list.innerHTML;
+                        temp = temp + "<li id=class" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "</li > ";
+                        list.innerHTML = temp;
+                       
+                }
+            //Sorting the Approved classes
+            cApprovedOrder=cApprovedOrder.sort((a, b) => (a.Position > b.Position) ? 1 : -1);
+
+            for (var j = 0; j < cApprovedOrder.length; j++) {
+                status = cApprovedOrder[j].Status;
+                id = cApprovedOrder[j].Id;
+                title = cApprovedOrder[j].Title;
+                list = document.getElementById(status);
                 temp = list.innerHTML;
                 temp = temp + "<li id=class" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "</li > ";
                 list.innerHTML = temp;
+            }
+
+                }
+        function CheckStatus() {
+            for (var i = 0; i < classes.length; i++) {
+
+
+                switch (classes[i].Status) {
+                    case 2:
+                    case 3:
+                        cNotApproved.push(classes[i]);
+                        break;
+                    case 4:
+                        cApprovedOrder.push(classes[i]);
+                        break;
+                }
             }
         }
     </script>
