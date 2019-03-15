@@ -9,5 +9,6 @@ namespace Registration.Controllers
 {
     public class SectionController : ApiController
     {
+        
     }
 }
