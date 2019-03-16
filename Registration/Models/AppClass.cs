@@ -45,5 +45,11 @@ namespace Registration.Models
             DBservices db = new DBservices();
             return db.GetAllClassFromDB("Class", "ConnectionStringPerson");
         }
+
+        public int GetLastId()
+        {
+            DBservices db = new DBservices();
+            return db.GetLastId("Class", "ConnectionStringPerson");
+        }
     }
 }

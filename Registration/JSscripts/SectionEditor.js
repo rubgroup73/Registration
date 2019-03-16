@@ -90,7 +90,20 @@ var ready;
 
 
 //Printing the sections one by one
+
+/***************************Get Last Id And Save Class*****************************************************/
 function SaveLesson() {
+    ajaxCall("GET", "../api/class/getid", "", GetClassIDSuccess, GetCalssIDError);
+}
+
+function GetClassIDSuccess(classId) {
+    SaveLessonPartTwo(classId);
+}
+
+function GetCalssIDError() {
+    alert("Error Get Id");
+}
+function SaveLessonPartTwo(classId) {
     counter2 = 1;
     var ct = document.getElementById("class-title").value;
     var cd = document.getElementById("class-desc").value;
@@ -124,8 +137,9 @@ function SaveLesson() {
         }
     }
     AddClass(ct, cd);
-
 }
+
+/***************************End Get Last Id And Save Class*****************************************************/
 
 function AddClass(title, description) {
     Class = {

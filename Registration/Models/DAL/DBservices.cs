@@ -275,6 +275,49 @@ namespace Registration.Models.DAL
         /*******************************END Get All Sections From DB***************************************/
         /*************************************************************************************************/
 
+        /**************************************************************************************************/
+        /*******************************Get Last Class ID From DB******************************************/
+        /*************************************************************************************************/
+        public int GetLastId(string tableName,string connectionString)
+        {
+            AppClass classId = new AppClass();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getClasses = "SELECT max(class_id) as 'max_id' FROM " + tableName;
+
+                SqlCommand cmd = new SqlCommand(getClasses, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+
+                    classId.Id = Convert.ToInt32(dr["max_id"]);
+                 
+                }
+
+                return classId.Id;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        /**************************************************************************************************/
+        /*******************************End Get Last Class ID From DB**************************************/
+        /*************************************************************************************************/
 
         /*************************************Create Sql Command*******************************/
         private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)

@@ -433,7 +433,7 @@
         </ul>
     </div>
 
-    <button id="addlesson" class="button-success pure-button" onclick="window.location='SectionEditor.html'">צור שיעור</button>
+    <button id="addlesson" class="button-success pure-button" onclick="CreateNewLesson()">צור שיעור</button>
     <button class="button-secondary pure-button">שמור שינויים</button>
     <button onclick="Empty()" class="button-error pure-button">רוקן פח אשפה</button>
 
@@ -508,7 +508,10 @@
             }
         }
 
-
+        function CreateNewLesson() {
+            localStorage.clear();
+            window.location = 'SectionEditor.html';
+        }
 
     </script>
 </body>

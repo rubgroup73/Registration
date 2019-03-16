@@ -26,5 +26,16 @@ namespace Registration.Controllers
            return appClass.GetAllClassFromDB();
             
         }
+
+        [HttpGet]
+        [Route("api/class/getid")]
+        public int GetLastId()
+        {
+            AppClass appClass = new AppClass();
+            return appClass.GetLastId();
+
+        }
+
+
     }
 }
