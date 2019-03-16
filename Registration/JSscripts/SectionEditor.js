@@ -33,6 +33,11 @@
         var section_id = 2;
 var readySectionsArr = [];
 var generalSectionsArr = [];
+var sNotApproved = [];
+var sApprovedOrder = [];
+
+
+
  function Section_Json(id,title,content,image,status){
         this.id= id,
             this.title= title,
@@ -137,4 +142,57 @@ function CalssAddError() {
     alert("Error add Class");
 }
    //**********************************************************************************************************************
+///Sorting and Show********************************************************************************************************'
 
+function ShowSectionsFromDB() {
+    generalSectionsArr = JSON.parse(window.localStorage.getItem("classes")).Sections;
+
+    CheckStatus();
+    let status;
+    let id;
+    let title;
+    var list;
+
+
+    for (var i = 0; i < sNotApproved.length; i++) {
+        status = sNotApproved[i].Status;
+        id = sNotApproved[i].Id;
+        title = sNotApproved[i].Title;
+        list = document.getElementById(status);
+
+
+        temp = list.innerHTML;
+        temp = temp+"<li id=section" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+        //temp = temp + "<li id=section" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "</li > ";
+        list.innerHTML = temp;
+
+    }
+    //Sorting the Approved classes
+    sApprovedOrder = sApprovedOrder.sort((a, b) => (a.Position > b.Position) ? 1 : -1);
+
+    for (var j = 0; j < sApprovedOrder.length; j++) {
+        status = sApprovedOrder[j].Status;
+        id = sApprovedOrder[j].Id;
+        title = sApprovedOrder[j].Title;
+        list = document.getElementById(status);
+        temp = list.innerHTML;
+        temp = temp + "<li id=section" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "</li > ";
+        list.innerHTML = temp;
+    }
+
+}
+function CheckStatus() {
+    for (var i = 0; i < generalSectionsArr.length; i++) {
+
+
+        switch (generalSectionsArr[i].Status) {
+            case 2:
+            case 3:
+                sNotApproved.push(generalSectionsArr[i]);
+                break;
+            case 4:
+                sApprovedOrder.push(generalSectionsArr[i]);
+                break;
+        }
+    }
+}
