@@ -15,9 +15,9 @@ namespace Registration.Models
         public int Position { get; set; }
         public int Score { get; set; }
         public int Version { get; set; }
-        
+        public List<Section> Sections { get; set; }
 
-        public AppClass(int id,string description,string title,int status,int position,int score,int version)
+        public AppClass(int id,string description,string title,int status,int position,int score,int version,List<Section> sections)
         {
             Id = id;
             Description = description;
@@ -26,7 +26,7 @@ namespace Registration.Models
             Position = position;
             Score = score;
             Version = version;
-            
+            Sections = sections;
         }
         public AppClass()
         {

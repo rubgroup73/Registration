@@ -233,25 +233,61 @@
         var classes = [];
         var cApprovedOrder = [];
         var cNotApproved = [];
+        var sectionArr = [];
 
         $(document).ready(function () {
 
             ajaxCall("GET", "../api/class", "", getAllClassFromDb, ErrorgetAllClassFromDb);
 
         });
+        /***********************************Success and Error Function Get Classes********************************/
         function getAllClassFromDb(data) {
-            
-            
-            ShowClassesFromDB(data);
+            classes = data;
+            ajaxCall("GET", "../api/section", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);
+            //ShowClassesFromDB(data);
 
         }
         function ErrorgetAllClassFromDb() {
-            alert("Error get Class");
+            alert("Error get Classes");
         }
+        /***********************************End Success and Error Function Get Classes****************************/
+
+
+        /***********************************Success and Error Function Get Section********************************/
+        
+        function getAllSectionFromDb(AllSectionData) {
+            sectionArr = AllSectionData;
+            InsertSectionToClass();
+
+        }
+        function ErrorgetAllSectionFromDb() {
+            alert("Error loading section from DB");
+        }
+        /***********************************End Success and Error Function Get Section*****************************/
+
+        /***********************************InsertSectionToClass Function******************************************/
+        function InsertSectionToClass() {
+            
+            for (var i = 0; i < classes.length; i++) {
+                classes[i].Sections = new Array();
+                for (var j = 0; j < sectionArr.length; j++) {
+                    if (sectionArr[j].ClassId == classes[i].Id) {
+
+                        classes[i].Sections.push(sectionArr[j]);
+                    }
+                }
+            }
+
+            
+        }
+
+        /***********************************END InsertSectionToClass Function**************************************/
+
+
 
         function ShowClassesFromDB(data) {
 
-            classes = data;
+            
             CheckStatus();
             let status;
             let id;
@@ -298,6 +334,10 @@
                         break;
                 }
             }
+        }
+
+        function UpdateClass() {
+
         }
     </script>
 </head>
@@ -353,7 +393,7 @@
     
 
     <button id="addlesson" class="button-success pure-button" onclick="window.location='SectionEditor.html'">צור שיעור</button>
-    <button class="button-secondary pure-button">שמור שינויים</button>
+    <button class="button-secondary pure-button" onclick="UpdateClass()">שמור שינויים</button>
     <button  onclick="Empty()" class="button-error pure-button">רוקן פח אשפה</button>
 
 

@@ -223,6 +223,59 @@ namespace Registration.Models.DAL
         /******************************* END Get All Classes From DB***************************************/
         /*************************************************************************************************/
 
+        /**************************************************************************************************/
+        /*******************************Get All Sections From DB***************************************/
+        /*************************************************************************************************/
+
+        public List<Section> GetAllSectionFromDB(string tableName,string connectionString)
+        {
+            List<Section> allSection = new List<Section>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getClasses = "SELECT * FROM " + tableName;
+
+                SqlCommand cmd = new SqlCommand(getClasses, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Section sectionClass = new Section();
+                    sectionClass.Id = Convert.ToInt32(dr["section_id"]);
+                    sectionClass.Description = (string)(dr["section_desc"]);
+                    sectionClass.Title = (string)dr["section_title"];
+                    sectionClass.Status = Convert.ToInt32(dr["section_status"]);
+                    sectionClass.Position = Convert.ToInt32(dr["approved_section_position"]);
+                    sectionClass.Version = Convert.ToInt32(dr["section_version"]);
+                    sectionClass.ClassId = Convert.ToInt32(dr["class_id"]);
+                    sectionClass.HasFeedback = Convert.ToBoolean(dr["has_feedback"]);
+                    //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
+                    allSection.Add(sectionClass);
+                }
+
+                return allSection;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        /**************************************************************************************************/
+        /*******************************END Get All Sections From DB***************************************/
+        /*************************************************************************************************/
+
+
         /*************************************Create Sql Command*******************************/
         private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)
         {
