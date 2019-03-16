@@ -1,36 +1,36 @@
 ﻿
 
 
-        dragula([
-            document.getElementById('1'),
-            document.getElementById('2'),
-            document.getElementById('3'),
-            document.getElementById('4'),
-            document.getElementById('5'),
-            document.getElementById('6')]).
+dragula([
+    document.getElementById('1'),
+    document.getElementById('2'),
+    document.getElementById('3'),
+    document.getElementById('4'),
+    document.getElementById('5'),
+    document.getElementById('6')]).
 
 
-            on('drag', function (el) {
+    on('drag', function (el) {
 
-            // add 'is-moving' class to element being dragged
-            el.classList.add('is-moving');
-        }).
-            on('dragend', function (el) {
+        // add 'is-moving' class to element being dragged
+        el.classList.add('is-moving');
+    }).
+    on('dragend', function (el) {
 
-            // remove 'is-moving' class from element after dragging has stopped
-            el.classList.remove('is-moving');
+        // remove 'is-moving' class from element after dragging has stopped
+        el.classList.remove('is-moving');
 
         // add the 'is-moved' class for 600ms then remove it
         window.setTimeout(function () {
             el.classList.add('is-moved');
-        window.setTimeout(function () {
-            el.classList.remove('is-moved');
-        }, 600);
-                }, 100);
-            });
-        //***********************************************************************************************************************
-        var counter = 0;
-        var section_id = 2;
+            window.setTimeout(function () {
+                el.classList.remove('is-moved');
+            }, 600);
+        }, 100);
+    });
+//***********************************************************************************************************************
+var counter = 0;
+var section_id = 2;
 var readySectionsArr = [];
 var generalSectionsArr = [];
 var sNotApproved = [];
@@ -38,43 +38,43 @@ var sApprovedOrder = [];
 
 
 
- function Section_Json(id,title,content,image,status){
-        this.id= id,
-            this.title= title,
-            this.content= content,
-            this.image= image,
-            this.status= status
-        }
-        //Adding a new section
+function Section_Json(id, title, content, image, status) {
+    this.id = id,
+        this.title = title,
+        this.content = content,
+        this.image = image,
+        this.status = status
+}
+//Adding a new section
 
-        function AddSection() {
-            section_id = 2;
-        var title = document.getElementById("section-title").value;
-            var content = document.getElementById("section-content").value;
-           var image = document.getElementById("section-image").value;
-            var ready = document.getElementById("ready").checked;
-            
-            if (ready === true) {
-                section_id = 3;
-            }
+function AddSection() {
+    section_id = 2;
+    var title = document.getElementById("section-title").value;
+    var content = document.getElementById("section-content").value;
+    var image = document.getElementById("section-image").value;
+    var ready = document.getElementById("ready").checked;
 
-            
-            //Saving the section details in JSON object
-            Section_Json.id = "section" + counter;
-            Section_Json.content = content;
-            Section_Json.title = title;
-            Section_Json.image = image;
-            Section_Json.status = section_id;
-            var sec = new Section_Json(Section_Json.id, Section_Json.title, Section_Json.content, Section_Json.image, Section_Json.status);
+    if (ready === true) {
+        section_id = 3;
+    }
 
-            var list = document.getElementById(section_id);
-            temp = list.innerHTML;
-            temp = temp + "<li id=section" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
-            list.innerHTML = temp;
-            counter++;
-            generalSectionsArr.push(sec);
-            $("#squarespaceModal").modal("hide");
-        }
+
+    //Saving the section details in JSON object
+    Section_Json.id = "section" + counter;
+    Section_Json.content = content;
+    Section_Json.title = title;
+    Section_Json.image = image;
+    Section_Json.status = section_id;
+    var sec = new Section_Json(Section_Json.id, Section_Json.title, Section_Json.content, Section_Json.image, Section_Json.status);
+
+    var list = document.getElementById(section_id);
+    temp = list.innerHTML;
+    temp = temp + "<li id=section" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+    list.innerHTML = temp;
+    counter++;
+    generalSectionsArr.push(sec);
+    $("#squarespaceModal").modal("hide");
+}
 
 
 //Delete specific section
@@ -124,13 +124,13 @@ function SaveLesson() {
         }
     }
     AddClass(ct, cd);
-    
+
 }
 
-function AddClass(title,description) {
+function AddClass(title, description) {
     Class = {
-        Description : description,
-        Title : title
+        Description: description,
+        Title: title
     }
     ajaxCall("POST", "../api/class", JSON.stringify(Class), ClassAddSuccess, CalssAddError);
 }
@@ -141,7 +141,7 @@ function ClassAddSuccess(data) {
 function CalssAddError() {
     alert("Error add Class");
 }
-   //**********************************************************************************************************************
+//**********************************************************************************************************************
 ///Sorting and Show********************************************************************************************************'
 
 function ShowSectionsFromDB() {
@@ -162,7 +162,7 @@ function ShowSectionsFromDB() {
 
 
         temp = list.innerHTML;
-        temp = temp+"<li id=section" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+        temp = temp + "<li id=section" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
         //temp = temp + "<li id=section" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "</li > ";
         list.innerHTML = temp;
 
