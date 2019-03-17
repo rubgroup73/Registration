@@ -434,7 +434,7 @@
     </div>
 
     <button id="addlesson" class="button-success pure-button" onclick="CreateNewLesson()">צור שיעור</button>
-    <button class="button-secondary pure-button">שמור שינויים</button>
+    <button class="button-secondary pure-button" onclick="SaveClassToDB()">שמור שינויים</button>
     <button onclick="Empty()" class="button-error pure-button">רוקן פח אשפה</button>
 
     <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/45226/dragula.min.js'></script>
@@ -470,7 +470,8 @@
         var counter = 0;
 
         function AddLesson() {
-            var title = document.getElementById("class-title").value;
+            let newClass = JSON.parse(window.localStorage.getItem("newClass")).Sections;
+            var title = newClass.Title;
             var list = document.getElementById("3");
             temp = list.innerHTML;
 
@@ -509,10 +510,23 @@
         }
 
         function CreateNewLesson() {
-            localStorage.clear();
+            localStorage.removeItem("classes");
             window.location = 'SectionEditor.html';
         }
 
+        function SaveClassToDB() {
+        //need to add identifier if we came from another page
+            let Class = JSON.parse(window.localStorage.getItem("newClass"));
+            alert(Class.Title);
+            //ajaxCall("POST", "../api/class", JSON.stringify(Class), ClassAddSuccess, CalssAddError);
+       
+        }
+        function ClassAddSuccess(data) {
+            alert("Success add Class");
+        }
+        function CalssAddError() {
+            alert("Error add Class");
+        }
     </script>
 </body>
 </html>

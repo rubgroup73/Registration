@@ -198,7 +198,7 @@ namespace Registration.Models.DAL
                     appClass.Status = Convert.ToInt32(dr["class_status"]);
                     appClass.Position = Convert.ToInt32(dr["approved_class_position"]);
                     appClass.Score = Convert.ToInt32(dr["score"]);
-                    appClass.Version = Convert.ToInt32(dr["score"]);
+                    appClass.Version = Convert.ToInt32(dr["class_version"]);
                     //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
                     allClass.Add(appClass);
                 }
@@ -248,7 +248,7 @@ namespace Registration.Models.DAL
                     sectionClass.Title = (string)dr["section_title"];
                     sectionClass.Status = Convert.ToInt32(dr["section_status"]);
                     sectionClass.Position = Convert.ToInt32(dr["approved_section_position"]);
-                    sectionClass.Version = Convert.ToInt32(dr["section_version"]);
+                    sectionClass.Version = Convert.ToInt32(dr["class_version"]);
                     sectionClass.ClassId = Convert.ToInt32(dr["class_id"]);
                     sectionClass.HasFeedback = Convert.ToBoolean(dr["has_feedback"]);
                     //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);

@@ -93,7 +93,16 @@ var ready;
 
 /***************************Get Last Id And Save Class*****************************************************/
 function SaveLesson() {
-    ajaxCall("GET", "../api/class/getid", "", GetClassIDSuccess, GetCalssIDError);
+    
+    let notReady2 = document.getElementById("2").children;
+    let waiting2 = document.getElementById("3").children;
+    let ready2 = document.getElementById("4").children;
+    if (notReady2.length == 0 && waiting2.length == 0 && ready2.length == 0) {
+        alert("You have to add Section to class");
+        return;
+    }
+  
+ ajaxCall("GET", "../api/class/getid", "", GetClassIDSuccess, GetCalssIDError);
 }
 
 function GetClassIDSuccess(classId) {
@@ -136,25 +145,25 @@ function SaveLessonPartTwo(classId) {
 
         }
     }
-    AddClass(ct, cd);
+    AddClass(ct, cd, classId);
 }
 
 /***************************End Get Last Id And Save Class*****************************************************/
 
-function AddClass(title, description) {
+function AddClass(title, description, classId) {
+    SaveLessonPartTwo();
     Class = {
         Description: description,
-        Title: title
+        Title: title,
+        // Id: classId + 1,
+        Sections: generalSectionsArr
+
     }
-    ajaxCall("POST", "../api/class", JSON.stringify(Class), ClassAddSuccess, CalssAddError);
+    window.localStorage.setItem("checkNewClass", JSON.stringify("1"));
+    window.localStorage.setItem("newClass", JSON.stringify(Class)); // Saving
+    window.location = 'ContentReview.html';
 }
 
-function ClassAddSuccess(data) {
-    alert("Success add Class");
-}
-function CalssAddError() {
-    alert("Error add Class");
-}
 //**********************************************************************************************************************
 ///Sorting and Show********************************************************************************************************'
 
@@ -177,7 +186,7 @@ function ShowSectionsFromDB() {
 
         temp = list.innerHTML;
         temp = temp + "<li id=section" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
-        //temp = temp + "<li id=section" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "</li > ";
+        
         list.innerHTML = temp;
 
     }
@@ -190,7 +199,7 @@ function ShowSectionsFromDB() {
         title = sApprovedOrder[j].Title;
         list = document.getElementById(status);
         temp = list.innerHTML;
-        temp = temp + "<li id=section" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "</li > ";
+        temp = temp + "<li id=section" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
         list.innerHTML = temp;
     }
 
