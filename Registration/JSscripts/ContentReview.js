@@ -11,6 +11,7 @@ var readyClasses;
 $(document).ready(function () {
 
     ajaxCall("GET", "../api/class", "", getAllClassFromDb, ErrorgetAllClassFromDb);
+    CreateNewLesson();
 
 });
 /***********************************Success and Error Function Get Classes********************************/
@@ -116,9 +117,6 @@ function CheckStatus() {
     }
 }
 
-function UpdateClass() {
-
-}
 //עדכון סטטוס לכל השיעורים לפני הכנסתם ל- DB
 
 function SaveLesson() {
@@ -206,28 +204,28 @@ function CalssAddError() {
     alert("Error add Class");
 }
 
-//function AddLesson() {
-//    let newClass = JSON.parse(window.localStorage.getItem("newClass")).Sections;
-//    var title = newClass.Title;
-//    var list = document.getElementById("3");
-//    temp = list.innerHTML;
+function AddLesson() {
+    let newClass = JSON.parse(window.localStorage.getItem("newClass")).Sections;
+    var title = newClass.Title;
+    var list = document.getElementById("3");
+    temp = list.innerHTML;
 
-//    temp = temp + "<li id=" + counter + " class='drag-item' > " + title + "</li > ";
-//    list.innerHTML = temp;
-//}
+    temp = temp + "<li id=" + counter + " class='drag-item' > " + title + "</li > ";
+    list.innerHTML = temp;
+}
 
 
-//function Empty() {
+function Empty() {
 
-//    document.getElementById("6").innerHTML = "";
-//}
+    document.getElementById("6").innerHTML = "";
+}
 //**********************************************************************************************************************
 
 
-//function CreateNewLesson() {
-//    localStorage.removeItem("classes");
+function CreateNewLesson() {
+ localStorage.removeItem("classes");
     
-//}
+}
 
 //function SaveClassToDB() {
 //    //need to add identifier if we came from another page

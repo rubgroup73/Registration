@@ -74,7 +74,7 @@ function AddSection() {
     Section_Json.Status = section_status;
     Section_Json.Position = -1;
     Section_Json.Version = classMaxVersion,
-        Section_Json.ClassId = classMaxId
+    Section_Json.ClassId = classMaxId +1
     var sec = new Section_Json(Section_Json.Id, Section_Json.Title, Section_Json.Description, Section_Json.Status, Section_Json.Position, Section_Json.Version, Section_Json.ClassId);
 
     var list = document.getElementById(section_status);
