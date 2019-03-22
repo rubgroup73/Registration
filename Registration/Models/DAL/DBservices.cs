@@ -160,8 +160,8 @@ namespace Registration.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values('{0}','{1}')", appClass.Description,appClass.Title);
-            String prefix = "INSERT INTO Class " + "( class_desc,class_title)";
+            sb.AppendFormat(" Values({0},'{1}','{2}',{3},{4},{5},{6}); ", appClass.Id,appClass.Description,appClass.Title,appClass.Status,appClass.Position,appClass.Score,appClass.Version);
+            String prefix = "INSERT INTO Class " + "( class_id,class_desc,class_title,class_status,approved_class_position,score,class_version)";
             command = prefix + sb.ToString();
 
             return command;
@@ -184,8 +184,8 @@ namespace Registration.Models.DAL
             {
 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getClasses = "SELECT * FROM " + tableName;
-
+                string getClasses = "SELECT * FROM " + tableName +" where class_version = (select max(class_version) from "+ tableName+");" ;
+                    
                 SqlCommand cmd = new SqlCommand(getClasses, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
 
@@ -322,7 +322,7 @@ namespace Registration.Models.DAL
         /**************************************************************************************************/
         /*******************************Insert  Class Array with new version*******************************/
         /*************************************************************************************************/
-        public int InsertNewClassArray(List<AppClass> appClasses,string tableName,string connectionString)
+        public int InsertNewClassArray(List<AppClass> appClasses,string connectionString)
         {
             SqlConnection con;
             SqlCommand cmd;

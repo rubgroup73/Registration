@@ -37,5 +37,15 @@ namespace Registration.Controllers
         }
 
 
+        [HttpPost]
+        [Route("api/class/classArray")]
+        public int InsertNewClassArray(List<AppClass> appClass)
+        {
+            AppClass app = new AppClass();
+            int numEffected = app.InsertNewClassArray(appClass);
+            return numEffected;
+        }
+
+
     }
 }

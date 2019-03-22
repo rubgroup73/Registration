@@ -77,7 +77,7 @@ function ShowClassesFromDB(data) {
         type = 1;
 
         temp = list.innerHTML;
-        temp = temp + "<li id=class" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
+        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
         list.innerHTML = temp;
 
     }
@@ -92,7 +92,7 @@ function ShowClassesFromDB(data) {
         type = 2;
 
         temp = list.innerHTML;
-        temp = temp + "<li id=class" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
+        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
         list.innerHTML = temp;
     }
 
@@ -128,8 +128,10 @@ function SaveLesson() {
 
     for (var i = 0; i < notReadyClasses.length; i++) {
         for (var j = 0; j < classes.length; j++) {
-            if (classes[j].id == notReadyClasses[i].id) {
-                classes[j].status = 2;
+            if (classes[j].Id == notReadyClasses[i].id) {
+                classes[j].Status = 2;
+                classes[j].Position = -1;
+
             }
 
         }
@@ -137,16 +139,18 @@ function SaveLesson() {
     }
     for (var i = 0; i < waitingClasses.length; i++) {
         for (var j = 0; j < classes.length; j++) {
-            if (classes[j].id == waitingClasses[i].id) {
-                classes[j].status = 3;
+            if (classes[j].Id == waitingClasses[i].id) {
+                classes[j].Status = 3;
+                classes[j].Position = -1;
             }
 
         }
     }
     for (var i = 0; i < readyClasses.length; i++) {
         for (var j = 0; j < classes.length; j++) {
-            if (classes[j].id == readyClasses[i].id) {
-                classes[j].status = 4;
+            if (classes[j].Id == readyClasses[i].id) {
+                classes[j].Status = 4;
+                classes[j].Position = i;
             }
 
         }
@@ -158,22 +162,7 @@ function SaveLesson() {
 //***********************************************************************************************************************
 var counter = 0;
 
-//function AddLesson() {
-//    let newClass = JSON.parse(window.localStorage.getItem("newClass")).Sections;
-//    var title = newClass.Title;
-//    var list = document.getElementById("3");
-//    temp = list.innerHTML;
 
-//    temp = temp + "<li id=class" + counter + " class='drag-item' > " + title + "</li > ";
-//    list.innerHTML = temp;
-//}
-
-
-//function Empty() {
-
-//    document.getElementById("6").innerHTML = "";
-//}
-//**********************************************************************************************************************
 
 //************************************Passing Section To Section Page****************************************************
 
@@ -200,11 +189,12 @@ function getSections(specific_class_id, type) {
 
 //לעדכן את הגירסה של השיעורים לחדשה יותר
 function SaveClassToDB() {
+    SaveLesson();
     let oldVersion = classes[0].Version;
     for (var i = 0; i < classes.length; i++) {
         classes[i].Version = oldVersion + 1;
     }
-    ajaxCall("POST", "../api/class", JSON.stringify(classes), ClassAddSuccess, CalssAddError);
+    ajaxCall("POST", "../api/class/classArray", JSON.stringify(classes), ClassAddSuccess, CalssAddError);
 
 }
 function ClassAddSuccess(data) {
@@ -213,6 +203,23 @@ function ClassAddSuccess(data) {
 function CalssAddError() {
     alert("Error add Class");
 }
+
+//function AddLesson() {
+//    let newClass = JSON.parse(window.localStorage.getItem("newClass")).Sections;
+//    var title = newClass.Title;
+//    var list = document.getElementById("3");
+//    temp = list.innerHTML;
+
+//    temp = temp + "<li id=" + counter + " class='drag-item' > " + title + "</li > ";
+//    list.innerHTML = temp;
+//}
+
+
+//function Empty() {
+
+//    document.getElementById("6").innerHTML = "";
+//}
+//**********************************************************************************************************************
 
 
 //function CreateNewLesson() {

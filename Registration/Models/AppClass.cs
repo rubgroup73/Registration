@@ -51,5 +51,12 @@ namespace Registration.Models
             DBservices db = new DBservices();
             return db.GetLastId("Class", "ConnectionStringPerson");
         }
+
+        public int InsertNewClassArray(List<AppClass> appClass)
+        {
+            DBservices db = new DBservices();
+            return db.InsertNewClassArray(appClass,"ConnectionStringPerson");
+             
+        }
     }
 }
