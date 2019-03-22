@@ -319,6 +319,55 @@ namespace Registration.Models.DAL
         /*******************************End Get Last Class ID From DB**************************************/
         /*************************************************************************************************/
 
+        /**************************************************************************************************/
+        /*******************************Insert  Class Array with new version*******************************/
+        /*************************************************************************************************/
+        public int InsertNewClassArray(List<AppClass> appClasses,string tableName,string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            String cStr = "";
+            try
+            {
+                con = connect(connectionString); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            for (int i = 0; i < appClasses.Count; i++)
+            {
+                cStr += BuildInsertCommandClass(appClasses[i]);
+            }
+           
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        /**************************************************************************************************/
+        /*******************************END Insert  Class Array with new version**************************/
+        /*************************************************************************************************/
+
         /*************************************Create Sql Command*******************************/
         private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)
         {
