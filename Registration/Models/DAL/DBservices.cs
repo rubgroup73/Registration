@@ -107,9 +107,7 @@ namespace Registration.Models.DAL
 
             return command;
         }
-        /*********************END Build the Insert command User String*************************************/
-        /*******************************End User Confirmation In React App********************************/
-
+        
         /**************************************************************************************************/
         /*******************************Insert Class*******************************************************/
         /*************************************************************************************************/
@@ -168,10 +166,6 @@ namespace Registration.Models.DAL
         }
 
         /**************************************************************************************************/
-        /*******************************END Insert Class*******************************************************/
-        /*************************************************************************************************/
-
-        /**************************************************************************************************/
         /*******************************Get All Classes From DB********************************************/
         /*************************************************************************************************/
 
@@ -219,9 +213,6 @@ namespace Registration.Models.DAL
 
             }
         }
-        /**************************************************************************************************/
-        /******************************* END Get All Classes From DB***************************************/
-        /*************************************************************************************************/
 
         /**************************************************************************************************/
         /*******************************Get All Sections From DB***************************************/
@@ -250,7 +241,7 @@ namespace Registration.Models.DAL
                     sectionClass.Position = Convert.ToInt32(dr["approved_section_position"]);
                     sectionClass.Version = Convert.ToInt32(dr["class_version"]);
                     sectionClass.ClassId = Convert.ToInt32(dr["class_id"]);
-                    sectionClass.HasFeedback = Convert.ToBoolean(dr["has_feedback"]);
+                    sectionClass.HasFeedback = Convert.ToInt32(dr["has_feedback"]);
                     //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
                     allSection.Add(sectionClass);
                 }
@@ -271,9 +262,6 @@ namespace Registration.Models.DAL
 
             }
         }
-        /**************************************************************************************************/
-        /*******************************END Get All Sections From DB***************************************/
-        /*************************************************************************************************/
 
         /**************************************************************************************************/
         /*******************************Get Last Class ID From DB******************************************/
@@ -317,9 +305,7 @@ namespace Registration.Models.DAL
             }
         }
 
-        /**************************************************************************************************/
-        /*******************************End Get Last Class ID From DB**************************************/
-        /*************************************************************************************************/
+      
         public Section GetLastSectionId(string tableName, string connectionString)
         {
             Section section = new Section();
@@ -403,10 +389,68 @@ namespace Registration.Models.DAL
                 }
             }
         }
-        /**************************************************************************************************/
-        /*******************************END Insert  Class Array with new version**************************/
-        /*************************************************************************************************/
+        
 
+        /**************************************************************************************/
+        /****************************Insert Sections Array*************************************/
+      
+
+        public int InsertNewSessionsToDB(List<Section> sections,string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            String cStr = "";
+            try
+            {
+                con = connect(connectionString); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            for (int i = 0; i < sections.Count; i++)
+            {
+                cStr += BuildInsertCommandSection(sections[i]);
+            }
+
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private String BuildInsertCommandSection(Section section)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat(" Values({0},'{1}','{2}',{3},{4},{5},{6},{7}); ", section.Id,section.Description,section.Title,section.Status,section.Position,section.ClassId,section.HasFeedback,section.Version);
+            String prefix = "INSERT INTO Section " + "( section_id,section_desc,section_title,section_status,approved_section_position,class_id,has_feedback,class_version)";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+        /**************************************************************************************/
         /*************************************Create Sql Command*******************************/
         private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)
         {

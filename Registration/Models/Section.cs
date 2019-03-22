@@ -13,11 +13,11 @@ namespace Registration.Models
         public string Title { get; set; }
         public int Status { get; set; }
         public int Position { get; set; }
-        public bool HasFeedback { get; set; }
+        public int HasFeedback { get; set; }
         public int ClassId { get; set; }
         public int Version { get; set; }
 
-        public Section(int id, string description, string title, int status, int position,bool hasFeedback,int classId,int version)
+        public Section(int id, string description, string title, int status, int position,int classId,int version, int hasFeedback=0)
         {
             Id = id;
             Description = description;
@@ -41,6 +41,12 @@ namespace Registration.Models
         {
             DBservices db = new DBservices();
             return db.GetLastSectionId("Section", "ConnectionStringPerson");
+        }
+
+        public int InsertNewSessionsToDB(List<Section>sections)
+        {
+            DBservices db = new DBservices();
+            return db.InsertNewSessionsToDB(sections, "ConnectionStringPerson");
         }
     }
 }

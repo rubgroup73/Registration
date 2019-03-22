@@ -31,6 +31,7 @@ function ErrorgetAllClassFromDb() {
 function getAllSectionFromDb(AllSectionData) {
     sectionArr = AllSectionData;
     InsertSectionToClass();
+    //יש לנו כרגע שני מערכים של הראשון של שיעורים והשני של מקטעים
 
 }
 function ErrorgetAllSectionFromDb() {
@@ -39,6 +40,7 @@ function ErrorgetAllSectionFromDb() {
 /***********************************End Success and Error Function Get Section*****************************/
 
 /***********************************InsertSectionToClass Function******************************************/
+//הכנסה של המקטעים לתוך המערכים של השיעורים המתאימים
 function InsertSectionToClass() {
 
     for (var i = 0; i < classes.length; i++) {

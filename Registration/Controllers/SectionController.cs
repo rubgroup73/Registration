@@ -28,5 +28,14 @@ namespace Registration.Controllers
             return section.GetLastSectionId();
 
         }
+        /*******Insert a new class into DB*******/
+        [HttpPost]
+        [Route("api/section/addnewsection")]
+        public int InsertClass(List<Section> Sections)
+        {
+            Section section = new Section();
+            int numEffected = section.InsertNewSessionsToDB(Sections);
+            return numEffected;
+        }
     }
 }
