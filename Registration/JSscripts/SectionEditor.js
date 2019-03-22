@@ -35,9 +35,12 @@ var readySectionsArr = [];
 var generalSectionsArr = [];
 var sNotApproved = [];
 var sApprovedOrder = [];
+var classMaxId;
+var classMaxVersion;
+var sectionMaxId;
 
 
-
+//Template for Section
 function Section_Json(id, title, content, image, status) {
     this.id = id,
         this.title = title,
@@ -45,7 +48,7 @@ function Section_Json(id, title, content, image, status) {
         this.image = image,
         this.status = status
 }
-//Adding a new section
+//הוספת אובייקט ג'ייסון של מקטע חדש לתוך מערך המקטעים הכללי
 
 function AddSection() {
     section_id = 2;
@@ -60,7 +63,7 @@ function AddSection() {
 
 
     //Saving the section details in JSON object
-    Section_Json.id = "section" + counter;
+    Section_Json.id =  counter;
     Section_Json.content = content;
     Section_Json.title = title;
     Section_Json.image = image;
@@ -69,7 +72,7 @@ function AddSection() {
 
     var list = document.getElementById(section_id);
     temp = list.innerHTML;
-    temp = temp + "<li id=section" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+    temp = temp + "<li id=" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
     list.innerHTML = temp;
     counter++;
     generalSectionsArr.push(sec);
@@ -92,83 +95,60 @@ var ready;
 //Printing the sections one by one
 
 /***************************Get Last Id And Save Class*****************************************************/
-function SaveLesson() {
-    
-    let notReady2 = document.getElementById("2").children;
-    let waiting2 = document.getElementById("3").children;
-    let ready2 = document.getElementById("4").children;
-    if (notReady2.length == 0 && waiting2.length == 0 && ready2.length == 0) {
-        alert("You have to add Section to class");
-        return;
-    }
-  
- ajaxCall("GET", "../api/class/getid", "", GetClassIDSuccess, GetCalssIDError);
-}
 
+
+//Error and Success function receiving class Max ID
 function GetClassIDSuccess(classId) {
-    SaveLessonPartTwo(classId);
+    
+    
+    classMaxId = classId.Id;
+    classMaxVersion = classId.Version;
+    ajaxCall("GET", "../api/section/getid", "", GetSessionIDSuccess, GetSessionIDError);
 }
-
 function GetCalssIDError() {
     alert("Error Get Id");
 }
-function SaveLessonPartTwo(classId) {
-    counter2 = 1;
-    var ct = document.getElementById("class-title").value;
-    var cd = document.getElementById("class-desc").value;
-    notReady = document.getElementById("2").children;
-    waiting = document.getElementById("3").children;
-    ready = document.getElementById("4").children;
+//Error and Success function receiving Session Max ID
+function GetSessionIDSuccess(data) {
+    sectionMaxId = data.Id;
 
-    for (var i = 0; i < notReady.length; i++) {
-        for (var j = 0; j < generalSectionsArr.length; j++) {
-            if (generalSectionsArr[j].id == notReady[i].id) {
-                generalSectionsArr[j].status = 2;
-            }
-
-        }
-
-    }
-    for (var i = 0; i < waiting.length; i++) {
-        for (var j = 0; j < generalSectionsArr.length; j++) {
-            if (generalSectionsArr[j].id == waiting[i].id) {
-                generalSectionsArr[j].status = 3;
-            }
-
-        }
-    }
-    for (var i = 0; i < ready.length; i++) {
-        for (var j = 0; j < generalSectionsArr.length; j++) {
-            if (generalSectionsArr[j].id == ready[i].id) {
-                generalSectionsArr[j].status = 4;
-            }
-
-        }
-    }
-    AddClass(ct, cd, classId);
 }
+function GetSessionIDError() {
+    alert("Error in get section max ID");
+}
+
+
+
 
 /***************************End Get Last Id And Save Class*****************************************************/
 
-function AddClass(title, description, classId) {
-    SaveLessonPartTwo();
+function AddClass(title, description) {
+    
     Class = {
+        Id: classMaxId + 1,
         Description: description,
         Title: title,
-        // Id: classId + 1,
-        Sections: generalSectionsArr
-
+        Status:3,
+        Position: -1,
+        Score: 50,
+        Version: classMaxVersion
+        //Sections: generalSectionsArr
     }
-    window.localStorage.setItem("checkNewClass", JSON.stringify("1"));
-    window.localStorage.setItem("newClass", JSON.stringify(Class)); // Saving
-    window.location = 'ContentReview.html';
+    ajaxCall("POST", "../api/class/addnewclass", JSON.stringify(Class), SuccessfullyAddNewClass, ErrorAddNewClass);
+}
+
+function SuccessfullyAddNewClass(data) {
+    alert('Success Addidng class');
+}
+function ErrorAddNewClass() {
+    alert("Error Add New Class");
 }
 
 //**********************************************************************************************************************
 ///Sorting and Show********************************************************************************************************'
 
 function ShowSectionsFromDB() {
-    generalSectionsArr = JSON.parse(window.localStorage.getItem("classes")).Sections;
+    //generalSectionsArr = JSON.parse(window.localStorage.getItem("classes")).Sections;
 
     CheckStatus();
     let status;
@@ -204,6 +184,59 @@ function ShowSectionsFromDB() {
     }
 
 }
+//עדכון סטטוס ומיקום למקטעים חדשים
+function UpdateSectionStatus() {
+    counter2 = 1;
+    var ct = document.getElementById("class-title").value;
+    var cd = document.getElementById("class-desc").value;
+    notReady = document.getElementById("2").children;
+    waiting = document.getElementById("3").children;
+    ready = document.getElementById("4").children;
+
+    for (var i = 0; i < notReady.length; i++) {
+        for (var j = 0; j < generalSectionsArr.length; j++) {
+            if (generalSectionsArr[j].Id == notReady[i].id) {
+                generalSectionsArr[j].Status = 2;
+                generalSectionsArr[j].Position = -1;
+
+            }
+
+        }
+
+    }
+    for (var i = 0; i < waiting.length; i++) {
+        for (var j = 0; j < generalSectionsArr.length; j++) {
+            if (generalSectionsArr[j].Id == waiting[i].id) {
+                generalSectionsArr[j].Status = 3;
+                generalSectionsArr[j].Position = -1;
+            }
+
+        }
+    }
+    for (var i = 0; i < ready.length; i++) {
+        for (var j = 0; j < generalSectionsArr.length; j++) {
+            if (generalSectionsArr[j].Id == ready[i].id) {
+                generalSectionsArr[j].Status = 4;
+                generalSectionsArr[j].Position = i;
+            }
+
+        }
+    }
+    AddClass(ct, cd);
+}
+//בודק שקיימים סקשנים בשיעור החדש
+function CheckExistingSections() {
+
+    let notReady2 = document.getElementById("2").children;
+    let waiting2 = document.getElementById("3").children;
+    let ready2 = document.getElementById("4").children;
+    if (notReady2.length == 0 && waiting2.length == 0 && ready2.length == 0) {
+        alert("You have to add Section to class");
+        return;
+    }
+    UpdateSectionStatus();
+    }
+
 function CheckStatus() {
     for (var i = 0; i < generalSectionsArr.length; i++) {
 

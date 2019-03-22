@@ -278,27 +278,29 @@ namespace Registration.Models.DAL
         /**************************************************************************************************/
         /*******************************Get Last Class ID From DB******************************************/
         /*************************************************************************************************/
-        public int GetLastId(string tableName,string connectionString)
+        public AppClass GetLastId(string tableName,string connectionString)
         {
-            AppClass classId = new AppClass();
+            AppClass appClass = new AppClass();
             SqlConnection con = null;
             try
             {
 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getClasses = "SELECT max(class_id) as 'max_id' FROM " + tableName;
-
+                string getClasses = "SELECT max(class_id) as 'max_id', max(class_version) as max_version FROM " + tableName;
+                
                 SqlCommand cmd = new SqlCommand(getClasses, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
 
                 while (dr.Read())
                 {   // Read till the end of the data into a row
 
-                    classId.Id = Convert.ToInt32(dr["max_id"]);
-                 
+                    
+                    appClass.Id = Convert.ToInt32(dr["max_id"]);
+                    appClass.Version = Convert.ToInt32(dr["max_version"]);
+
                 }
 
-                return classId.Id;
+                return appClass;
             }
             catch (Exception ex)
             {
@@ -318,7 +320,44 @@ namespace Registration.Models.DAL
         /**************************************************************************************************/
         /*******************************End Get Last Class ID From DB**************************************/
         /*************************************************************************************************/
+        public Section GetLastSectionId(string tableName, string connectionString)
+        {
+            Section section = new Section();
+            SqlConnection con = null;
+            try
+            {
 
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getClasses = "SELECT max(section_id) as 'max_id' FROM " + tableName;
+
+                SqlCommand cmd = new SqlCommand(getClasses, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+
+
+                    section.Id = Convert.ToInt32(dr["max_id"]);
+                    
+
+                }
+
+                return section;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
         /**************************************************************************************************/
         /*******************************Insert  Class Array with new version*******************************/
         /*************************************************************************************************/

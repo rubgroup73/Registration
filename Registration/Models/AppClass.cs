@@ -46,7 +46,7 @@ namespace Registration.Models
             return db.GetAllClassFromDB("Class", "ConnectionStringPerson");
         }
 
-        public int GetLastId()
+        public AppClass GetLastId()
         {
             DBservices db = new DBservices();
             return db.GetLastId("Class", "ConnectionStringPerson");

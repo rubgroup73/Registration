@@ -19,5 +19,14 @@ namespace Registration.Controllers
             return SectionClass.GetAllSectionFromDB();
 
         }
+
+        [HttpGet]
+        [Route("api/section/getid")]
+        public Section GetLastSectionId()
+        {
+            Section section = new Section();
+            return section.GetLastSectionId();
+
+        }
     }
 }

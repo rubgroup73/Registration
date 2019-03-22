@@ -37,5 +37,10 @@ namespace Registration.Models
             DBservices db = new DBservices();
             return db.GetAllSectionFromDB("Section", "ConnectionStringPerson");
         }
+        public Section GetLastSectionId()
+        {
+            DBservices db = new DBservices();
+            return db.GetLastSectionId("Section", "ConnectionStringPerson");
+        }
     }
 }

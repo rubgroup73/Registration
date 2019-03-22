@@ -10,14 +10,16 @@ namespace Registration.Controllers
 {
     public class ClassController : ApiController
     {
+        /*******Insert a new class into DB*******/
         [HttpPost]
-        [Route("api/class")]
+        [Route("api/class/addnewclass")]
         public int InsertClass(AppClass appClass)
         {
          int numEffected = appClass.InsertClassToDB(appClass);
-            return numEffected;
+         return numEffected;
         }
 
+        /**********GET All Classes From DB*********/
         [HttpGet]
         [Route("api/class")]
         public List<AppClass> GetAllClass()
@@ -26,17 +28,17 @@ namespace Registration.Controllers
            return appClass.GetAllClassFromDB();
             
         }
-
+        /**********GET The Latest Class_Id From DB*********/
         [HttpGet]
         [Route("api/class/getid")]
-        public int GetLastId()
+        public AppClass GetLastId()
         {
             AppClass appClass = new AppClass();
             return appClass.GetLastId();
 
         }
 
-
+        /**********Insert Class Array to DB*********/
         [HttpPost]
         [Route("api/class/classArray")]
         public int InsertNewClassArray(List<AppClass> appClass)
@@ -46,6 +48,6 @@ namespace Registration.Controllers
             return numEffected;
         }
 
-
+ 
     }
 }
