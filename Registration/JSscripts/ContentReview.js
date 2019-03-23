@@ -8,17 +8,18 @@ var readyClasses;
 
 
 
+
 $(document).ready(function () {
 
-    ajaxCall("GET", "../api/class", "", getAllClassFromDb, ErrorgetAllClassFromDb);
-    CreateNewLesson();
+    ajaxCall("GET", "../api/class", "", getAllClassFromDb, ErrorgetAllClassFromDb);//להביא את כל מערכי השיעורים מהדאטה בייס
+    CreateNewLesson();//לנקות את הלוקל סטורא'ג בכל פעם שהדף מסתיים להטען
 
 });
 /***********************************Success and Error Function Get Classes********************************/
 function getAllClassFromDb(data) {
-    classes = data;
-    ajaxCall("GET", "../api/section", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);
-    ShowClassesFromDB(data);
+    classes = data;//שמירה של כל מערכי השיעורים במשתנה גלובלי
+    ajaxCall("GET", "../api/section", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);//להביא את כל הסקשנים מהדאטה בייס
+    ShowClassesFromDB(data);//מעבירים לפונקציה את כל מערך השיעורים שקיבלנו מהדאטה בייס
 
 }
 function ErrorgetAllClassFromDb() {
@@ -61,24 +62,24 @@ function InsertSectionToClass() {
 /***********************************END InsertSectionToClass Function**************************************/
 
 
-/*חלוקה לעמודות המתאימות לפי סטטוס השיעור*/
+/*חלוקה לעמודות המתאימות במסך האינטרנט לפי סטטוס השיעור*/
 function ShowClassesFromDB(data) {
 
 
-    CheckStatus();
+    CheckStatus();// קריאה לפונקציה שתשמור במשתנים גלובליים מערכים של שיעורים מוכנים ושל לא מוכנים
     let status;
     let id;
     let title;
     var list;
     let type;
-
+    //חלוקה למערכים של מוכנים ולא מוכנים
     for (var i = 0; i < cNotApproved.length; i++) {
         status = cNotApproved[i].Status;
         id = cNotApproved[i].Id;
         title = cNotApproved[i].Title;
         list = document.getElementById(status);
         type = 1;
-
+        //בנייה בדף האינטרנט לפי המערך של הלא מוכנים
         temp = list.innerHTML;
         temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
         list.innerHTML = temp;
@@ -167,6 +168,8 @@ var counter = 0;
 //************************************Passing Section To Section Page****************************************************
 
 function getSections(specific_class_id, type) {
+    window.localStorage.setItem("allClasses", JSON.stringify(classes)); // Saving
+
     if (type == 1) {
         for (var i = 0; i < cNotApproved.length; i++) {
             if (cNotApproved[i].Id == specific_class_id) {
@@ -204,15 +207,15 @@ function CalssAddError() {
     alert("Error add Class");
 }
 
-function AddLesson() {
-    let newClass = JSON.parse(window.localStorage.getItem("newClass")).Sections;
-    var title = newClass.Title;
-    var list = document.getElementById("3");
-    temp = list.innerHTML;
+//function AddLesson() {
+//    let newClass = JSON.parse(window.localStorage.getItem("newClass")).Sections;
+//    var title = newClass.Title;
+//    var list = document.getElementById("3");
+//    temp = list.innerHTML;
 
-    temp = temp + "<li id=" + counter + " class='drag-item' > " + title + "</li > ";
-    list.innerHTML = temp;
-}
+//    temp = temp + "<li id=" + counter + " class='drag-item' > " + title + "</li > ";
+//    list.innerHTML = temp;
+//}
 
 
 function Empty() {

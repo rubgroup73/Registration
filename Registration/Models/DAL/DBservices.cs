@@ -226,7 +226,7 @@ namespace Registration.Models.DAL
             {
 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getClasses = "SELECT * FROM " + tableName;
+                string getClasses = "SELECT *  from " + tableName+ " where class_version = (select max(class_version) FROM section)";
 
                 SqlCommand cmd = new SqlCommand(getClasses, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end

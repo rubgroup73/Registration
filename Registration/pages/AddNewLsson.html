@@ -23,10 +23,7 @@
     <script>
         $(document).ready(function () {
             ajaxCall("GET", "../api/class/getid", "", GetClassIDSuccess, GetCalssIDError);
-            if (localStorage["classes"] != null) {
-                ShowSectionsFromDB();
-            }
-            
+           
           
 
         });
@@ -102,7 +99,7 @@
 
                 <section class="section"></section>
 
-                <button id="addlesson" class="button-success pure-button" onclick="CheckExistingSections()">שמור שינויים</button>
+                <button id="addlesson" class="button-success pure-button" onclick="CheckExistingSections()">הוסף שיעור</button>
                 <button id="newsection" data-toggle="modal" data-target="#squarespaceModal" class="button-secondary pure-button">יצירת מקטע חדש</button>
             </div>
         </div>
@@ -154,6 +151,6 @@
         </div>
     </div>
     <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/45226/dragula.min.js'></script>
-    <script src="../JSscripts/SectionEditor.js"></script>
+    <script src="../JSscripts/AddNewLesson.js"></script>
 </body>
 </html>

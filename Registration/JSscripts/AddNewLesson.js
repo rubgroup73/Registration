@@ -37,12 +37,8 @@ var sNotApproved = [];
 var sApprovedOrder = [];
 var classMaxId;
 var classMaxVersion;
-var class_title;
-var class_desc;
-var class_position;
-var class_status;
-var class_id;
-var allClasses;
+
+
 
 //Template for Section
 function Section_Json(id, title, content, status,position,class_version,class_id) {
@@ -77,8 +73,8 @@ function AddSection() {
     //Section_Json.Image = image;
     Section_Json.Status = section_status;
     Section_Json.Position = -1;
-    Section_Json.Version = classMaxVersion;
-     Section_Json.ClassId = class_id;
+    Section_Json.Version = classMaxVersion,
+    Section_Json.ClassId = classMaxId +1
     var sec = new Section_Json(Section_Json.Id, Section_Json.Title, Section_Json.Description, Section_Json.Status, Section_Json.Position, Section_Json.Version, Section_Json.ClassId);
 
     var list = document.getElementById(section_status);
@@ -111,24 +107,25 @@ var ready;
 function GetClassIDSuccess(classId) {
     
     
- //   classMaxId = classId.Id;
+    classMaxId = classId.Id;
     classMaxVersion = classId.Version;
    
-}SuccessfullyAddNewSections
+}
 function GetCalssIDError() {
     alert("Error Get Id");
 }
 
 
 //Error and Success function Add New Class
-//function SuccessfullyAddNewClass(data) {
-//    alert('Success Addidng class');
-    
-//    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
-//}
-//function ErrorAddNewClass() {
-//    alert("Error Add New Class");
-//}
+function SuccessfullyAddNewClass(data) {
+    alert('Success Addidng class');
+    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
+
+    //ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
+}
+function ErrorAddNewClass() {
+    alert("Error Add New Class");
+}
 //Error and Success function Add New Sessions
 function SuccessfullyAddNewSections(data) {
     alert("Successfully Add A new Sections");
@@ -140,66 +137,31 @@ function ErrorAddNewSections() {
 
 /***************************End Get Last Id And Save Class*****************************************************/
 
-function AddClass(title,description,position,status) {
+function AddClass(title, description) {
     
     Class = {
-        Id: class_id,
+        Id: classMaxId + 1,
         Description: description,
         Title: title,
-        Status: status,
-        Position: position,
+        Status:3,
+        Position: -1,
         Score: 50,
-        Version: classMaxVersion,
-        Sections: generalSectionsArr
+        Version: classMaxVersion
+        //Sections: generalSectionsArr
     }
-
-    for (var i = 0; i < allClasses.length; i++) {
-
-        if (allClasses[i].Id == Class.Id) {
-            allClasses[i] = Class;
-            
-        }
-        else {
-            for (var j = 0; j < allClasses[i].Sections.length; j++) {
-           
-                generalSectionsArr.push(allClasses[i].Sections[j]);
-                
-            }
-        }
-        allClasses[i].Version += 1;
-
-    }
-
-    for (var k = 0; k < generalSectionsArr.length; k++) {
-        generalSectionsArr[k].Version = classMaxVersion + 1;
-    }
-    //ajaxCall("POST", "../api/class/addnewclass", JSON.stringify(Class), SuccessfullyAddNewClass, ErrorAddNewClass);
-    ajaxCall("POST", "../api/class/classArray", JSON.stringify(allClasses), ClassAddSuccess, CalssAddError);
+    ajaxCall("POST", "../api/class/addnewclass", JSON.stringify(Class), SuccessfullyAddNewClass, ErrorAddNewClass);
 }
-function ClassAddSuccess(data) {
-    alert("Success add Class");
-    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
-}
-function CalssAddError() {
-    alert("Error add Class");
-}
+//ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
 
 //**********************************************************************************************************************
 ///Sorting and Show********************************************************************************************************'
 
 function ShowSectionsFromDB() {
-    allClasses = JSON.parse(window.localStorage.getItem("allClasses"));//כל השיעורים בגרסה האחרונה
 
-    class_object = JSON.parse(window.localStorage.getItem("classes"));//האובייקט שעושים עליו את השינוי
+    class_object = JSON.parse(window.localStorage.getItem("classes"));
     generalSectionsArr = class_object.Sections;
     class_title = class_object.Title;
     class_desc = class_object.Description;
-    class_position = class_object.Position;
-    class_status = class_object.Status;
-    class_id = class_object.Id;
-
-
-
 
     document.getElementById("class-title").value = class_title;
     document.getElementById("class-desc").value = class_desc;
@@ -219,7 +181,7 @@ function ShowSectionsFromDB() {
 
 
         temp = list.innerHTML;
-        temp = temp + "<li id=" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+        temp = temp + "<li id="+ counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
         
         list.innerHTML = temp;
 
@@ -236,13 +198,13 @@ function ShowSectionsFromDB() {
         temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
         list.innerHTML = temp;
     }
-    
+
 }
 //עדכון סטטוס ומיקום למקטעים חדשים
 function UpdateSectionStatus() {
   
-     class_title = document.getElementById("class-title").value;
-     class_desc = document.getElementById("class-desc").value;
+    var ct = document.getElementById("class-title").value;
+    var cd = document.getElementById("class-desc").value;
     notReady = document.getElementById("2").children;
     waiting = document.getElementById("3").children;
     ready = document.getElementById("4").children;
@@ -276,7 +238,7 @@ function UpdateSectionStatus() {
 
         }
     }
-    AddClass(class_title, class_desc, class_position, class_status);
+    AddClass(ct, cd);
 }
 //בודק שקיימים סקשנים בשיעור החדש
 function CheckExistingSections() {

@@ -204,9 +204,11 @@
     <Content Include="JSscripts\ContentReview.js" />
     <Content Include="JSscripts\ContentReviewDrag.js" />
     <Content Include="JSscripts\oursScripts.js" />
+    <Content Include="JSscripts\AddNewLesson.js" />
     <Content Include="JSscripts\SectionEditor.js" />
     <Content Include="pages\ContentReview.html" />
     <Content Include="pages\Registration.html" />
+    <Content Include="pages\AddNewLsson.html" />
     <Content Include="pages\SectionEditor.html" />
     <Content Include="Scripts\ajaxCall.js" />
     <Content Include="Scripts\bootstrap.js" />
