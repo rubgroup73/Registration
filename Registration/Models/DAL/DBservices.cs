@@ -242,6 +242,7 @@ namespace Registration.Models.DAL
                     sectionClass.Version = Convert.ToInt32(dr["class_version"]);
                     sectionClass.ClassId = Convert.ToInt32(dr["class_id"]);
                     sectionClass.HasFeedback = Convert.ToInt32(dr["has_feedback"]);
+                    sectionClass.FilePath = (string)(dr["file_path"]);
                     //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
                     allSection.Add(sectionClass);
                 }
@@ -444,8 +445,8 @@ namespace Registration.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values({0},'{1}','{2}',{3},{4},{5},{6},{7}); ", section.Id,section.Description,section.Title,section.Status,section.Position,section.ClassId,section.HasFeedback,section.Version);
-            String prefix = "INSERT INTO Section " + "( section_id,section_desc,section_title,section_status,approved_section_position,class_id,has_feedback,class_version)";
+            sb.AppendFormat(" Values({0},'{1}','{2}',{3},{4},{5},{6},{7},'{8}'); ", section.Id,section.Description,section.Title,section.Status,section.Position,section.ClassId,section.HasFeedback,section.Version,section.FilePath);
+            String prefix = "INSERT INTO Section " + "( section_id,section_desc,section_title,section_status,approved_section_position,class_id,has_feedback,class_version,file_path)";
             command = prefix + sb.ToString();
 
             return command;

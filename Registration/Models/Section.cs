@@ -13,20 +13,22 @@ namespace Registration.Models
         public string Title { get; set; }
         public int Status { get; set; }
         public int Position { get; set; }
-        public int HasFeedback { get; set; }
         public int ClassId { get; set; }
         public int Version { get; set; }
+        public string FilePath { get; set; }
+        public int HasFeedback { get; set; }
 
-        public Section(int id, string description, string title, int status, int position,int classId,int version, int hasFeedback=0)
+        public Section(int id, string description, string title, int status, int position,int classId,int version, string mediaPath,int hasFeedback = 0)
         {
             Id = id;
             Description = description;
             Title = title;
             Status = status;
             Position = position;
-            HasFeedback = hasFeedback;
             ClassId = classId;
             Version = version;
+            FilePath = mediaPath;
+            HasFeedback = hasFeedback;
         }
         public Section()
         {

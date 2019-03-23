@@ -179,6 +179,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\FetchController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SectionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -206,6 +207,7 @@
     <Content Include="JSscripts\oursScripts.js" />
     <Content Include="JSscripts\AddNewLesson.js" />
     <Content Include="JSscripts\SectionEditor.js" />
+    <Content Include="JSscripts\UploadFiles.js" />
     <Content Include="pages\ContentReview.html" />
     <Content Include="pages\Registration.html" />
     <Content Include="pages\AddNewLsson.html" />
@@ -266,6 +268,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Files\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

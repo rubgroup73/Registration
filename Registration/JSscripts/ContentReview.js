@@ -31,8 +31,8 @@ function ErrorgetAllClassFromDb() {
 /***********************************Success and Error Function Get Section********************************/
 
 function getAllSectionFromDb(AllSectionData) {
-    sectionArr = AllSectionData;
-    InsertSectionToClass();
+    sectionArr = AllSectionData;//שמירה של כל הסקשנים במשתנה גלובלי
+    InsertSectionToClass();//הפונקציה מכניסה את כל הסקשנים לשיעורים המתאימים להם- נוצר לנו אובייקט של שיעור יחד עם כל הסקשנים שלו
     //יש לנו כרגע שני מערכים של הראשון של שיעורים והשני של מקטעים
 
 }
@@ -191,13 +191,14 @@ function getSections(specific_class_id, type) {
 }
 
 //לעדכן את הגירסה של השיעורים לחדשה יותר
+//הפונקציה מופעלת מדף ה- HTML
 function SaveClassToDB() {
-    SaveLesson();
+    SaveLesson();//הפונקציה מעדכנת את סטאטוס השיעור, את המיקום שלו לפני הכנסתם לדאטה בייס 
     let oldVersion = classes[0].Version;
     for (var i = 0; i < classes.length; i++) {
         classes[i].Version = oldVersion + 1;
     }
-    ajaxCall("POST", "../api/class/classArray", JSON.stringify(classes), ClassAddSuccess, CalssAddError);
+    ajaxCall("POST", "../api/class/classArray", JSON.stringify(classes), ClassAddSuccess, CalssAddError);//הכנסת כל השיעורים לדאטה בייס
 
 }
 function ClassAddSuccess(data) {

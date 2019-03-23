@@ -45,15 +45,17 @@ var class_id;
 var allClasses;
 
 //Template for Section
-function Section_Json(id, title, content, status,position,class_version,class_id) {
-        this.Id =id ,
+function Section_Json(id, title, content, status, position, class_version, class_id, file_path) {
+    this.Id = id,
         this.Title = title,
         this.Description = content,
-        //this.Image = image,
         this.Status = status,
         this.Position = position,
         this.Version = class_version,
-        this.ClassId = class_id
+        this.ClassId = class_id,
+        this.FilePath = file_path
+
+}
         
 }
 //הוספת אובייקט ג'ייסון של מקטע חדש לתוך מערך המקטעים הכללי
@@ -74,12 +76,12 @@ function AddSection() {
     Section_Json.Id = counter;
     Section_Json.Description = content;
     Section_Json.Title = title;
-    //Section_Json.Image = image;
+    Section_Json.FilePath = file_path;
     Section_Json.Status = section_status;
     Section_Json.Position = -1;
     Section_Json.Version = classMaxVersion;
      Section_Json.ClassId = class_id;
-    var sec = new Section_Json(Section_Json.Id, Section_Json.Title, Section_Json.Description, Section_Json.Status, Section_Json.Position, Section_Json.Version, Section_Json.ClassId);
+    var sec = new Section_Json(Section_Json.Id, Section_Json.Title, Section_Json.Description, Section_Json.Status, Section_Json.Position, Section_Json.Version, Section_Json.ClassId, Section_Json.FilePath);
 
     var list = document.getElementById(section_status);
     temp = list.innerHTML;
