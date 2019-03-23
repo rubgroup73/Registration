@@ -52,8 +52,9 @@ namespace Registration.Models.DAL
                 }
             }
         }
-        /***********************************End Insert User********************************************/
+        /**************************************************************************************************/
         /***********************************User Confirmation In React App********************************/
+        /************************************************************************************************/
         public User GetUserForConfirmation(string username, string constring, string tableName)
         {
             username = username.Trim();
@@ -101,13 +102,66 @@ namespace Registration.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},'{13}','{14}',{15})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status, user.YearsOfEducation, user.UserName, user.Password, user.Mail, user.Phone, user.Residence, user.City, user.PrefDay1, user.PrefDay2, user.PrefHour1, user.PrefHour2, user.Score);
-            String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefday2,prefhour1,prefhour2,score)";
+            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},'{13}','{14}',{15},{16})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status, user.YearsOfEducation, user.UserName, user.Password, user.Mail, user.Phone, user.Residence, user.City, user.PrefDay1, user.PrefDay2, user.PrefHour1, user.PrefHour2, user.Score,user.Group_Id);
+            String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefday2,prefhour1,prefhour2,score,group_id)";
             command = prefix + sb.ToString();
 
             return command;
         }
-        
+           /**************************************************************************************************/
+        /*******************************Insert Class*******************************************************/
+        /*************************************************************************************************/
+        public List<User> GetAllUsersFromDB(string tableName,string connectionString)
+        {
+
+            List<User> allUsers = new List<User>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getUsers = "SELECT * FROM " + tableName + " where group_id = -1; ";
+
+                SqlCommand cmd = new SqlCommand(getUsers, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    User user = new User();
+                   user.Id= Convert.ToInt32(dr["userid"]);
+                   user.Group_Id = Convert.ToInt32(dr["group_id"]);
+                   user.FullName = (string)(dr["fullname"]);
+                   user.Mail = (string)dr["mail"];
+                    user.Gender = (string)(dr["gender"]);
+                   user.PrefDay1 = Convert.ToInt32(dr["prefday1"]);
+                   user.PrefDay2 = Convert.ToInt32(dr["prefday1"]);
+                   user.PrefHour1 = (string)(dr["prefhour1"]);
+                   user.PrefHour2 = (string)(dr["prefhour2"]);
+                   user.Status= (string)(dr["family_status"]);
+                   user.YearsOfEducation= Convert.ToInt32(dr["education"]);
+                   user.Residence = Convert.ToInt32(dr["residence"]);
+                 
+                   allUsers.Add(user);
+                }
+
+                return allUsers;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+
         /**************************************************************************************************/
         /*******************************Insert Class*******************************************************/
         /*************************************************************************************************/

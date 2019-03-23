@@ -9,8 +9,9 @@ namespace Registration.Models
     public class User
     {
         
-        public User(string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1, int prefDay2,string phone,int city, string birthDate, string prefHour1 , string prefHour2 , string mail,int score=0,bool credentials = false )
+        public User(int id,string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1, int prefDay2,string phone,int city, string birthDate, string prefHour1 , string prefHour2 , string mail,int score=0,bool credentials = false,int group_id = -1 )
         {
+            Id = id;
             FullName = fullName;
             BirthDate = birthDate;
             Gender = gender;
@@ -27,6 +28,7 @@ namespace Registration.Models
             PrefHour2 = prefHour2;
             Score = score;
             Credentials1 = credentials;
+            Group_Id = group_id;
             Mail = mail;
         }
         public User()
@@ -34,6 +36,7 @@ namespace Registration.Models
 
         }
 
+        public int Id { get; set; }
         public string FullName { get; set; }
         public string BirthDate { get; set; }
         public string Gender { get; set; }
@@ -50,6 +53,7 @@ namespace Registration.Models
         public string PrefHour2 { get; set; }
         public int Score { get; set; }
         public bool Credentials1 { get; set; }
+        public int Group_Id { get; set; }
         public string Mail { get; set; }
         /***************************************************************/
         /********Insert New User Into DB********************************/
