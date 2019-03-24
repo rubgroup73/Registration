@@ -177,9 +177,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\FetchController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SectionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -188,7 +190,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppClass.cs" />
+    <Compile Include="Models\City.cs" />
     <Compile Include="Models\DAL\DBservices.cs" />
+    <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Media.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\User.cs" />
@@ -204,11 +208,13 @@
     <Content Include="Images\trash.png" />
     <Content Include="JSscripts\ContentReview.js" />
     <Content Include="JSscripts\ContentReviewDrag.js" />
+    <Content Include="JSscripts\GroupingAlgorithm.js" />
     <Content Include="JSscripts\oursScripts.js" />
     <Content Include="JSscripts\AddNewLesson.js" />
     <Content Include="JSscripts\SectionEditor.js" />
     <Content Include="JSscripts\UploadFiles.js" />
     <Content Include="pages\ContentReview.html" />
+    <Content Include="pages\GroupSorting.html" />
     <Content Include="pages\Registration.html" />
     <Content Include="pages\AddNewLsson.html" />
     <Content Include="pages\SectionEditor.html" />

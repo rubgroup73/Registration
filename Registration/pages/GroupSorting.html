@@ -11,7 +11,16 @@
     <link href="../stylesheets/HeaderNFooter.css" rel="stylesheet" />
     <title></title>
     <script>
-        var allUsers = [];
+
+       var prefDayArr =
+            [
+                { key: "1", value: "ראשון" }, { key: "2", value: "שני" },
+                { key: "3", value: "שלישי" }, { key: "4", value: "רביעי" },
+                { key: "5", value: "חמישי" }, { key: "6", value: "שישי" },
+                { key: "7", value: "שבת" }
+            ];
+      var allUsers = [];
+
         $(document).ready(function () {
 
             ajaxCall("GET", "../api/user/getAllUsers", "", SuccessGetAllUsers, ErrorGetAllUsers);
@@ -25,10 +34,7 @@
         function ErrorGetAllUsers() {
             alert("Error get all users from db");
         }
-        function UserPrefDay(DayNum, DayName) {
-            this.DayNum = DayNum;
-            this.PrefDay1 = DayName;
-        }
+       
     </script>
 </head>
 <body>

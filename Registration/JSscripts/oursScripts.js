@@ -5,8 +5,8 @@ function createHourList() {
     var hourList2 = "<option value='-1' selected>בחר</option>";
 
     for (let i = 0; i < hourArr.length; i++) {
-        hourList1 += "<option value = '" + hourArr[i] + "'>" + hourArr[i] + "</option>";
-        hourList2 += "<option value = '" + hourArr[i]+ "'>" + hourArr[i] + "</option>";
+        hourList1 += "<option value = '" + (i+1) + "'>" + hourArr[i] + "</option>";
+        hourList2 += "<option value = '" + (i + 1) + "'>" + hourArr[i] + "</option>";
     }
     document.getElementById("prefhour1").innerHTML = hourList1;
     document.getElementById("prefhour2").innerHTML = hourList1;

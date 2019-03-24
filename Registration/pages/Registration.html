@@ -12,25 +12,48 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link href="../stylesheets/rgister.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCall.js"></script>
+    <script src="../JSscripts/GroupingAlgorithm.js"></script>
     <title>Registration Page</title>
     <script>
-        hourArr = ["8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"]
+  /*****************************************************************************************************************************************/
+        hourArr = ["8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"];
+        
+        var prefDayArr =
+            [
+                { key: "1", value: "ראשון" }, { key: "2", value: "שני" },
+                { key: "3", value: "שלישי" }, { key: "4", value: "רביעי" },
+                { key: "5", value: "חמישי" }, { key: "6", value: "שישי" },
+                { key: "7", value: "שבת" }
+            ];
+        var genderArr = [{ key: "m", value: "Male" }, { key: "f", value: "Female" }];
+        var educationArr = [{ key: "1", value: "NoEducation" }, { key: "2", value: "HighShool" }, { key: "3", value: "Academic" }];
+        allCitiesArr = [];
+        var User;
+        var allGroupsArr = [];
+/*****************************************************************************************************************************************/
+
         $(document).ready(function () {
+            ajaxCall("GET", "../api/city/allCities", "", SccessGetAllCities, ErrorGetAllCities);
             createHourList();
-            autofillScript();
-            //ajaxCall("GET", "../api/fetch?username=gavri1411", "", userAdd, user);
+        
          
             $("#pForm").submit(formSubmited);
         });
+        function SccessGetAllCities(allCities) {
+            allCitiesArr = allCities;
+            
+            let str = "";
+            for (var i = 0; i < allCities.length; i++) {
+                str += "<option value = '" + allCities[i].Id + "'>" + allCities[i].CityName + "</option>";
+            }
+            document.getElementById("city").innerHTML += str;
 
-        //function userAdd(data) {
-        //    alert("success");
-        //    alert(data);
-        //}
-        //function user(data) {
-        //    alert("failed");
-        //}
+        }
+        function ErrorGetAllCities() {
+            alert("Error Get All Cities");
+        }
 
+       
         function AddUser() {
             User = { // Note that the name of the fields must be identical to the names of the properties of the object in the server
                 FullName: document.getElementById("fullname").value,
@@ -43,23 +66,23 @@
                 Phone: $("#phone").val(),
                 BirthDate: $("#birth").val(),
                 PrefDay1: $("#prefday1").val(),
-                PrefDay2: $("#prefday2").val(),
                 PrefHour1: $("#prefhour1").val(),
                 PrefHour2: $("#prefhour2").val(),
                 Mail: $("#mail").val(),
-                City:$("#city").val()
+                City: $("#city").val()
 
             }
+            ajaxCall("GET", "../api/getAllGroup", "", SuccessGetAllGroup, ErrorGetAllGroup);
             
-
-            ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
         }
-        function userAddSuccefully(data) {
-            swal("Added!", "User is successfully Added!", "success");
+        function SuccessGetAllGroup(allGroups) {
+            allGroupsArr = allGroups;
+            CheckHour();
         }
-        function userNotAdded(err) {
-            alert("Sorryyyyy");
+        function ErrorGetAllGroup() {
+            alert("Error get all groups from DB");
         }
+           
         function formSubmited() {
             AddUser();
             return false;
@@ -71,7 +94,7 @@
 <body>
     <div class="container">
         <h1 class="well">טופס הרשמה</h1>
-                <form id="pForm">
+                <form id="pForm" autocomplete="on">
                     <div class="col-sm-12">
                         <div class="col-sm-6">
                             <label>תאריך לידה</label><br/>
@@ -99,7 +122,11 @@
                         <div class="row">
                             <div class="col-sm-6 form-group ui-widget">
                                 <label for="city">עיר</label>
-                                <input id="city" type="text" placeholder="הכנס שם משתמש כאן" class="form-control">
+                               
+                                <select id="city" type="text" placeholder="הכנס שם משתמש כאן" class="form-control" autocomplete="on">
+                                    <!--all cities will be here-->
+                                 </select>
+                               
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="residence">סוג דיור</label>
@@ -178,11 +205,11 @@
                         <div class="row">
 
                             <div class=" rightToLeftDiv col-sm-6 form-group">
-                                <label for="prefhour2">שעה מועדפת</label>
+                                <label for="prefhour2"> שעה מועדפת לשיעורי בית</label>
                                 <select id="prefhour2" class="form-control"></select>
                             </div>
 
-                            <div class="form-group col-sm-6 rightToLeftDiv">
+                            <!--<div class="form-group col-sm-6 rightToLeftDiv">
                                 <label for="prefday2">יום מועדף שני</label>
                                 <select id="prefday2" class="form-control">
                                     <option value="-1" selected>בחר</option>
@@ -194,7 +221,7 @@
                                     <option value="6">שישי</option>
                                     <option value="7">שבת</option>
                                 </select>
-                            </div>
+                            </div>-->
                         </div>
                     
                     <button type="submit" class="btn btn-lg btn-info">שלח</button>

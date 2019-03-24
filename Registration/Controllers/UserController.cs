@@ -17,6 +17,14 @@ namespace Registration.Controllers
             return num;
         }
 
-       
+        [HttpGet]
+        [Route("api/section")]
+        public List<User> GetAllClass()
+        {
+            User SectionClass = new User();
+            return SectionClass.GetAllSectionFromDB();
+
+        }
+     
     }
 }

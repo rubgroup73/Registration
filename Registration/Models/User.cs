@@ -9,7 +9,7 @@ namespace Registration.Models
     public class User
     {
         
-        public User(int id,string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1, int prefDay2,string phone,int city, string birthDate, string prefHour1 , string prefHour2 , string mail,int score=0,bool credentials = false,int group_id = -1 )
+        public User(int id,string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1,string phone,int city, string birthDate, string prefHour1 , string prefHour2 , string mail, int group_id, int score=0,bool credentials = false)
         {
             Id = id;
             FullName = fullName;
@@ -21,7 +21,7 @@ namespace Registration.Models
             Password = password;
             Residence = residence;
             PrefDay1 = prefDay1;
-            PrefDay2 = prefDay2;
+        
             Phone = phone;
             City = city;
             PrefHour1 = prefHour1;
@@ -46,7 +46,6 @@ namespace Registration.Models
         public string Password { get; set; }
         public int Residence { get; set; }
         public int PrefDay1 { get; set; }
-        public int PrefDay2 { get; set; }
         public string Phone { get; set; }
         public int City { get; set; }
         public string PrefHour1 { get; set; }
@@ -87,6 +86,12 @@ namespace Registration.Models
             { u.Credentials1 = false; return u; }
         }
         /***************************************************************/
+        /***************Get All Person From DB*************************/
+        public List<User> GetAllSectionFromDB()
+        {
+            DBservices db = new DBservices();
+            return db.GetAllUsersFromDB("AppUser", "ConnectionStringPerson");
+        }
 
     }
 }
