@@ -55,6 +55,7 @@ namespace Registration.Models.DAL
         /**************************************************************************************************/
         /***********************************User Confirmation In React App********************************/
         /************************************************************************************************/
+
         public User GetUserForConfirmation(string username, string constring, string tableName)
         {
             username = username.Trim();
@@ -95,20 +96,23 @@ namespace Registration.Models.DAL
             }
         }
 
+        /************************************************************************************************/
         /*************************Build the Insert command User String**********************************/
+        /************************************************************************************************/
+
         private String BuildInsertCommand(User user)
         {
             String command;
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},'{12}','{13}',{14},{15})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status, user.YearsOfEducation, user.UserName, user.Password, user.Mail, user.Phone, user.Residence, user.City, user.PrefDay1, user.PrefHour1, user.PrefHour2, user.Score,user.Group_Id);
-            String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefhour1,prefhour2,score,group_id)";
+            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},'{12}','{13}',{14},{15})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status, user.YearsOfEducation, user.UserName, user.Password, user.Mail, user.Phone, user.Residence, user.City, user.PrefDay1, user.PrefHour1, user.PrefHour2, user.Score,user.Group_Id,user.Group_Version);
+            String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefhour1,prefhour2,score,group_id,group_version)";
             command = prefix + sb.ToString();
 
             return command;
         }
-           /**************************************************************************************************/
+        /**************************************************************************************************/
         /*******************************Insert Class*******************************************************/
         /*************************************************************************************************/
         public List<User> GetAllUsersFromDB(string tableName,string connectionString)
@@ -444,11 +448,11 @@ namespace Registration.Models.DAL
                 }
             }
         }
-        
 
-        /**************************************************************************************/
-        /****************************Insert Sections Array*************************************/
-      
+
+        /**************************************************************************************************/
+        /**********************************Insert Sections Array*******************************************/
+        /**************************************************************************************************/
 
         public int InsertNewSessionsToDB(List<Section> sections,string connectionString)
         {
@@ -506,9 +510,9 @@ namespace Registration.Models.DAL
             return command;
         }
 
-        /**************************************************************************************/
-        /***********************************Get All Cities From DB*******************************/
-
+        /**************************************************************************************************/
+        /************************************Get All Cities From DB****************************************/
+        /**************************************************************************************************/
         public List<City> GetAllCitiesFromDB(string tableName,string connectionString)
         {
             List<City> allCities = new List<City>();
@@ -548,8 +552,9 @@ namespace Registration.Models.DAL
             }
         }
 
-        /**************************************************************************************/
-        /***********************************Get All Groups From DB*******************************/
+        /**************************************************************************************************/
+        /************************************Get All Groups From DB****************************************/
+        /**************************************************************************************************/
 
         public List<Group> GetAllGroupsFromDB(int day,int grouptime,int education, string tableName, string connectionString)
         {
@@ -595,8 +600,67 @@ namespace Registration.Models.DAL
 
             }
         }
-        /**************************************************************************************/
-        /*************************************Create Sql Command*******************************/
+
+        /**************************************************************************************************/
+        /***********************************Insert a New Group Into DB*************************************/
+        /**************************************************************************************************/
+
+        public int InsertNewGroupToDB(Group group)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("ConnectionStringPerson"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommandNewGroup(group);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private String BuildInsertCommandNewGroup(Group group)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat(" Values({0},'{1}',{2},{3},{4},{5},{6},{7},{8}); ", group.Group_Id,group.Group_Name,group.Day1,group.Hour1,group.Max_Partcipants,group.Num_Of_Registered,group.Group_Version,group.Education,group.Class_Version);
+            String prefix = "INSERT INTO Class " + "( Group_Id,Group_Name,Day1,Hour1,Max_Participants,Num_Of_Registered,Group_Version,Education,Class_Version)";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
+        /*************************************************************************************************/
+        /*************************************Create Sql Command******************************************/
+        /************************************************************************************************/
         private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)
         {
 
@@ -612,9 +676,10 @@ namespace Registration.Models.DAL
 
             return cmd;
         }
-       
 
-        /******************************Create Connection*************************************/
+        /************************************************************************************************/
+        /******************************Create Connection************************************************/
+        /***********************************************************************************************/
         public SqlConnection connect(String conString)
         {
 
@@ -624,6 +689,6 @@ namespace Registration.Models.DAL
             con.Open();
             return con;
         }
-        /******************************END Create Connection*************************************/
+     
     }
 }

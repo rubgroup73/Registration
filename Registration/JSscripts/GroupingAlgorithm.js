@@ -69,17 +69,39 @@ function CheckEducation() {
 //        }
 //    }
 //}
+function AddUserToGroup() {
+    if (choosenGroup[0].Max_Partcipants < choosenGroup[0].Num_Of_Registered) {
+        User.Group_Id = choosenGroup[0].Group_Id;
+        ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
+    }
+    else {
+        OpenNewGroup();
+    }
+}
+
+function OpenNewGroup() {
+    choosenGroup[0].Group_Id += 1;
+    ajaxCall("POST", "../api/group/insertNewGroup", JSON.stringify(choosenGroup), SuccessAddNewGroup, ErrorAddNewGroup)
+}
 
 function userAddSuccefully(data) {
-    swal("Added!", "User is successfully Added!", "success");
+    swal("Added!", "User Is Successfully Added!", "Success");
 }
 function userNotAdded(err) {
     alert("Sorryyyyy");
 }
-function SuccessGetAllGroup(allGroups) {
-    allGroupsArr = allGroups;
-    
+function SuccessGetAllGroup(group) {
+    choosenGroup = group;
+    AddUserToGroup();
 }
 function ErrorGetAllGroup() {
     alert("Error get all groups from DB");
+}
+function SuccessAddNewGroup() {
+    swal("Add a New To Group!", "A New Group is successfully Added!", "Success");
+    ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
+
+}
+function ErrorAddNewGroup() {
+    alert("Error Insert New Group");
 }

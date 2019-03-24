@@ -10,12 +10,21 @@ namespace Registration.Controllers
 {
     public class GroupController : ApiController
     {
+        [HttpPost]
+        [Route("api/group/insertNewGroup")]
+        public int AddNewGroup([FromBody]Group group)
+        {
+
+            int numEffected = group.insert();
+            return numEffected;
+        }
+
         [HttpGet]
         [Route("api/getAllGroup")]
-        public List<Group> GetAllClass()
+        public List<Group> GetAllClass(int day,int grouptime,int education)
         {
             Group groupClass = new Group();
-            return groupClass.GetAllGroupsFromDB();
+            return groupClass.GetAllGroupsFromDB(day,grouptime,education);
 
         }
     }

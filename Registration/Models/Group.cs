@@ -8,6 +8,7 @@ namespace Registration.Models
 {
     public class Group
     {
+        public int Class_Version { get; set; }
         public int Group_Id { get; set; }
         public string Group_Name { get; set; }
         public int Day1 { get; set; }
@@ -17,8 +18,9 @@ namespace Registration.Models
         public int Group_Version { get; set; }
         public int Education { get; set; }
 
-        public Group(int group_id,string group_name,int day1,int hour1,int max_partcipants,int num_of_registered,int group_version,int education)
+        public Group(int class_version,int group_id,string group_name,int day1,int hour1,int max_partcipants,int num_of_registered,int group_version,int education)
         {
+            Class_Version = class_version;
             Group_Id = group_id;
             Group_Name = group_name;
             Day1 = day1;
@@ -35,10 +37,20 @@ namespace Registration.Models
         }
 
         /***************Get All Group From DB*************************/
-        public List<Group> GetAllGroupsFromDB()
+        public List<Group> GetAllGroupsFromDB(int day,int grouptime,int education)
         {
             DBservices db = new DBservices();
-            return db.GetAllGroupsFromDB("class_group", "ConnectionStringPerson");
+            return db.GetAllGroupsFromDB(day, grouptime, education, "class_group", "ConnectionStringPerson");
+        }
+
+        /***************************************************************/
+        /********Insert New Group Into DB********************************/
+        /***************************************************************/
+        public int insert()
+        {
+            DBservices dbs = new DBservices();
+            int numEffected = dbs.InsertNewGroupToDB(this);
+            return numEffected;
         }
     }
 }

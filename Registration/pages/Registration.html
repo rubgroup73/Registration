@@ -29,7 +29,7 @@
         var educationArr = [{ key: "1", value: "NoEducation" }, { key: "2", value: "HighShool" }, { key: "3", value: "Academic" }];
         allCitiesArr = [];
         var User;
-        var allGroupsArr = [];
+        var choosenGroup = [];
 /*****************************************************************************************************************************************/
 
         $(document).ready(function () {
@@ -72,16 +72,10 @@
                 City: $("#city").val()
 
             }
-            ajaxCall("GET", "../api/getAllGroup", "", SuccessGetAllGroup, ErrorGetAllGroup);
+            CheckHour();
             
         }
-        function SuccessGetAllGroup(allGroups) {
-            allGroupsArr = allGroups;
-            CheckHour();
-        }
-        function ErrorGetAllGroup() {
-            alert("Error get all groups from DB");
-        }
+        
            
         function formSubmited() {
             AddUser();
