@@ -106,7 +106,7 @@ namespace Registration.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},'{12}','{13}',{14},{15})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status, user.YearsOfEducation, user.UserName, user.Password, user.Mail, user.Phone, user.Residence, user.City, user.PrefDay1, user.PrefHour1, user.PrefHour2, user.Score,user.Group_Id,user.Group_Version);
+            sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},{13},{14},{15},{16})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status, user.YearsOfEducation, user.UserName, user.Password, user.Mail, user.Phone, user.Residence, user.City, user.PrefDay1, user.PrefHour1, user.PrefHour2, user.Score,user.Group_Id,user.Group_Version);
             String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefhour1,prefhour2,score,group_id,group_version)";
             command = prefix + sb.ToString();
 
@@ -139,12 +139,15 @@ namespace Registration.Models.DAL
                     user.Gender = (string)(dr["gender"]);
                    user.PrefDay1 = Convert.ToInt32(dr["prefday1"]);
                    //user.PrefDay2 = Convert.ToInt32(dr["prefday1"]);
-                   user.PrefHour1 = (string)(dr["prefhour1"]);
-                   user.PrefHour2 = (string)(dr["prefhour2"]);
+                   user.PrefHour1 = Convert.ToInt32(dr["prefhour1"]);
+                   user.PrefHour2 = Convert.ToInt32(dr["prefhour2"]);
                    user.Status= (string)(dr["family_status"]);
                    user.YearsOfEducation= Convert.ToInt32(dr["education"]);
                    user.Residence = Convert.ToInt32(dr["residence"]);
-                 
+                    user.Group_Version = Convert.ToInt32(dr["Group_Version"]);
+                    
+
+
                    allUsers.Add(user);
                 }
 
@@ -580,6 +583,7 @@ namespace Registration.Models.DAL
                     group.Num_Of_Registered = Convert.ToInt32(dr["num_of_registered"]);
                     group.Education = Convert.ToInt32(dr["education"]);
                     group.Class_Version = Convert.ToInt32(dr["class_version"]);
+                    group.Day1 = Convert.ToInt32(dr["day1"]);
 
                     allGroups.Add(group);
                 }

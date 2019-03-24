@@ -9,7 +9,7 @@ namespace Registration.Models
     public class User
     {
         
-        public User(int id,string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1,string phone,int city, string birthDate, string prefHour1 , string prefHour2 , string mail, int group_id,int group_version ,int score=0,bool credentials = false)
+        public User(int id,string fullName,string gender, string status, int yearsOfEducation,string userName,string password,int residence,int prefDay1,string phone,int city, string birthDate,int prefHour1 , int prefHour2 , string mail, int group_id,int group_version ,int score=0,bool credentials = false)
         {
             Id = id;
             FullName = fullName;
@@ -48,8 +48,8 @@ namespace Registration.Models
         public int PrefDay1 { get; set; }
         public string Phone { get; set; }
         public int City { get; set; }
-        public string PrefHour1 { get; set; }
-        public string PrefHour2 { get; set; }
+        public int PrefHour1 { get; set; }
+        public int PrefHour2 { get; set; }
         public int Score { get; set; }
         public bool Credentials1 { get; set; }
         public int Group_Id { get; set; }

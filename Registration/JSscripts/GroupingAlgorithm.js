@@ -19,11 +19,12 @@
 /*educationLevel:1-Fine,2-ok,3-smarties*/
 var groupTime;
 var educationLevel;
-var groupDay = User.PrefDay1;
+var groupDay;
 
 
 //Checking User Prefhour and convert to groupHour
 function CheckHour() {
+    groupDay = User.PrefDay1;
     if (User.PrefHour1 >= 1 && User.PrefHour1 <= 9) {
         groupTime = 1;
     }
@@ -52,26 +53,10 @@ function CheckEducation() {
 
 
 
-//function FindGroup() {
-//    for (var i = 0; i < allGroupsArr.length; i++) {
-//        if (allGroupsArr[i].Day1 == groupDay) {
-//            if (allGroupsArr[i].Hour1 == groupTime) {
-//                if (allGroupsArr[i].Education == educationLevel) {
-//                    if (allGroupsArr[i].Max_Partcipants < allGroupsArr[i].Num_Of_Registered) {
-//                        User.Group_Id = allGroupsArr[i].Group_Id;
-//                        ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
-//                    }
-//                    else {
-//                        OpenNewGroup();
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
 function AddUserToGroup() {
-    if (choosenGroup[0].Max_Partcipants < choosenGroup[0].Num_Of_Registered) {
+    if (choosenGroup[0].Max_Partcipants > choosenGroup[0].Num_Of_Registered) {
         User.Group_Id = choosenGroup[0].Group_Id;
+        User.Group_Version = choosenGroup[0].Group_Version;
         ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
     }
     else {
@@ -80,7 +65,7 @@ function AddUserToGroup() {
 }
 
 function OpenNewGroup() {
-    choosenGroup[0].Group_Id += 1;
+    choosenGroup[0].Group_Version += 1;
     ajaxCall("POST", "../api/group/insertNewGroup", JSON.stringify(choosenGroup), SuccessAddNewGroup, ErrorAddNewGroup)
 }
 
@@ -97,8 +82,10 @@ function SuccessGetAllGroup(group) {
 function ErrorGetAllGroup() {
     alert("Error get all groups from DB");
 }
-function SuccessAddNewGroup() {
+function SuccessAddNewGroup(data) {
     swal("Add a New To Group!", "A New Group is successfully Added!", "Success");
+    User.Group_Version = data.Group_Version;
+    User.Group_Id = data.Group_Id;
     ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
 
 }
