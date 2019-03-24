@@ -27,5 +27,12 @@ namespace Registration.Controllers
             return groupClass.GetAllGroupsFromDB(day,grouptime,education);
 
         }
+        [HttpPut]
+        [Route("api/group/UpdateGroup")]
+        public void UpdateGroupParticipant([FromBody]Group group)
+        {
+
+            group.UpdateGroupParticipant(group);
+        }
     }
 }

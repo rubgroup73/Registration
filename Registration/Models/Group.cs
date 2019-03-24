@@ -52,5 +52,15 @@ namespace Registration.Models
             int numEffected = dbs.InsertNewGroupToDB(this);
             return numEffected;
         }
+
+        /***************************************************************/
+        /********Update Group Participant Number***********************/
+        /***************************************************************/
+
+        public int UpdateGroupParticipant(Group group)
+        {
+            DBservices db = new DBservices();
+            return db.UpdateGroupParticipant(group, "class_group", "ConnectionStringPerson");
+        }
     }
 }

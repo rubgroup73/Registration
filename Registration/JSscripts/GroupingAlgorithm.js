@@ -58,6 +58,7 @@ function AddUserToGroup() {
         User.Group_Id = choosenGroup[0].Group_Id;
         User.Group_Version = choosenGroup[0].Group_Version;
         ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
+        ajaxCall("PUT", "../api/group/UpdateGroup", JSON.stringify(choosenGroup[0]), UpdateNumSuccess, UpdateNumError);
     }
     else {
         OpenNewGroup();
@@ -66,9 +67,19 @@ function AddUserToGroup() {
 
 function OpenNewGroup() {
     choosenGroup[0].Group_Version += 1;
-    ajaxCall("POST", "../api/group/insertNewGroup", JSON.stringify(choosenGroup), SuccessAddNewGroup, ErrorAddNewGroup)
-}
+    choosenGroup[0].Num_Of_Registered = 1;
+    ajaxCall("POST", "../api/group/insertNewGroup", JSON.stringify(choosenGroup[0]), SuccessAddNewGroup, ErrorAddNewGroup)
+} /*ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);*/
 
+function UpdateNumSuccess() {
+    swal("Updated!", "Group Is Successfully Updated!", "Success");
+}
+function UpdateNumError() {
+    alert("Error update Group");
+}
+function ErrorAddNewGroup() {
+    alert("sorry update failed");
+}
 function userAddSuccefully(data) {
     swal("Added!", "User Is Successfully Added!", "Success");
 }
@@ -84,8 +95,8 @@ function ErrorGetAllGroup() {
 }
 function SuccessAddNewGroup(data) {
     swal("Add a New To Group!", "A New Group is successfully Added!", "Success");
-    User.Group_Version = data.Group_Version;
-    User.Group_Id = data.Group_Id;
+    User.Group_Version = choosenGroup[0].Group_Version;
+    User.Group_Id = choosenGroup[0].Group_Id;
     ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
 
 }

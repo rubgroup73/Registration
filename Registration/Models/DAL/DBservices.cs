@@ -649,6 +649,48 @@ namespace Registration.Models.DAL
             }
         }
 
+        /**************************************************************************************************/
+        /*******************************Update Group Participant In DB*************************************/
+        /**************************************************************************************************/
+
+        public int UpdateGroupParticipant(Group group,string tableName,string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect(connectionString);
+            String cStr = BuildUpdateDetailsCommand(group, tableName);
+            cmd = CreateCommand(cStr, con);
+
+            try
+            { 
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+
+        public string BuildUpdateDetailsCommand(Group group, string tableName)
+        {
+            int currentNum = group.Num_Of_Registered+1;
+            int group_id = group.Group_Id;
+            int group_version = group.Group_Version;
+
+            string updateComand = "UPDATE " + tableName+" ";
+            updateComand += "set num_of_registered=" + currentNum + " where group_id=" + group_id+" AND group_version="+group_version;
+            return updateComand;
+        }
+
         private String BuildInsertCommandNewGroup(Group group)
         {
             String command;
@@ -656,7 +698,7 @@ namespace Registration.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat(" Values({0},'{1}',{2},{3},{4},{5},{6},{7},{8}); ", group.Group_Id,group.Group_Name,group.Day1,group.Hour1,group.Max_Partcipants,group.Num_Of_Registered,group.Group_Version,group.Education,group.Class_Version);
-            String prefix = "INSERT INTO Class " + "( Group_Id,Group_Name,Day1,Hour1,Max_Participants,Num_Of_Registered,Group_Version,Education,Class_Version)";
+            String prefix = "INSERT INTO class_group " + "( Group_Id,Group_Name,Day1,Hour1,Max_Participants,Num_Of_Registered,Group_Version,Education,Class_Version)";
             command = prefix + sb.ToString();
 
             return command;
