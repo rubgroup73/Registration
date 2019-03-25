@@ -704,6 +704,58 @@ namespace Registration.Models.DAL
             return command;
         }
 
+        /**************************************************************************************************/
+        /*******************************Receiving Admin Credentials From DB********************************/
+        /**************************************************************************************************/
+
+        public Admin AdminAuthentication(Admin admin,string tableName,string connectionString)
+        {
+
+
+            Admin user = new Admin();
+            SqlConnection con = null;
+            try
+            {
+                con = connect(connectionString);
+                string getQuery = "SELECT * FROM " + tableName + " WHERE admin_userName='" + admin.Admin_UserName + "'";
+
+                SqlCommand cmd = new SqlCommand(getQuery, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                if (dr.HasRows == true)
+                {
+                    while (dr.Read())
+                    {   // Read till the end of the data into a row
+
+                        admin.Admin_UserName = (string)(dr["admin_userName"]);
+                        admin.Admin_Password = (string)(dr["admin_password"]);
+
+                    }
+
+                    return admin;
+                }
+                else
+                {
+                    admin.Found = false;
+                    return admin;
+                }
+            }
+
+
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
         /*************************************************************************************************/
         /*************************************Create Sql Command******************************************/
         /************************************************************************************************/

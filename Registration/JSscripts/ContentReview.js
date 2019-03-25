@@ -18,7 +18,7 @@ $(document).ready(function () {
 /***********************************Success and Error Function Get Classes********************************/
 function getAllClassFromDb(data) {
     classes = data;//שמירה של כל מערכי השיעורים במשתנה גלובלי
-    ajaxCall("GET", "../api/section", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);//להביא את כל הסקשנים מהדאטה בייס
+    ajaxCall("GET", "../api/section/GetAllClass", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);//להביא את כל הסקשנים מהדאטה בייס
     ShowClassesFromDB(data);//מעבירים לפונקציה את כל מערך השיעורים שקיבלנו מהדאטה בייס
 
 }

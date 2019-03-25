@@ -12,7 +12,7 @@ namespace Registration.Controllers
     public class SectionController : ApiController
     {
         [HttpGet]
-        [Route("api/section")]
+        [Route("api/section/GetAllClass")]
         public List<Section> GetAllClass()
         {
             Section SectionClass = new Section();
