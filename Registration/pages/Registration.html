@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="he">
+<html lang="en">
 <head>
 
     <meta charset="utf-8" />
@@ -13,11 +13,12 @@
     <link href="../stylesheets/rgister.css" rel="stylesheet" />
     <script src="../Scripts/ajaxCall.js"></script>
     <script src="../JSscripts/GroupingAlgorithm.js"></script>
+    <link href="../stylesheets/HeaderNFooter.css" rel="stylesheet" />
     <title>Registration Page</title>
     <script>
-  /*****************************************************************************************************************************************/
+        /*****************************************************************************************************************************************/
         hourArr = ["8:00", "8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"];
-        
+
         var prefDayArr =
             [
                 { key: "1", value: "ראשון" }, { key: "2", value: "שני" },
@@ -30,18 +31,18 @@
         allCitiesArr = [];
         var User;
         var choosenGroup = [];
-/*****************************************************************************************************************************************/
+        /*****************************************************************************************************************************************/
 
         $(document).ready(function () {
             ajaxCall("GET", "../api/city/allCities", "", SccessGetAllCities, ErrorGetAllCities);
             createHourList();
-        
-         
+
+
             $("#pForm").submit(formSubmited);
         });
         function SccessGetAllCities(allCities) {
             allCitiesArr = allCities;
-            
+
             let str = "";
             for (var i = 0; i < allCities.length; i++) {
                 str += "<option value = '" + allCities[i].Id + "'>" + allCities[i].CityName + "</option>";
@@ -53,7 +54,7 @@
             alert("Error Get All Cities");
         }
 
-       
+
         function AddUser() {
             User = { // Note that the name of the fields must be identical to the names of the properties of the object in the server
                 FullName: document.getElementById("fullname").value,
@@ -71,158 +72,167 @@
                 Mail: $("#mail").val(),
                 City: $("#city").val(),
                 Group_Version: -1,
-                Group_Id:-1
+                Group_Id: -1
 
 
             }
             CheckHour();
-            
+
         }
-        
-           
+
+
         function formSubmited() {
             AddUser();
             return false;
         }
-      
+
     </script>
 
 </head>
 <body>
+    <header class="header">
+        <h1 class="logo"><a href="#">Mindfulness4U</a></h1>
+        <ul class="main-nav">
+            <li><a href="Registration.html">יצירת משתשמש חדש</a></li>
+            <li onclick="CreateNewLesson()"><a href="AddNewLsson.html">יצירת שיעור חדש</a></li>
+            <li><a href="ContentReview.html">ניהול מערך שיעורים</a></li>
+            <li><a href="LoginPage.html">כניסה</a></li>
+        </ul>
+    </header>
     <div class="container">
         <h1 class="well">טופס הרשמה</h1>
-                <form id="pForm" autocomplete="on">
-                    <div class="col-sm-12">
-                        <div class="col-sm-6">
-                            <label>תאריך לידה</label><br/>
-                            <input type="date"id="birth" class="form-control"/>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group"style="padding-right:0px;">
-                                <label>שם מלא</label>
-                                <input id="fullname" type="text" placeholder="הכנס שם מלא כאן" class="form-control">
-                            </div>
-
-                        </div>
+        <form id="pForm" autocomplete="on">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <label>תאריך לידה</label><br />
+                    <input type="date" id="birth" class="form-control" />
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group" style="padding-right:0px;">
+                        <label>שם מלא</label>
+                        <input id="fullname" type="text" placeholder="הכנס שם מלא כאן" class="form-control">
                     </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>סיסמא</label>
-                                <input id="password" type="text" placeholder="הכנס הסיסמא כאן" class="form-control">
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label >שם משתמש</label>
-                                <input id="username" type="text" placeholder="הכנס שם משתמש כאן" class="form-control">
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-sm-6 form-group ui-widget">
-                                <label for="city">עיר</label>
-                               
-                                <select id="city" type="text" placeholder="הכנס שם משתמש כאן" class="form-control" autocomplete="on">
-                                    <!--all cities will be here-->
-                                 </select>
-                               
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label for="residence">סוג דיור</label>
-                                <select id="residence" class="form-control">
-                                    <option value="-1" selected>בחר</option>
-                                    <option value="1">בית אבות</option>
-                                    <option value="2">דיור מוגן</option>
-                                    <option value="3">פרטי</option>
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label>אימייל</label>
-                                <input id="mail" type="text" placeholder="aaaa@gmail.com" class="form-control">
-                            </div>
-                            <div class="col-sm-6 form-group">
-                                <label>טלפון</label>
-                                <input id="phone" type="text" placeholder="טלפון" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="gender">מין</label>
-                                <select id="gender" class="form-control">
-                                    <option value="-1" selected>בחר</option>
-                                    <option value="1">זכר</option>
-                                    <option value="2">נקבה</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="education">השכלה</label>
-                                <select id="education" class="form-control">
-                                    <option value="-1" selected>בחר</option>
-                                    <option value="1">ללא</option>
-                                    <option value="2">על יסודית</option>
-                                    <option value="3">תיכונית</option>
-                                    <option value="4">אקדמית</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="famstatus">מצב משפחתי</label>
-                                <select id="famstatus" class="form-control">
-                                    <option value="-1" selected>בחר</option>
-                                    <option value="1">רווק</option>
-                                    <option value="2">נשוי</option>
-                                    <option value="3">גרוש</option>
-                                    <option value="4">אלמן</option>
-                                </select>
-                            </div>
-                        </div>
-                    
-                        <div class="row">
-
-                            <div class="form-group col-sm-6">
-                                <label for="prefday1">יום מועדף ראשון</label>
-                                <select id="prefday1" class="form-control">
-                                    <option value="-1" selected>בחר</option>
-                                    <option value="1">ראשון</option>
-                                    <option value="2">שני</option>
-                                    <option value="3">שלישי</option>
-                                    <option value="4">רביעי</option>
-                                    <option value="5">חמישי</option>
-                                    <option value="6">שישי</option>
-                                    <option value="7">שבת</option>
-                                </select>
-                            </div>
-                            <div class=" rightToLeftDiv col-sm-6 form-group">
-                                <label for="prefhour1">שעה מועדפת</label>
-                                <select id="prefhour1" value="-1" class="form-control"></select>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class=" rightToLeftDiv col-sm-6 form-group">
-                                <label for="prefhour2"> שעה מועדפת לשיעורי בית</label>
-                                <select id="prefhour2" class="form-control"></select>
-                            </div>
-
-                            <!--<div class="form-group col-sm-6 rightToLeftDiv">
-                                <label for="prefday2">יום מועדף שני</label>
-                                <select id="prefday2" class="form-control">
-                                    <option value="-1" selected>בחר</option>
-                                    <option value="1">ראשון</option>
-                                    <option value="2">שני</option>
-                                    <option value="3">שלישי</option>
-                                    <option value="4">רביעי</option>
-                                    <option value="5">חמישי</option>
-                                    <option value="6">שישי</option>
-                                    <option value="7">שבת</option>
-                                </select>
-                            </div>-->
-                        </div>
-                    
-                    <button type="submit" class="btn btn-lg btn-info">שלח</button>
-                </form>
+                </div>
             </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label>סיסמא</label>
+                    <input id="password" type="text" placeholder="הכנס הסיסמא כאן" class="form-control">
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label>שם משתמש</label>
+                    <input id="username" type="text" placeholder="הכנס שם משתמש כאן" class="form-control">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 form-group ui-widget">
+                    <label for="city">עיר</label>
+
+                    <select id="city" type="text" placeholder="הכנס שם משתמש כאן" class="form-control" autocomplete="on">
+                        <!--all cities will be here-->
+                    </select>
+
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="residence">סוג דיור</label>
+                    <select id="residence" class="form-control">
+                        <option value="-1" selected>בחר</option>
+                        <option value="1">בית אבות</option>
+                        <option value="2">דיור מוגן</option>
+                        <option value="3">פרטי</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label>אימייל</label>
+                    <input id="mail" type="text" placeholder="aaaa@gmail.com" class="form-control">
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label>טלפון</label>
+                    <input id="phone" type="text" placeholder="טלפון" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="gender">מין</label>
+                    <select id="gender" class="form-control">
+                        <option value="-1" selected>בחר</option>
+                        <option value="1">זכר</option>
+                        <option value="2">נקבה</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="education">השכלה</label>
+                    <select id="education" class="form-control">
+                        <option value="-1" selected>בחר</option>
+                        <option value="1">ללא</option>
+                        <option value="2">על יסודית</option>
+                        <option value="3">תיכונית</option>
+                        <option value="4">אקדמית</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="famstatus">מצב משפחתי</label>
+                    <select id="famstatus" class="form-control">
+                        <option value="-1" selected>בחר</option>
+                        <option value="1">רווק</option>
+                        <option value="2">נשוי</option>
+                        <option value="3">גרוש</option>
+                        <option value="4">אלמן</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="form-group col-sm-6">
+                    <label for="prefday1">יום מועדף ראשון</label>
+                    <select id="prefday1" class="form-control">
+                        <option value="-1" selected>בחר</option>
+                        <option value="1">ראשון</option>
+                        <option value="2">שני</option>
+                        <option value="3">שלישי</option>
+                        <option value="4">רביעי</option>
+                        <option value="5">חמישי</option>
+                        <option value="6">שישי</option>
+                        <option value="7">שבת</option>
+                    </select>
+                </div>
+                <div class=" rightToLeftDiv col-sm-6 form-group">
+                    <label for="prefhour1">שעה מועדפת</label>
+                    <select id="prefhour1" value="-1" class="form-control"></select>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class=" rightToLeftDiv col-sm-6 form-group">
+                    <label for="prefhour2"> שעה מועדפת לשיעורי בית</label>
+                    <select id="prefhour2" class="form-control"></select>
+                </div>
+
+                <!--<div class="form-group col-sm-6 rightToLeftDiv">
+                    <label for="prefday2">יום מועדף שני</label>
+                    <select id="prefday2" class="form-control">
+                        <option value="-1" selected>בחר</option>
+                        <option value="1">ראשון</option>
+                        <option value="2">שני</option>
+                        <option value="3">שלישי</option>
+                        <option value="4">רביעי</option>
+                        <option value="5">חמישי</option>
+                        <option value="6">שישי</option>
+                        <option value="7">שבת</option>
+                    </select>
+                </div>-->
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-info">שלח</button>
+        </form>
+    </div>
 </body>
 </html>

@@ -16,7 +16,10 @@ function CheckAuth() {
     ajaxCall("POST", "../api/loginAuth", JSON.stringify(Admin), AuthSuccess, AuthError);
 }
 function AuthSuccess(data) {
-    window.location.href="ContentReview.html";
+    if (data == true)
+        window.location.href = "ContentReview.html";
+    else
+        alert("The Password Or The Username in Uncorrect");
 
 }
 function AuthError() {

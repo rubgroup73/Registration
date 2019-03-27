@@ -57,7 +57,7 @@ function Section_Json(id, title, content, status, position, class_version, class
 
 }
         
-}
+
 //הוספת אובייקט ג'ייסון של מקטע חדש לתוך מערך המקטעים הכללי
 
 function AddSection() {
@@ -221,7 +221,7 @@ function ShowSectionsFromDB() {
 
 
         temp = list.innerHTML;
-        temp = temp + "<li id=" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+        temp = temp + "<li id=" + sNotApproved[i].Id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
         
         list.innerHTML = temp;
 
