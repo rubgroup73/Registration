@@ -232,3 +232,17 @@ label, h3 {
     text-align:center;
     
 }
+
+#editBTN {
+    width: 100%;
+    height: 40px;
+}
+
+input#section-image{
+    color:transparent;
+}
+
+.help-block {
+    color: black;
+}
+

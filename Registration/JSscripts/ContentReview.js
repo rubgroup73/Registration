@@ -15,7 +15,7 @@ $(document).ready(function () {
     CreateNewLesson();//לנקות את הלוקל סטורא'ג בכל פעם שהדף מסתיים להטען
 
 });
-/***********************************Success and Error Function Get Classes********************************/
+/************Success and Error Function Get Classes***********/
 function getAllClassFromDb(data) {
     classes = data;//שמירה של כל מערכי השיעורים במשתנה גלובלי
     ajaxCall("GET", "../api/section/GetAllClasses", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);//להביא את כל הסקשנים מהדאטה בייס
@@ -25,10 +25,10 @@ function getAllClassFromDb(data) {
 function ErrorgetAllClassFromDb() {
     alert("Error get Classes");
 }
-/***********************************End Success and Error Function Get Classes****************************/
+/************End Success and Error Function Get Classes*********/
 
 
-/***********************************Success and Error Function Get Section********************************/
+/************Success and Error Function Get Section***********/
 
 function getAllSectionFromDb(AllSectionData) {
     sectionArr = AllSectionData;//שמירה של כל הסקשנים במשתנה גלובלי
@@ -39,9 +39,9 @@ function getAllSectionFromDb(AllSectionData) {
 function ErrorgetAllSectionFromDb() {
     alert("Error loading section from DB");
 }
-/***********************************End Success and Error Function Get Section*****************************/
+/************End Success and Error Function Get Section**********/
 
-/***********************************InsertSectionToClass Function******************************************/
+/************InsertSectionToClass Function***************/
 //הכנסה של המקטעים לתוך המערכים של השיעורים המתאימים
 function InsertSectionToClass() {
 
@@ -59,10 +59,10 @@ function InsertSectionToClass() {
 
 }
 
-/***********************************END InsertSectionToClass Function**************************************/
+/************END InsertSectionToClass Function*************/
 
 
-/*חלוקה לעמודות המתאימות במסך האינטרנט לפי סטטוס השיעור*/
+/חלוקה לעמודות המתאימות במסך האינטרנט לפי סטטוס השיעור/
 function ShowClassesFromDB(data) {
 
 
@@ -81,7 +81,7 @@ function ShowClassesFromDB(data) {
         type = 1;
         //בנייה בדף האינטרנט לפי המערך של הלא מוכנים
         temp = list.innerHTML;
-        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
+        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button id='editBTN' class='button-secondary pure-button' onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
         list.innerHTML = temp;
 
     }
@@ -96,7 +96,7 @@ function ShowClassesFromDB(data) {
         type = 2;
 
         temp = list.innerHTML;
-        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
+        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button id='editBTN' class='button-secondary pure-button' onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
         list.innerHTML = temp;
     }
 
@@ -160,12 +160,12 @@ function SaveLesson() {
 
 }
 
-//***********************************************************************************************************************
+//*****************************************
 var counter = 0;
 
 
 
-//************************************Passing Section To Section Page****************************************************
+//*************Passing Section To Section Page*****************
 
 function getSections(specific_class_id, type) {
     window.localStorage.setItem("allClasses", JSON.stringify(classes)); // Saving
@@ -223,12 +223,12 @@ function Empty() {
 
     document.getElementById("6").innerHTML = "";
 }
-//**********************************************************************************************************************
+//****************************************
 
 
 function CreateNewLesson() {
- localStorage.removeItem("classes");
-    
+    localStorage.removeItem("classes");
+
 }
 
 //function SaveClassToDB() {
@@ -238,5 +238,3 @@ function CreateNewLesson() {
 //    //ajaxCall("POST", "../api/class", JSON.stringify(Class), ClassAddSuccess, CalssAddError);
 
 //}
-
-

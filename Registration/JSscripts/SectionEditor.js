@@ -43,7 +43,7 @@ var class_position;
 var class_status;
 var class_id;
 var allClasses;
-
+var section_for_edit;
 //Template for Section
 function Section_Json(id, title, content, status, position, class_version, class_id, file_path) {
     this.Id = id,
@@ -64,7 +64,7 @@ function AddSection() {
     section_status = 2;
     var title = document.getElementById("section-title").value;
     var content = document.getElementById("section-content").value;
-    var image = document.getElementById("section-image").value;
+    var file_path = document.getElementById("section-image").value;
     var ready = document.getElementById("ready").checked;
 
     if (ready === true) {
@@ -221,7 +221,7 @@ function ShowSectionsFromDB() {
 
 
         temp = list.innerHTML;
-        temp = temp + "<li id=" + sNotApproved[i].Id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal'  class='button-secondary pure-button' onclick='EditThisSection(" + id + ")'>Edit sections</button></li > ";
         
         list.innerHTML = temp;
 
@@ -235,7 +235,8 @@ function ShowSectionsFromDB() {
         title = sApprovedOrder[j].Title;
         list = document.getElementById(status);
         temp = list.innerHTML;
-        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal' class='button-secondary pure-button' onclick='EditThisSection(" + id + ")'>Edit sections</button></li > ";
+       
         list.innerHTML = temp;
     }
     
@@ -308,3 +309,41 @@ function CheckStatus() {
         }
     }
 }
+function EditThisSection(section_id) {
+    for (var i = 0; i < generalSectionsArr.length; i++) {
+        if (generalSectionsArr[i].Id == section_id) {
+            section_for_edit = generalSectionsArr[i];
+            break;
+        }
+    }
+    document.getElementById("section-title").value = section_for_edit.Title;
+    document.getElementById("section-content").value = section_for_edit.Description;
+    document.getElementById("pathName").innerHTML = section_for_edit.FilePath;
+    document.getElementById("readyDiv").style.display = "none";
+
+   document.getElementById("SaveBtn").innerHTML = "<button onclick='UpdateSection("+section_for_edit.Id+")' type='button' id='saveImage' class='btn btn-default btn-hover-green' data-action='save' role='button'>שמור</button>";
+}
+
+function UpdateSection(id) {
+    document.getElementById("SaveBtn").innerHTML = "<button onclick='AddSection()' type='button' id='saveImage' class='btn btn-default btn-hover-green' data-action='save' role='button'>שמור</button>";
+
+    document.getElementById("readyDiv").style.display = "block";
+    var updated_title = document.getElementById("section-title").value;
+    var updated_content = document.getElementById("section-content").value;
+    var updated_file_path = document.getElementById("pathName").innerHTML;
+
+    for (var i = 0; i < generalSectionsArr.length; i++) {
+        if (generalSectionsArr[i].Id == id) {
+            generalSectionsArr[i].Title = updated_title;
+            generalSectionsArr[i].Description = updated_content;
+            generalSectionsArr[i].FilePath = updated_file_path;
+            break;
+        }
+    }
+
+}
+
+$("#section-image").on("input", function () {
+    
+    document.getElementById("pathName").innerHTML = this.value;
+});
