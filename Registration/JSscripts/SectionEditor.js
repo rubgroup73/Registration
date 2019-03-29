@@ -29,7 +29,7 @@ dragula([
         }, 100);
     });
 //***********************************************************************************************************************
-var counter = 305;
+var NewSectionId = 305;
 var section_status = 2;
 var readySectionsArr = [];
 var generalSectionsArr = [];
@@ -61,6 +61,7 @@ function Section_Json(id, title, content, status, position, class_version, class
 //הוספת אובייקט ג'ייסון של מקטע חדש לתוך מערך המקטעים הכללי
 
 function AddSection() {
+    FindMaxSectionId();
     section_status = 2;
     var title = document.getElementById("section-title").value;
     var content = document.getElementById("section-content").value;
@@ -73,7 +74,7 @@ function AddSection() {
 
 
     //Saving the section details in JSON object
-    Section_Json.Id = counter;
+    Section_Json.Id = NewSectionId;
     Section_Json.Description = content;
     Section_Json.Title = title;
     Section_Json.FilePath = file_path;
@@ -85,9 +86,8 @@ function AddSection() {
 
     var list = document.getElementById(section_status);
     temp = list.innerHTML;
-    temp = temp + "<li id=" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+    temp = temp + "<li id=" + NewSectionId + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this," + id +")' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal'  class='button-secondary pure-button' onclick='EditThisSection(" + NewSectionId + ")'>Edit sections</button></li > ";
     list.innerHTML = temp;
-    counter++;
     generalSectionsArr.push(sec);
     $("#squarespaceModal").modal("hide");
 }
@@ -95,8 +95,25 @@ function AddSection() {
 
 //Delete specific section
 
-function Delete(e) {
-    e.parentNode.parentNode.removeChild(e.parentNode);
+function Delete(e,id) {
+
+    if (confirm("האם אתה שברצונך למחוק את המקטע?")) {
+        let indexToRemove;
+        for (var i = 0; i < generalSectionsArr.length; i++) {
+            if (id == generalSectionsArr[i].Id) {
+                indexToRemove = i;
+                break;
+            }
+        }
+        if (indexToRemove > -1) {
+            generalSectionsArr.splice(indexToRemove, 1);
+        }
+        e.parentNode.parentNode.removeChild(e.parentNode);
+
+        location.reload();
+    } 
+
+    
 }
 
 var notReady;
@@ -116,24 +133,16 @@ function GetClassIDSuccess(classId) {
  //   classMaxId = classId.Id;
     classMaxVersion = classId.Version;
    
-}SuccessfullyAddNewSections
+}
+
 function GetCalssIDError() {
     alert("Error Get Id");
 }
 
 
-//Error and Success function Add New Class
-//function SuccessfullyAddNewClass(data) {
-//    alert('Success Addidng class');
-    
-//    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
-//}
-//function ErrorAddNewClass() {
-//    alert("Error Add New Class");
-//}
-//Error and Success function Add New Sessions
 function SuccessfullyAddNewSections(data) {
     alert("Successfully Add A new Sections");
+    window.location.href = 'ContentReview.html';
 }
 function ErrorAddNewSections() {
     alert("Error Add A new Sections");
@@ -221,7 +230,7 @@ function ShowSectionsFromDB() {
 
 
         temp = list.innerHTML;
-        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal'  class='button-secondary pure-button' onclick='EditThisSection(" + id + ")'>Edit sections</button></li > ";
+        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this,"+id+")' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal'  class='button-secondary pure-button' onclick='EditThisSection(" + id + ")'>Edit sections</button></li > ";
         
         list.innerHTML = temp;
 
@@ -235,7 +244,7 @@ function ShowSectionsFromDB() {
         title = sApprovedOrder[j].Title;
         list = document.getElementById(status);
         temp = list.innerHTML;
-        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal' class='button-secondary pure-button' onclick='EditThisSection(" + id + ")'>Edit sections</button></li > ";
+        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this," + id +")' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal' class='button-secondary pure-button' onclick='EditThisSection(" + id + ")'>Edit sections</button></li > ";
        
         list.innerHTML = temp;
     }
@@ -331,6 +340,7 @@ function UpdateSection(id) {
     var updated_title = document.getElementById("section-title").value;
     var updated_content = document.getElementById("section-content").value;
     var updated_file_path = document.getElementById("pathName").innerHTML;
+    document.getElementById(section_for_edit.Id).innerHTML = "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + updated_title + "<img src='../Images/trash.png' onclick='Delete(this," + id +")' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal' class='button-secondary pure-button' onclick='EditThisSection(" + id + ")'>Edit sections</button></li > ";
 
     for (var i = 0; i < generalSectionsArr.length; i++) {
         if (generalSectionsArr[i].Id == id) {
@@ -347,3 +357,14 @@ $("#section-image").on("input", function () {
     
     document.getElementById("pathName").innerHTML = this.value;
 });
+
+function FindMaxSectionId() {
+    NewSectionId = generalSectionsArr[0].Id;
+    for (var i = 1; i < generalSectionsArr.length; i++) {
+        if (generalSectionsArr[i].Id > NewSectionId) {
+            NewSectionId = generalSectionsArr[i].Id;
+        }
+    }
+
+    NewSectionId++;
+}

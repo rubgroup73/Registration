@@ -130,6 +130,14 @@ function ErrorAddNewClass() {
 //Error and Success function Add New Sessions
 function SuccessfullyAddNewSections(data) {
     alert("Successfully Add A new Sections");
+    
+    if (confirm("האם את רוצה להוסיף עוד שיעורים?")) {
+        location.reload();
+    } else {
+        window.location.href = 'ContentReview.html';
+    }
+    
+
 }
 function ErrorAddNewSections() {
     alert("Error Add A new Sections");
@@ -152,7 +160,6 @@ function AddClass(title, description) {
     }
     ajaxCall("POST", "../api/class/addnewclass", JSON.stringify(Class), SuccessfullyAddNewClass, ErrorAddNewClass);
 }
-//ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
 
 //**********************************************************************************************************************
 ///Sorting and Show********************************************************************************************************'
