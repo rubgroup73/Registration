@@ -17,15 +17,28 @@
     <title>User Manegement</title>
 </head>
 
-<body>
-    <select id="educationType">
-        <option id="fine" value="1">השכלה מינמלית/ללא השכלה</option>
-        <option id="ok" value="2">תיכונית</option>
-        <option id="smarties" value="3">אקדמאים</option>
-    </select>
-    <button id="btnEducation" onclick="devideToGroups()">לחץ להצגת גרף</button>
-    
-    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<body align="right">
+
+    <h1 style="text-align:center;">דו"חות נתוני משתמשים</h1>
+   
+    <div style="float:right;width:500px;position:relative;right:0px;left:auto; margin:0px 20px">
+        <div id="FinishAnalysis" style="height: 370px;"></div>
+        <select id="educationType">
+            <option id="fine" value="1">השכלה מינמלית/ללא השכלה</option>
+            <option id="ok" value="2">תיכונית</option>
+            <option id="smarties" value="3">אקדמאים</option>
+        </select>
+        <button id="btnEducation" onclick="devideToGroups()" class="btn-primary">לחץ להצגת גרף</button>
+    </div>
+    <div style="float:right;width:500px;position:relative;right:0;left:auto;margin:0px 50px">
+        <div id="RegisteredAnalysis" style="height: 370px;"></div>
+        <button id="btnRegistrartion" onclick="sumPerDay()" class="btn-primary">לחץ להצגת גרף</button>
+
+    </div>
+
+
+
+
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </body>
 </html>
