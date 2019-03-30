@@ -124,7 +124,9 @@ namespace Registration.Models.DAL
             {
 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getUsers = "SELECT * FROM " + tableName + " where group_id = -1; ";
+                //string getUsers = "SELECT * FROM " + tableName + " where group_id = -1; ";
+                string getUsers = "SELECT * FROM " + tableName; ;
+
 
                 SqlCommand cmd = new SqlCommand(getUsers, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
@@ -141,7 +143,7 @@ namespace Registration.Models.DAL
                    //user.PrefDay2 = Convert.ToInt32(dr["prefday1"]);
                    user.PrefHour1 = Convert.ToInt32(dr["prefhour1"]);
                    user.PrefHour2 = Convert.ToInt32(dr["prefhour2"]);
-                   user.Status= (string)(dr["family_status"]);
+                   user.Status= Convert.ToInt32(dr["family_status"]);
                    user.YearsOfEducation= Convert.ToInt32(dr["education"]);
                    user.Residence = Convert.ToInt32(dr["residence"]);
                     user.Group_Version = Convert.ToInt32(dr["Group_Version"]);
@@ -583,7 +585,9 @@ namespace Registration.Models.DAL
                     group.Num_Of_Registered = Convert.ToInt32(dr["num_of_registered"]);
                     group.Education = Convert.ToInt32(dr["education"]);
                     group.Class_Version = Convert.ToInt32(dr["class_version"]);
-                    group.Day1 = Convert.ToInt32(dr["day1"]);
+                    group.Day1 = Convert.ToInt32(dr["day1"]);                   
+                    group.IsStarted = Convert.ToBoolean(dr["IsStarted"]);
+                    group.IsFinished = Convert.ToBoolean(dr["IsFinished"]);
 
                     allGroups.Add(group);
                 }
@@ -741,6 +745,111 @@ namespace Registration.Models.DAL
             }
 
 
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        /**************************************************************************************************/
+        /*******************************Retrive All Groups From DB*****************************************/
+        /**************************************************************************************************/
+
+        public List<Group> GetAllGroupsFromDB(string tableName, string connectionString)
+        {
+            List<Group> allGroups = new List<Group>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getGroups = "SELECT *  from " + tableName;
+
+                SqlCommand cmd = new SqlCommand(getGroups, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Group group = new Group();
+                    group.Group_Id = Convert.ToInt32(dr["group_id"]);
+                    group.Group_Name = (string)(dr["group_name"]);
+                    group.Group_Version = Convert.ToInt32(dr["group_version"]);
+                    group.Hour1 = Convert.ToInt32(dr["hour1"]);
+                    group.Max_Partcipants = Convert.ToInt32(dr["max_participants"]);
+                    group.Num_Of_Registered = Convert.ToInt32(dr["num_of_registered"]);
+                    group.Education = Convert.ToInt32(dr["education"]);
+                    group.Class_Version = Convert.ToInt32(dr["class_version"]);
+                    group.Day1 = Convert.ToInt32(dr["day1"]);
+                    group.IsStarted = Convert.ToBoolean(dr["isstarted"]);
+                    group.IsFinished = Convert.ToBoolean(dr["isFinished"]);
+
+                    allGroups.Add(group);
+                }
+
+                return allGroups;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        /**************************************************************************************************/
+        /*******************************Retrive All User In Class From DB**********************************/
+        /**************************************************************************************************/
+
+        public List<UserInClass> GetAllUsersInClassFromDb(string tableName, string connectionString)
+        {
+            string startTime;
+            string endTime;
+          
+            
+            List<UserInClass> allUserInClass = new List<UserInClass>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getGroups = "SELECT *  from " + tableName;
+
+                SqlCommand cmd = new SqlCommand(getGroups, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    UserInClass userInClass = new UserInClass();
+                    userInClass.UserId = Convert.ToInt32(dr["UserId"]);
+                    userInClass.ClassId = Convert.ToInt32(dr["ClassId"]);
+                    userInClass.ClassVersion = Convert.ToInt32(dr["ClassVersion"]);
+                    startTime = dr["startTime"].ToString();
+                    endTime = dr["endTime"].ToString();
+                    userInClass.StartTime= DateTime.Parse(startTime);
+                    userInClass.EndTime=DateTime.Parse(startTime);
+                   
+
+                    allUserInClass.Add(userInClass);
+                }
+
+                return allUserInClass;
+            }
             catch (Exception ex)
             {
                 // write to log

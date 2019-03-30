@@ -25,6 +25,16 @@ namespace Registration.Controllers
             return SectionClass.GetAllSectionFromDB();
 
         }
-     
+
+        [HttpGet]
+        [Route("api/user/getAllUser")]
+        public List<User> GetAllUsersFromDb()
+        {
+            User allUsers = new User();
+            return allUsers.GetAllUsersFromDB();
+
+        }
+
+
     }
 }

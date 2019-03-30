@@ -20,7 +20,7 @@ namespace Registration.Controllers
         }
 
         [HttpGet]
-        [Route("api/getAllGroup")]
+        [Route("api/group/getAllGroup")]
         public List<Group> GetAllClass(int day,int grouptime,int education)
         {
             Group groupClass = new Group();
@@ -33,6 +33,16 @@ namespace Registration.Controllers
         {
 
             group.UpdateGroupParticipant(group);
+        }
+
+        //Get all groups from DB --> this function is related to UserManegement.js Page
+        [HttpGet]
+        [Route("api/group/getAllGroups")]
+        public List<Group> GetAllGroupsFromDb()
+        {
+            Group groupClass = new Group();
+            return groupClass.GetAllGroupsFromDB();
+
         }
     }
 }

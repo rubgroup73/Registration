@@ -186,6 +186,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SectionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserInClassController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -198,6 +199,7 @@
     <Compile Include="Models\Media.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserInClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -216,12 +218,14 @@
     <Content Include="JSscripts\AddNewLesson.js" />
     <Content Include="JSscripts\SectionEditor.js" />
     <Content Include="JSscripts\UploadFiles.js" />
+    <Content Include="JSscripts\UserManagement.js" />
     <Content Include="pages\ContentReview.html" />
     <Content Include="pages\GroupSorting.html" />
     <Content Include="pages\LoginPage.html" />
     <Content Include="pages\Registration.html" />
     <Content Include="pages\AddNewLsson.html" />
     <Content Include="pages\SectionEditor.html" />
+    <Content Include="pages\UserManegement.html" />
     <Content Include="Scripts\ajaxCall.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

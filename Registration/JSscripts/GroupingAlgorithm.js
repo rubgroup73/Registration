@@ -48,7 +48,7 @@ function CheckEducation() {
         educationLevel = 3;
     }
 
-    ajaxCall("GET", "../api/getAllGroup?day=" + groupDay + "&grouptime=" + groupTime+"&education=" + educationLevel, "", SuccessGetAllGroup, ErrorGetAllGroup);
+    ajaxCall("GET", "../api/group/getAllGroup?day=" + groupDay + "&grouptime=" + groupTime+"&education=" + educationLevel, "", SuccessGetAllGroup, ErrorGetAllGroup);
 }
 
 

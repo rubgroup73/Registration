@@ -17,8 +17,10 @@ namespace Registration.Models
         public int Num_Of_Registered { get; set; }
         public int Group_Version { get; set; }
         public int Education { get; set; }
+        public bool IsFinished { get; set; }
+        public bool IsStarted { get; set; }
 
-        public Group(int class_version,int group_id,string group_name,int day1,int hour1,int max_partcipants,int num_of_registered,int group_version,int education)
+        public Group(int class_version,int group_id,string group_name,int day1,int hour1,int max_partcipants,int num_of_registered,int group_version,int education,bool isFinished,bool isStarted=false)
         {
             Class_Version = class_version;
             Group_Id = group_id;
@@ -29,6 +31,8 @@ namespace Registration.Models
             Num_Of_Registered = num_of_registered;
             Group_Version = group_version;
             Education = education;
+            IsFinished = isFinished;
+            IsStarted = isStarted;
         }
 
         public Group()
@@ -61,6 +65,16 @@ namespace Registration.Models
         {
             DBservices db = new DBservices();
             return db.UpdateGroupParticipant(group, "class_group", "ConnectionStringPerson");
+        }
+
+        /***************************************************************/
+        /********Retrive All Groups From DB*****************************/
+        /***************************************************************/
+
+        public List<Group> GetAllGroupsFromDB()
+        {
+            DBservices db = new DBservices();
+            return db.GetAllGroupsFromDB("class_group", "ConnectionStringPerson");
         }
     }
 }

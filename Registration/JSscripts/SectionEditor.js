@@ -97,7 +97,7 @@ function AddSection() {
 
 function Delete(e,id) {
 
-    if (confirm("האם אתה שברצונך למחוק את המקטע?")) {
+    if (confirm("האם ברצונך למחוק את המקטע?")) {
         let indexToRemove;
         for (var i = 0; i < generalSectionsArr.length; i++) {
             if (id == generalSectionsArr[i].Id) {
