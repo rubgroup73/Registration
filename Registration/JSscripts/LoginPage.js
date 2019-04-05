@@ -19,7 +19,7 @@ function AuthSuccess(data) {
     if (data == true)
         window.location.href = "ContentReview.html";
     else
-        alert("The Password Or The Username in Uncorrect");
+        alert("The Password Or The Username In Incorrect");
 
 }
 function AuthError() {

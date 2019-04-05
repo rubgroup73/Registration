@@ -733,6 +733,7 @@ namespace Registration.Models.DAL
 
                         admin.Admin_UserName = (string)(dr["admin_userName"]);
                         admin.Admin_Password = (string)(dr["admin_password"]);
+                        admin.Found = true;
 
                     }
 

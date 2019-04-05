@@ -5,6 +5,7 @@ var sectionArr = [];
 var notReadyClasses;
 var waitingClasses;
 var readyClasses;
+var sectionsToDB = [];
 
 
 
@@ -197,7 +198,12 @@ function SaveClassToDB() {
     let oldVersion = classes[0].Version;
     for (var i = 0; i < classes.length; i++) {
         classes[i].Version = oldVersion + 1;
+        for (var j = 0; j < classes[i].Sections.length; j++) {
+            classes[i].Sections[j].Version = oldVersion + 1;
+            sectionsToDB.push(classes[i].Sections[j]);
+        }
     }
+    
     ajaxCall("POST", "../api/class/classArray", JSON.stringify(classes), ClassAddSuccess, CalssAddError);//הכנסת כל השיעורים לדאטה בייס
 
 }
@@ -206,12 +212,21 @@ function SaveClassToDB() {
 //***********Ajax success and error function******************
 function ClassAddSuccess(data) {
     alert("Success add Class");
-    location.reload();
+    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(sectionsToDB), SuccessfullyAddNewSections, ErrorAddNewSections);
 
 }
 function CalssAddError() {
     alert("Error add Class");
 }
+
+function SuccessfullyAddNewSections(){
+    location.reload();
+
+}
+function ErrorAddNewSections() {
+    alert("Error add Section with new version");
+}
+
 
 function Empty() {
 
@@ -223,20 +238,21 @@ function CreateNewLesson() {
 }
 
 function Delete() {
-   
+
     let indexToRemove;
     let Removelist = document.getElementById("6").children;
-        for (var j = 0; j < Removelist.length; j++) {
+    for (var j = 0; j < Removelist.length; j++) {
 
-            for (var i = 0; i < classes.length; i++) {
-                if (Removelist[j].id == classes[i].Id) {
-                    indexToRemove = i;
-                    break;
-                }
-            }
-            if (indexToRemove > -1) {
-                classes.splice(indexToRemove, 1);
+        for (var i = 0; i < classes.length; i++) {
+            if (Removelist[j].id == classes[i].Id) {
+                indexToRemove = i;
+                break;
             }
         }
+        if (indexToRemove > -1) {
+            classes.splice(indexToRemove, 1);
+        }
     }
+
+}
 
