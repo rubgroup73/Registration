@@ -15,30 +15,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'>
     <title>User Manegement</title>
+
+    <style>
+        .card-title {
+            border-bottom: 1px solid;
+            padding-bottom: 10px;
+            font-size: 26px;
+            font-weight: 300;
+            text-align:right;
+        }
+        a.canvasjs-chart-credit{
+            display:none;
+        }
+
+        #backButton {
+            border-radius: 4px;
+            padding: 8px;
+            border: none;
+            font-size: 16px;
+            background-color: #2eacd1;
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .invisible {
+            display: none;
+        }
+    </style>
+
 </head>
 
 <body align="right">
 
     <h1 style="text-align:center;">דו"חות נתוני משתמשים</h1>
-   
-    <div style="float:right;width:500px;position:relative;right:0px;left:auto; margin:0px 20px">
-        <div id="FinishAnalysis" style="height: 370px;"></div>
-        <select id="educationType">
-            <option id="fine" value="1">השכלה מינמלית/ללא השכלה</option>
-            <option id="ok" value="2">תיכונית</option>
-            <option id="smarties" value="3">אקדמאים</option>
-        </select>
-        <button id="btnEducation" onclick="devideToGroups()" class="btn-primary">לחץ להצגת גרף</button>
+
+    <div style="float:right;width:30%;position:relative;right:0px;left:auto; margin:0px 20px">
+        <h4 class="card-title">שיעור מסיימי הקורס מכלל הנרשמים בקרב אקדמאים</h4>
+        <div id="FinishAnalysisSmarties" style="height: 370px;"></div>
     </div>
-    <div style="float:right;width:500px;position:relative;right:0;left:auto;margin:0px 50px">
+
+    <div style="float:right;width:30%;position:relative;right:0px;left:auto; margin:0px 20px">
+        <h4 class="card-title">שיעור מסיימי הקורס מכלל הנרשמים בקרב בעלי השכלה תיכונית</h4>
+        <div id="FinishAnalysisOk" style="height: 370px;"></div>
+    </div>
+
+    <div style="float:right;width:30%;position:relative;right:0px;left:auto; margin:0px 20px">
+        <h4 class="card-title">שיעור מסיימי הקורס מכלל הנרשמים בקרב בעלי השכלה בסיסית</h4>
+        <div id="FinishAnalysisFine" style="height: 370px;"></div>
+    </div>
+
+    <div style="clear:both; margin-top:40px;"></div>
+
+    <div style="float:right;width:45%;position:relative;right:0;left:auto;margin:0px 50px">
+        <h4 class="card-title">משתמשים רשומים לפי ימים ולפי קבוצות - לקבוצות פעילות</h4>
         <div id="RegisteredAnalysis" style="height: 370px;"></div>
-        <button id="btnRegistrartion" onclick="sumPerDay()" class="btn-primary">לחץ להצגת גרף</button>
+    </div>
+    <div>
+        <h4 class="card-title">חמש הערים המובילות במספר המשתמשים</h4>
+        <div id="Top5" style="height: 370px; width: 45%;position:relative;float:right">
+        </div>
 
     </div>
-
-
-
+    <div name="clearing" style="clear:both"></div>
+    <div style="float:right; height: 370px; width: 30%; margin-top:20px;">
+        <h4 class="card-title" style="padding-right:15%; margin-top:30px;">משתמשים על פי מין</h4>
+        <div id="drillDown1"></div>
+    </div>
+    <div style="float:right; height: 370px; width: 30%; margin-top:20px;">
+        <h4 class="card-title" style="padding-right:15%; margin-top:30px;">משתמשים על פי מין</h4>
+        <div id="educationPie" ></div>
+    </div>
+    <div style="float:right; height: 370px; width: 30%; margin-top:20px;">
+        <h4 class="card-title" style="padding-right:15%; margin-top:30px;">משתמשים על פי מין</h4>
+        <div id="residencePie" ></div>
+    </div>
+    <button class="btn invisible" id="backButton">< Back</button>
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
 </body>
 </html>

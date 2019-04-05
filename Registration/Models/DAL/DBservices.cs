@@ -911,6 +911,94 @@ namespace Registration.Models.DAL
             }
         }
 
+        /**************************************************************************************************/
+        /*******************************Return Top 5 Cities From DB*****************************************/
+        /**************************************************************************************************/
+
+        public List<City> GetAllCitiesFromDB(string connectionString)
+        {
+            List<City> topFive = new List<City>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getTopCities = "select top 5 count (*) as 'NumOfRegistered', city, cities.Name from appuser inner join cities on cities.id=AppUser.City group by appuser.City, cities.Name order by NumOfRegistered desc;";
+
+                SqlCommand cmd = new SqlCommand(getTopCities, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    City city = new City();
+                    city.Id = Convert.ToInt32(dr["city"]);
+                    city.CityName = (string)(dr["Name"]);
+                    city.NumOfUsers = Convert.ToInt32(dr["NumOfRegistered"]);
+
+                    topFive.Add(city);
+                }
+
+                return topFive;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        /**************************************************************************************************/
+        /*********************Return All Users Per Education From DB**************************************/
+        /**************************************************************************************************/
+
+        public List<User> GetAllUsersPerEducationFromDb(string connectionString)
+        {
+            List<City> topFive = new List<City>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getTopCities = "select top 5 count (*) as 'NumOfRegistered', city, cities.Name from appuser inner join cities on cities.id=AppUser.City group by appuser.City, cities.Name order by NumOfRegistered desc;";
+
+                SqlCommand cmd = new SqlCommand(getTopCities, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    City city = new City();
+                    city.Id = Convert.ToInt32(dr["city"]);
+                    city.CityName = (string)(dr["Name"]);
+                    city.NumOfUsers = Convert.ToInt32(dr["NumOfRegistered"]);
+
+                    topFive.Add(city);
+                }
+
+                return topFive;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
         /*************************************************************************************************/
         /*************************************Create Sql Command******************************************/
         /************************************************************************************************/

@@ -18,5 +18,14 @@ namespace Registration.Controllers
             return city.GetAllCitiesFromDB();
 
         }
+
+        [HttpGet]
+        [Route("api/city/topFiveCities")]
+        public List<City> GetTopFiveCities()
+        {
+            City city = new City();
+            return city.GetTopFiveCitiesFromDB();
+
+        }
     }
 }

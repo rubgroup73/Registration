@@ -10,12 +10,16 @@ namespace Registration.Models
     {
         public int Id { get; set; }
         public string CityName { get; set; }
+        public int NumOfUsers { get; set; }
 
-        public City(int id,string cityName)
+        public City(int id,string cityName,int numOfUsers)
         {
             Id = id;
             CityName = cityName;
+            NumOfUsers = numOfUsers;
         }
+
+     
 
         public City()
         {
@@ -26,6 +30,12 @@ namespace Registration.Models
         {
             DBservices dbs = new DBservices();
             return dbs.GetAllCitiesFromDB("cities", "ConnectionStringPerson");
+        }
+
+        public List<City> GetTopFiveCitiesFromDB()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.GetAllCitiesFromDB("ConnectionStringPerson");
         }
     }
 }

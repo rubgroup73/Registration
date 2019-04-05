@@ -31,6 +31,16 @@ namespace Registration.Models
             Group_Version = group_version;
             Mail = mail;
         }
+
+        public User(string education_name,int numOfRegistered)
+        {
+            Education_Name = education_name;
+            NumOfRegistered = numOfRegistered;
+        }
+
+        public string Education_Name { get; set; }
+        public int NumOfRegistered { get; set; }
+
         public User()
         {
            
@@ -55,6 +65,8 @@ namespace Registration.Models
         public int Group_Id { get; set; }
         public int Group_Version { get; set; }
         public string Mail { get; set; }
+        
+
         /***************************************************************/
         /********Insert New User Into DB********************************/
         /***************************************************************/
@@ -103,7 +115,17 @@ namespace Registration.Models
             return db.GetAllUsersFromDB("AppUser", "ConnectionStringPerson");
         }
 
-      
+        /***************************************************************/
+        /***********Get All Users Per Education From DB*****************/
+
+        public List<User> GetAllUsersPerEducationFromDb()
+        {
+            DBservices db = new DBservices();
+            return db.GetAllUsersPerEducationFromDb("ConnectionStringPerson");
+        }
+
+
+
 
 
     }

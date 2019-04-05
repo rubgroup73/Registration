@@ -1,12 +1,18 @@
-﻿//Global Var
+﻿//Global Vars
 var allGroupsArr = [];
 var allUsersArr = [];
 var allUserInClass = [];
+var allCitiesArr = [];
+var numOfRegisteredPerUser = [];
 var choosenGroup = [];
-var educationType;
 var smartPerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu": 0 }];;//Education=3
 var okPerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu": 0 }];;//Education=2
 var finePerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu": 0 }];//Education=1
+var maleArr = [];
+var femaleArr = [];
+educationTypeFine = 1;
+educationTypeOk = 2;
+educationTypeSmarties = 3;
 
 
 
@@ -14,6 +20,8 @@ var finePerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu
 //*************************************************
 $(document).ready(function () {
     ajaxCall("GET", "../api/group/getAllGroups", "", GetAllGroupsSuccess, ErrorGetAllGroups);
+    ajaxCall("GET", "../api/city/topFiveCities", "", GetAllCitiesSuccess, ErrorGetAllCities);
+    ajaxCall("GET", "../api/user/numOfRegisteredPerEducation", "", GetAllRegisteredSuccess, ErrorGetAllRegistered);
     
 });
 
@@ -38,18 +46,44 @@ function ErrorGetAllUsers() {
 }
 function GetAllUsersInClassSuccess(usersInClass) {
     allUserInClass = usersInClass;
+    allGraphs();
+    
     
 }
 function ErrorGetAllUserInClass() {
     alert("Error get all Users In Class from DB");
 }
 
+function GetAllCitiesSuccess(allCities) {
+    allCitiesArr = allCities;
+    TopFiveCities();
+}
+function ErrorGetAllCities() {
+    alert("Error Return All Cities From DB");
+}
+
+function GetAllRegisteredSuccess(registered) {
+    numOfRegisteredPerUser = registered;
+}
+
+function ErrorGetAllRegistered() {
+    alert("Error Return All Registered From DB");
+}
+
+function allGraphs() {
+    devideToGroupsSmarties();
+    devideToGroupsOk();
+    devideToGroupsFine();
+    sumPerDay();
+    DevidePerGender();
+}
+
 //כאשר לוחצים כל הכפתור 'לחץ להצגת גרף' הפונקציה הזאת תרוץ
 //************************************************************
-function devideToGroups() {
-    educationType = document.getElementById("educationType").value//תפיסת סוג ההשכלה
+function devideToGroupsSmarties() {
+    
     for (var i = 0; i < allGroupsArr.length; i++) {
-        if (allGroupsArr[i].Education == educationType) {
+        if (allGroupsArr[i].Education == educationTypeSmarties) {
             choosenGroup.push(allGroupsArr[i]);
            
         }
@@ -64,7 +98,48 @@ function devideToGroups() {
     }
     let finishPercentage = (groupFinish / choosenGroup.length) * 100;
     let notFinishPercentage = (groupNotFinish / choosenGroup.length) * 100;
-    GroupsPie(finishPercentage, notFinishPercentage)
+    GroupsPieSmarties(finishPercentage, notFinishPercentage)
+}
+
+function devideToGroupsFine() {
+    for (var i = 0; i < allGroupsArr.length; i++) {
+        if (allGroupsArr[i].Education == educationTypeFine) {
+            choosenGroup.push(allGroupsArr[i]);
+
+        }
+    }
+    let groupFinish = 0;
+    let groupNotFinish = 0;
+    for (var i = 0; i < choosenGroup.length; i++) {
+        if (choosenGroup[i].IsFinished == true)
+            groupFinish += 1;
+        else
+            groupNotFinish += 1;
+    }
+    let finishPercentage = (groupFinish / choosenGroup.length) * 100;
+    let notFinishPercentage = (groupNotFinish / choosenGroup.length) * 100;
+    GroupsPieFine(finishPercentage, notFinishPercentage)
+}
+
+function devideToGroupsOk() {
+    
+    for (var i = 0; i < allGroupsArr.length; i++) {
+        if (allGroupsArr[i].Education == educationTypeOk) {
+            choosenGroup.push(allGroupsArr[i]);
+
+        }
+    }
+    let groupFinish = 0;
+    let groupNotFinish = 0;
+    for (var i = 0; i < choosenGroup.length; i++) {
+        if (choosenGroup[i].IsFinished == true)
+            groupFinish += 1;
+        else
+            groupNotFinish += 1;
+    }
+    let finishPercentage = (groupFinish / choosenGroup.length) * 100;
+    let notFinishPercentage = (groupNotFinish / choosenGroup.length) * 100;
+    GroupsPieOk(finishPercentage, notFinishPercentage)
 }
 //*************************************************************************************
 function sumPerDay() {
@@ -133,27 +208,69 @@ function sumPerDay() {
 }
 
 //יצירת גרף פאי על פי השכלה של כל המסיימים והלא מסיימים
-    function GroupsPie(finishPercentage, notFinishPercentage) {
-        var chart = new CanvasJS.Chart("FinishAnalysis", {
+    function GroupsPieSmarties(finishPercentage, notFinishPercentage) {
+        var chart = new CanvasJS.Chart("FinishAnalysisSmarties", {
             animationEnabled: true,
-            title: {
-                text: "שיעור מסיימי הקורס מכלל הנרשמים לפי השכלה"
-            },
+            //title: {
+            //    text: "שיעור מסיימי הקורס מכלל הנרשמים בקרב אקדמאים"
+            //},
             data: [{
                 type: "pie",
                 startAngle: 240,
                 yValueFormatString: "##0.00\"%\"",
                 indexLabel: "{label} {y}",
                 dataPoints: [
-                    { y: finishPercentage, label: "Finished" },
-                    { y: notFinishPercentage, label: "No Finished" }
+                    { y: finishPercentage, label: "סיימו" },
+                    { y: notFinishPercentage, label: "לא סיימו" }
 
 
                 ]
             }]
         });
         chart.render();
-    }
+}
+function GroupsPieOk(finishPercentage, notFinishPercentage) {
+    var chart = new CanvasJS.Chart("FinishAnalysisOk", {
+        animationEnabled: true,
+        //title: {
+        //    text: "שיעור מסיימי הקורס מכלל הנרשמים בקרב בעלי השכלה תיכונית"
+        //},
+        data: [{
+            type: "pie",
+            startAngle: 240,
+            yValueFormatString: "##0.00\"%\"",
+            indexLabel: "{label} {y}",
+            dataPoints: [
+                { y: finishPercentage, label: "סיימו" },
+                { y: notFinishPercentage, label: "לא סיימו" }
+
+
+            ]
+        }]
+    });
+    chart.render();
+}
+function GroupsPieFine(finishPercentage, notFinishPercentage) {
+    var chart = new CanvasJS.Chart("FinishAnalysisFine", {
+        animationEnabled: true,
+        //title: {
+        //    text: "שיעור מסיימי הקורס מכלל הנרשמים בקרב בעלי השכלה בסיסית"
+        //},
+        data: [{
+            type: "pie",
+            startAngle: 240,
+            yValueFormatString: "##0.00\"%\"",
+            indexLabel: "{label} {y}",
+            dataPoints: [
+                { y: finishPercentage, label: "סיימו" },
+                { y: notFinishPercentage, label: "לא סיימו" }
+
+
+            ]
+        }]
+    });
+    chart.render();
+}
 
 
 //יצירת בר גרף על פי קבוצות בכל יום
@@ -161,9 +278,7 @@ function BarChart1() {
 
     var chart = new CanvasJS.Chart("RegisteredAnalysis", {
         animationEnabled: true,
-        title: {
-            text: "משתמשים רשומים לפי ימים ולפי קבוצות - לקבוצות פעילות"
-        },
+        
         axisY: {
             title: "Number Of Registered"
         },
@@ -179,7 +294,7 @@ function BarChart1() {
             type: "bar",
             showInLegend: true,
             name: "השכלה אקדמית",
-            color: "gold",
+            color: "#007bff",
             dataPoints: [
                 { y: smartPerDay[0]["Sun"], label: "ראשון" },
                 { y: smartPerDay[1]["Mon"], label: "שני" },
@@ -193,7 +308,7 @@ function BarChart1() {
             type: "bar",
             showInLegend: true,
             name: "השכלה תיכונית",
-            color: "silver",
+            color: "#dc3545",
             dataPoints: [
                 { y: okPerDay[0]["Sun"], label: "ראשון" },
                 { y: okPerDay[1]["Mon"], label: "שני" },
@@ -206,7 +321,7 @@ function BarChart1() {
             type: "bar",
             showInLegend: true,
             name: "ללא השכלה/ השכלה מינימלית",
-            color: "#A57164",
+            color: "#20c997",
             dataPoints: [
                 { y: finePerDay[0]["Sun"], label: "ראשון" },
                 { y: finePerDay[1]["Mon"], label: "שני" },
@@ -244,3 +359,180 @@ function BarChart1() {
     }
 
 }   
+
+function DevidePerGender() {
+    let gender = 0;
+    for (var i = 0; i < allUsersArr.length; i++) {
+        gender = parseInt(allUsersArr[i].Gender);
+        switch (gender) {
+            case 1:
+                maleArr.push(allUsersArr[i].Gender);
+                break;
+            case 2:
+                femaleArr.push(allUsersArr[i].Gender);
+                break;
+        }
+    }
+    drillDownPerGender();
+}
+
+function drillDownPerGender() {
+    var totalVisitors = allUsersArr.length;
+    var visitorsData = {
+        "New vs Returning Visitors": [{
+            click: visitorsChartDrilldownHandler,
+            cursor: "pointer",
+            explodeOnClick: false,
+            innerRadius: "75%",
+            legendMarkerType: "square",
+            name: "New vs Returning Visitors",
+            radius: "100%",
+            showInLegend: true,
+            startAngle: 90,
+            type: "doughnut",
+            dataPoints: [
+                { y: maleArr.length, name: "גברים", color: "#007bff" },
+                { y: femaleArr.length, name: "נשים", color: "#dc3545" }
+            ]
+        }],
+        "גברים": [{
+            color: "#E7823A",
+            name: "גברים",
+            type: "column",
+            dataPoints: [
+                { x: new Date("1 Jan 2015"), y: 33000 },
+                { x: new Date("1 Feb 2015"), y: 35960 },
+                { x: new Date("1 Mar 2015"), y: 42160 },
+                { x: new Date("1 Apr 2015"), y: 42240 },
+         
+            ]
+        }],
+        "נשים": [{
+            color: "#546BC1",
+            name: "נשים",
+            type: "column",
+            dataPoints: [
+                { x: new Date("1 Jan 2015"), y: 22000 },
+                { x: new Date("1 Feb 2015"), y: 26040 },
+                { x: new Date("1 Mar 2015"), y: 25840 },
+                { x: new Date("1 Apr 2015"), y: 23760 },
+                { x: new Date("1 May 2015"), y: 28800 },
+              
+            ]
+        }]
+    };
+
+    var newVSReturningVisitorsOptions = {
+        animationEnabled: true,
+        theme: "light2",
+        
+        //subtitles: [{
+        //    text: "לחץ על הצבעים בגרף על מנת לרדת יותר לעומק",
+        //    backgroundColor: "#2eacd1",
+        //    fontSize: 16,
+        //    fontColor: "white",
+        //    padding: 5
+        //}],
+        legend: {
+            fontFamily: "calibri",
+            fontSize: 14,
+            itemTextFormatter: function (e) {
+                return e.dataPoint.name + ": " + Math.round(e.dataPoint.y / totalVisitors * 100) + "%";
+            }
+        },
+        data: []
+    };
+
+    //var visitorsDrilldownedChartOptions = {
+    //    animationEnabled: true,
+    //    theme: "light2",
+    //    axisX: {
+    //        labelFontColor: "#717171",
+    //        lineColor: "#a2a2a2",
+    //        tickColor: "#a2a2a2"
+    //    },
+    //    axisY: {
+    //        gridThickness: 0,
+    //        includeZero: false,
+    //        labelFontColor: "#717171",
+    //        lineColor: "#a2a2a2",
+    //        tickColor: "#a2a2a2",
+    //        lineThickness: 1
+    //    },
+    //    data: []
+    //};
+
+    var chart = new CanvasJS.Chart("drillDown1", newVSReturningVisitorsOptions);
+    chart.options.data = visitorsData["New vs Returning Visitors"];
+    chart.render();
+
+    function visitorsChartDrilldownHandler(e) {
+        chart = new CanvasJS.Chart("drillDown1", visitorsDrilldownedChartOptions);
+        chart.options.data = visitorsData[e.dataPoint.name];
+        chart.options.title = { text: e.dataPoint.name }
+        chart.render();
+        $("#backButton").toggleClass("invisible");
+    }
+
+    $("#backButton").click(function () {
+        $(this).toggleClass("invisible");
+        chart = new CanvasJS.Chart("drillDown1", newVSReturningVisitorsOptions);
+        chart.options.data = visitorsData["New vs Returning Visitors"];
+        chart.render();
+    });
+
+}
+//******************************Top 5 Cities**************************//
+
+function TopFiveCities() {
+
+    var chart = new CanvasJS.Chart("Top5", {
+        animationEnabled: true,
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+       
+        axisY: {
+            title: "Reserves(MMbbl)"
+        },
+        data: [{
+            type: "column",
+            showInLegend: true,
+            legendMarkerColor: "grey",
+            legendText: "MMbbl = one million barrels",
+            dataPoints: [
+                { y: allCitiesArr[0].NumOfUsers, label: allCitiesArr[0].CityName },
+                { y: allCitiesArr[1].NumOfUsers, label: allCitiesArr[1].CityName },
+                { y: allCitiesArr[2].NumOfUsers, label: allCitiesArr[2].CityName },
+                { y: allCitiesArr[3].NumOfUsers, label: allCitiesArr[3].CityName },
+                /*{ y: allCitiesArr[4].NumOfUsers, label: allCitiesArr[4].CityName }*/
+            
+            ]
+        }]
+    });
+    chart.render();
+
+}
+
+function educationPie() {
+    var chart = new CanvasJS.Chart("educationPie", {
+        animationEnabled: true,
+        data: [{
+            type: "doughnut",
+            startAngle: 60,
+            //innerRadius: 60,
+            indexLabelFontSize: 17,
+            indexLabel: "{label} - #percent%",
+            toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+            dataPoints: [
+                { y: 67, label: "Inbox" },
+                { y: 28, label: "Archives" },
+                { y: 10, label: "Labels" },
+                { y: 7, label: "Drafts" },
+                { y: 15, label: "Trash" },
+                { y: 6, label: "Spam" }
+            ]
+        }]
+    });
+    chart.render();
+
+}
+}
