@@ -7,6 +7,7 @@ using System.Text;
 using System.Web;
 using System.Web.Configuration;
 
+
 namespace Registration.Models.DAL
 {
 /***********************************Insert User*******************/
@@ -761,7 +762,7 @@ namespace Registration.Models.DAL
         }
 
         /**************************************************************************************************/
-        /*******************************Retrive All Groups From DB*****************************************/
+        /*******************************Return All Groups From DB*****************************************/
         /**************************************************************************************************/
 
         public List<Group> GetAllGroupsFromDB(string tableName, string connectionString)
@@ -813,7 +814,7 @@ namespace Registration.Models.DAL
         }
 
         /**************************************************************************************************/
-        /*******************************Retrive All User In Class From DB**********************************/
+        /*******************************Return All User In Class From DB**********************************/
         /**************************************************************************************************/
 
         public List<UserInClass> GetAllUsersInClassFromDb(string tableName, string connectionString)
@@ -849,6 +850,51 @@ namespace Registration.Models.DAL
                 }
 
                 return allUserInClass;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        /**************************************************************************************************/
+        /*******************************Return All Courses From DB*****************************************/
+        /**************************************************************************************************/
+        
+            public List<Course> GetCoursesFromDB(string tableName,string connectionString)
+        {
+            string classDateCreated;
+            List<Course> courses = new List<Course>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getCourses = "SELECT *  from " + tableName+ " order by date_created";
+
+                SqlCommand cmd = new SqlCommand(getCourses, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Course course = new Course();
+                    course.Course_Version = Convert.ToInt32(dr["Course_Version"]);
+                    course.Course_Name = (string)(dr["Course_Name"]);
+                    classDateCreated = dr["Date_Created"].ToString();
+                    course.Date_Created = DateTime.Parse(classDateCreated);
+                    courses.Add(course);
+                }
+
+                return courses;
             }
             catch (Exception ex)
             {

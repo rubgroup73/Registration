@@ -156,7 +156,7 @@ function SaveLesson() {
 
         }
     }
-
+    Delete();
 
 }
 
@@ -201,40 +201,42 @@ function SaveClassToDB() {
     ajaxCall("POST", "../api/class/classArray", JSON.stringify(classes), ClassAddSuccess, CalssAddError);//הכנסת כל השיעורים לדאטה בייס
 
 }
+
+//************************************************************
+//***********Ajax success and error function******************
 function ClassAddSuccess(data) {
     alert("Success add Class");
+    location.reload();
+
 }
 function CalssAddError() {
     alert("Error add Class");
 }
-
-//function AddLesson() {
-//    let newClass = JSON.parse(window.localStorage.getItem("newClass")).Sections;
-//    var title = newClass.Title;
-//    var list = document.getElementById("3");
-//    temp = list.innerHTML;
-
-//    temp = temp + "<li id=" + counter + " class='drag-item' > " + title + "</li > ";
-//    list.innerHTML = temp;
-//}
-
 
 function Empty() {
 
     document.getElementById("6").innerHTML = "";
 }
 //****************************************
-
-
 function CreateNewLesson() {
     localStorage.removeItem("classes");
-
 }
 
-//function SaveClassToDB() {
-//    //need to add identifier if we came from another page
-//    let Class = JSON.parse(window.localStorage.getItem("newClass"));
-//    alert(Class.Title);
-//    //ajaxCall("POST", "../api/class", JSON.stringify(Class), ClassAddSuccess, CalssAddError);
+function Delete() {
+   
+    let indexToRemove;
+    let Removelist = document.getElementById("6").children;
+        for (var j = 0; j < Removelist.length; j++) {
 
-//}
+            for (var i = 0; i < classes.length; i++) {
+                if (Removelist[j].id == classes[i].Id) {
+                    indexToRemove = i;
+                    break;
+                }
+            }
+            if (indexToRemove > -1) {
+                classes.splice(indexToRemove, 1);
+            }
+        }
+    }
+

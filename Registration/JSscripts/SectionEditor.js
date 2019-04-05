@@ -86,14 +86,14 @@ function AddSection() {
 
     var list = document.getElementById(section_status);
     temp = list.innerHTML;
-    temp = temp + "<li id=" + NewSectionId + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this," + id +")' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal'  class='button-secondary pure-button' onclick='EditThisSection(" + NewSectionId + ")'>Edit sections</button></li > ";
+    temp = temp + "<li id=" + NewSectionId + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this,id)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal'  class='button-secondary pure-button' onclick='EditThisSection(" + NewSectionId + ")'>Edit sections</button></li > ";
     list.innerHTML = temp;
     generalSectionsArr.push(sec);
     $("#squarespaceModal").modal("hide");
 }
 
-
-//Delete specific section
+//**************************************
+//*******Delete specific section********
 
 function Delete(e,id) {
 
@@ -109,8 +109,6 @@ function Delete(e,id) {
             generalSectionsArr.splice(indexToRemove, 1);
         }
         e.parentNode.parentNode.removeChild(e.parentNode);
-
-        location.reload();
     } 
 
     
@@ -359,12 +357,15 @@ $("#section-image").on("input", function () {
 });
 
 function FindMaxSectionId() {
-    NewSectionId = generalSectionsArr[0].Id;
-    for (var i = 1; i < generalSectionsArr.length; i++) {
-        if (generalSectionsArr[i].Id > NewSectionId) {
-            NewSectionId = generalSectionsArr[i].Id;
+    if (generalSectionsArr.length > 0) {
+        NewSectionId = generalSectionsArr[0].Id;
+        for (var i = 1; i < generalSectionsArr.length; i++) {
+            if (generalSectionsArr[i].Id > NewSectionId) {
+                NewSectionId = generalSectionsArr[i].Id;
+            }
         }
-    }
 
-    NewSectionId++;
+        NewSectionId++;
+    }
+    else NewSectionId = 305;
 }

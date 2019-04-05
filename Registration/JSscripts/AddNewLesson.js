@@ -80,7 +80,7 @@ function AddSection() {
 
     var list = document.getElementById(section_status);
     temp = list.innerHTML;
-    temp = temp + "<li id=" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+    temp = temp + "<li id=" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this,"+counter+") ' style='width: 20px; height: 20px; margin: 5px; position: absolute; top: 2px; left: 1px' /></li > ";
     list.innerHTML = temp;
     counter++;
     generalSectionsArr.push(sec);
@@ -90,9 +90,6 @@ function AddSection() {
 
 //Delete specific section
 
-function Delete(e) {
-    e.parentNode.parentNode.removeChild(e.parentNode);
-}
 
 var notReady;
 var waiting;
@@ -164,50 +161,50 @@ function AddClass(title, description) {
 //**********************************************************************************************************************
 ///Sorting and Show********************************************************************************************************'
 
-function ShowSectionsFromDB() {
+//function ShowSectionsFromDB() {
 
-    class_object = JSON.parse(window.localStorage.getItem("classes"));
-    generalSectionsArr = class_object.Sections;
-    class_title = class_object.Title;
-    class_desc = class_object.Description;
+//    class_object = JSON.parse(window.localStorage.getItem("classes"));
+//    generalSectionsArr = class_object.Sections;
+//    class_title = class_object.Title;
+//    class_desc = class_object.Description;
 
-    document.getElementById("class-title").value = class_title;
-    document.getElementById("class-desc").value = class_desc;
+//    document.getElementById("class-title").value = class_title;
+//    document.getElementById("class-desc").value = class_desc;
 
-    CheckStatus();
-    let status;
-    let id;
-    let title;
-    var list;
-
-
-    for (var i = 0; i < sNotApproved.length; i++) {
-        status = sNotApproved[i].Status;
-        id = sNotApproved[i].Id;
-        title = sNotApproved[i].Title;
-        list = document.getElementById(status);
+//    CheckStatus();
+//    let status;
+//    let id;
+//    let title;
+//    var list;
 
 
-        temp = list.innerHTML;
-        temp = temp + "<li id="+ counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+//    for (var i = 0; i < sNotApproved.length; i++) {
+//        status = sNotApproved[i].Status;
+//        id = sNotApproved[i].Id;
+//        title = sNotApproved[i].Title;
+//        list = document.getElementById(status);
+
+
+//        temp = list.innerHTML;
+//        temp = temp + "<li id="+ counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this,id)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
         
-        list.innerHTML = temp;
+//        list.innerHTML = temp;
 
-    }
-    //Sorting the Approved classes
-    sApprovedOrder = sApprovedOrder.sort((a, b) => (a.Position > b.Position) ? 1 : -1);
+//    }
+//    //Sorting the Approved classes
+//    sApprovedOrder = sApprovedOrder.sort((a, b) => (a.Position > b.Position) ? 1 : -1);
 
-    for (var j = 0; j < sApprovedOrder.length; j++) {
-        status = sApprovedOrder[j].Status;
-        id = sApprovedOrder[j].Id;
-        title = sApprovedOrder[j].Title;
-        list = document.getElementById(status);
-        temp = list.innerHTML;
-        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
-        list.innerHTML = temp;
-    }
+//    for (var j = 0; j < sApprovedOrder.length; j++) {
+//        status = sApprovedOrder[j].Status;
+//        id = sApprovedOrder[j].Id;
+//        title = sApprovedOrder[j].Title;
+//        list = document.getElementById(status);
+//        temp = list.innerHTML;
+//        temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this,id)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /></li > ";
+//        list.innerHTML = temp;
+//    }
 
-}
+//}
 //עדכון סטטוס ומיקום למקטעים חדשים
 function UpdateSectionStatus() {
   
@@ -263,8 +260,6 @@ function CheckExistingSections() {
 
 function CheckStatus() {
     for (var i = 0; i < generalSectionsArr.length; i++) {
-
-
         switch (generalSectionsArr[i].Status) {
             case 2:
             case 3:
@@ -274,5 +269,23 @@ function CheckStatus() {
                 sApprovedOrder.push(generalSectionsArr[i]);
                 break;
         }
+    }
+
+}
+
+function Delete(e, id) {
+
+    if (confirm("האם ברצונך למחוק את המקטע?")) {
+        let indexToRemove;
+        for (var i = 0; i < generalSectionsArr.length; i++) {
+            if (id == generalSectionsArr[i].Id) {
+                indexToRemove = i;
+                break;
+            }
+        }
+        if (indexToRemove > -1) {
+            generalSectionsArr.splice(indexToRemove, 1);
+        }
+        e.parentNode.parentNode.removeChild(e.parentNode);
     }
 }
