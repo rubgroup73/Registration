@@ -3,7 +3,7 @@ var allGroupsArr = [];
 var allUsersArr = [];
 var allUserInClass = [];
 var allCitiesArr = [];
-var numOfRegisteredPerUser = [];
+var numOfRegisteredPerEducation = [];
 var choosenGroup = [];
 var smartPerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu": 0 }];;//Education=3
 var okPerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu": 0 }];;//Education=2
@@ -21,7 +21,7 @@ educationTypeSmarties = 3;
 $(document).ready(function () {
     ajaxCall("GET", "../api/group/getAllGroups", "", GetAllGroupsSuccess, ErrorGetAllGroups);
     ajaxCall("GET", "../api/city/topFiveCities", "", GetAllCitiesSuccess, ErrorGetAllCities);
-    ajaxCall("GET", "../api/user/numOfRegisteredPerEducation", "", GetAllRegisteredSuccess, ErrorGetAllRegistered);
+    
     
 });
 
@@ -55,15 +55,18 @@ function ErrorGetAllUserInClass() {
 }
 
 function GetAllCitiesSuccess(allCities) {
+    ajaxCall("GET", "../api/user/numOfRegisteredPerEducation", "", GetAllRegisteredSuccess, ErrorGetAllRegistered);
     allCitiesArr = allCities;
     TopFiveCities();
+
 }
 function ErrorGetAllCities() {
     alert("Error Return All Cities From DB");
 }
 
 function GetAllRegisteredSuccess(registered) {
-    numOfRegisteredPerUser = registered;
+    numOfRegisteredPerEducation = registered;
+    educationPie();
 }
 
 function ErrorGetAllRegistered() {
@@ -377,110 +380,27 @@ function DevidePerGender() {
 }
 
 function drillDownPerGender() {
-    var totalVisitors = allUsersArr.length;
-    var visitorsData = {
-        "New vs Returning Visitors": [{
-            click: visitorsChartDrilldownHandler,
-            cursor: "pointer",
-            explodeOnClick: false,
-            innerRadius: "75%",
-            legendMarkerType: "square",
-            name: "New vs Returning Visitors",
-            radius: "100%",
-            showInLegend: true,
-            startAngle: 90,
+    
+
+    var chart = new CanvasJS.Chart("drillDown1", {
+        animationEnabled: true,
+        data: [{
             type: "doughnut",
+            startAngle: 60,
+            //innerRadius: 60,
+            indexLabelFontSize: 17,
+            indexLabel: "{label} - #percent%",
+            toolTipContent: "<b>{label}:</b> {y} (#percent%)",
             dataPoints: [
-                { y: maleArr.length, name: "גברים", color: "#007bff" },
-                { y: femaleArr.length, name: "נשים", color: "#dc3545" }
-            ]
-        }],
-        "גברים": [{
-            color: "#E7823A",
-            name: "גברים",
-            type: "column",
-            dataPoints: [
-                { x: new Date("1 Jan 2015"), y: 33000 },
-                { x: new Date("1 Feb 2015"), y: 35960 },
-                { x: new Date("1 Mar 2015"), y: 42160 },
-                { x: new Date("1 Apr 2015"), y: 42240 },
-         
-            ]
-        }],
-        "נשים": [{
-            color: "#546BC1",
-            name: "נשים",
-            type: "column",
-            dataPoints: [
-                { x: new Date("1 Jan 2015"), y: 22000 },
-                { x: new Date("1 Feb 2015"), y: 26040 },
-                { x: new Date("1 Mar 2015"), y: 25840 },
-                { x: new Date("1 Apr 2015"), y: 23760 },
-                { x: new Date("1 May 2015"), y: 28800 },
-              
+                { y: maleArr.length, label:'גברים' },
+                { y: femaleArr.length, label:'נשים'}
+               
+            
             ]
         }]
-    };
-
-    var newVSReturningVisitorsOptions = {
-        animationEnabled: true,
-        theme: "light2",
-        
-        //subtitles: [{
-        //    text: "לחץ על הצבעים בגרף על מנת לרדת יותר לעומק",
-        //    backgroundColor: "#2eacd1",
-        //    fontSize: 16,
-        //    fontColor: "white",
-        //    padding: 5
-        //}],
-        legend: {
-            fontFamily: "calibri",
-            fontSize: 14,
-            itemTextFormatter: function (e) {
-                return e.dataPoint.name + ": " + Math.round(e.dataPoint.y / totalVisitors * 100) + "%";
-            }
-        },
-        data: []
-    };
-
-    //var visitorsDrilldownedChartOptions = {
-    //    animationEnabled: true,
-    //    theme: "light2",
-    //    axisX: {
-    //        labelFontColor: "#717171",
-    //        lineColor: "#a2a2a2",
-    //        tickColor: "#a2a2a2"
-    //    },
-    //    axisY: {
-    //        gridThickness: 0,
-    //        includeZero: false,
-    //        labelFontColor: "#717171",
-    //        lineColor: "#a2a2a2",
-    //        tickColor: "#a2a2a2",
-    //        lineThickness: 1
-    //    },
-    //    data: []
-    //};
-
-    var chart = new CanvasJS.Chart("drillDown1", newVSReturningVisitorsOptions);
-    chart.options.data = visitorsData["New vs Returning Visitors"];
-    chart.render();
-
-    function visitorsChartDrilldownHandler(e) {
-        chart = new CanvasJS.Chart("drillDown1", visitorsDrilldownedChartOptions);
-        chart.options.data = visitorsData[e.dataPoint.name];
-        chart.options.title = { text: e.dataPoint.name }
-        chart.render();
-        $("#backButton").toggleClass("invisible");
-    }
-
-    $("#backButton").click(function () {
-        $(this).toggleClass("invisible");
-        chart = new CanvasJS.Chart("drillDown1", newVSReturningVisitorsOptions);
-        chart.options.data = visitorsData["New vs Returning Visitors"];
-        chart.render();
     });
-
+    chart.render();
+   
 }
 //******************************Top 5 Cities**************************//
 
@@ -513,6 +433,7 @@ function TopFiveCities() {
 }
 
 function educationPie() {
+    
     var chart = new CanvasJS.Chart("educationPie", {
         animationEnabled: true,
         data: [{
@@ -523,16 +444,13 @@ function educationPie() {
             indexLabel: "{label} - #percent%",
             toolTipContent: "<b>{label}:</b> {y} (#percent%)",
             dataPoints: [
-                { y: 67, label: "Inbox" },
-                { y: 28, label: "Archives" },
-                { y: 10, label: "Labels" },
-                { y: 7, label: "Drafts" },
-                { y: 15, label: "Trash" },
-                { y: 6, label: "Spam" }
+                { y: numOfRegisteredPerEducation[0].NumOfRegistered, label: numOfRegisteredPerEducation[0].Education_Name},
+                { y: numOfRegisteredPerEducation[1].NumOfRegistered, label: numOfRegisteredPerEducation[1].Education_Name },
+                { y: numOfRegisteredPerEducation[2].NumOfRegistered, label: numOfRegisteredPerEducation[2].Education_Name },
+                /*{ y: numOfRegisteredPerEducation[3].NumOfRegistered, label: numOfRegisteredPerEducation[3].Education_Name }*/
             ]
         }]
     });
     chart.render();
 
-}
 }

@@ -961,28 +961,24 @@ namespace Registration.Models.DAL
 
         public List<User> GetAllUsersPerEducationFromDb(string connectionString)
         {
-            List<City> topFive = new List<City>();
+            List<User> users = new List<User>();
             SqlConnection con = null;
             try
             {
 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getTopCities = "select top 5 count (*) as 'NumOfRegistered', city, cities.Name from appuser inner join cities on cities.id=AppUser.City group by appuser.City, cities.Name order by NumOfRegistered desc;";
+                string getRegisteredPerUser = "select  count (*) as 'NumOfRegistered', Education, Education.education_name from AppUser inner join Education on Education.id=AppUser.Education group by appuser.Education, Education.education_name order by NumOfRegistered desc;";
 
-                SqlCommand cmd = new SqlCommand(getTopCities, con);
+                SqlCommand cmd = new SqlCommand(getRegisteredPerUser, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
 
                 while (dr.Read())
                 {   // Read till the end of the data into a row
-                    City city = new City();
-                    city.Id = Convert.ToInt32(dr["city"]);
-                    city.CityName = (string)(dr["Name"]);
-                    city.NumOfUsers = Convert.ToInt32(dr["NumOfRegistered"]);
-
-                    topFive.Add(city);
+                    User user = new User((string)(dr["education_name"]), Convert.ToInt32(dr["NumOfRegistered"]));
+                    users.Add(user);
                 }
 
-                return topFive;
+                return users;
             }
             catch (Exception ex)
             {

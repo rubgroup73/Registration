@@ -35,6 +35,15 @@ namespace Registration.Controllers
 
         }
 
+        [HttpGet]
+        [Route("api/user/numOfRegisteredPerEducation")]
+        public List<User> GetAllUsersPerEducationFromDb()
+        {
+            User allUsers = new User();
+            return allUsers.GetAllUsersPerEducationFromDb();
+
+        }
+
 
     }
 }
