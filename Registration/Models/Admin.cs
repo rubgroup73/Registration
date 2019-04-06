@@ -15,9 +15,9 @@ namespace Registration.Models
         public string Admin_UserName { get; set; }
         public string Admin_Password { get; set; }
         public bool Found { get; set; }
-        public bool IsManeger { get; set; }
+        public int IsManeger { get; set; }
 
-        public Admin(int admin_id, string admin_firsname, string admin_lastName, string admin_email, string admin_userName, string admin_password,bool found,bool isManeger=false)
+        public Admin(int admin_id, string admin_firsname, string admin_lastName, string admin_email, string admin_userName, string admin_password,bool found,int isManeger=0)
         {
             Admin_Id = admin_id;
             Admin_Firsname = admin_firsname;
@@ -52,6 +52,7 @@ namespace Registration.Models
         {
             DBservices db = new DBservices();
             Admin adminFromDb = new Admin();
+            
             adminFromDb = db.AdminAuthentication(admin, "admin_class", "ConnectionStringPerson");
             if (adminFromDb.Found == false)
                 return false;

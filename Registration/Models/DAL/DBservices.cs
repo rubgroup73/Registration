@@ -731,19 +731,19 @@ namespace Registration.Models.DAL
                     while (dr.Read())
                     {   // Read till the end of the data into a row
 
-                        admin.Admin_UserName = (string)(dr["admin_userName"]);
-                        admin.Admin_Password = (string)(dr["admin_password"]);
-                        admin.IsManeger = Convert.ToBoolean(dr["IsManeger"]);
-                        admin.Found = true;
+                        user.Admin_UserName = (string)(dr["admin_userName"]);
+                        user.Admin_Password = (string)(dr["admin_password"]);
+                        
+                        user.Found = true;
 
                     }
 
-                    return admin;
+                    return user;
                 }
                 else
                 {
-                    admin.Found = false;
-                    return admin;
+                    user.Found = false;
+                    return user;
                 }
             }
 
@@ -844,7 +844,7 @@ namespace Registration.Models.DAL
                     admin.Admin_LastName = (string)(dr["admin_lastName"]);
                     admin.Admin_Email = (string)(dr["admin_email"]);
                     admin.Admin_UserName = (string)(dr["admin_userName"]);
-                    admin.IsManeger = Convert.ToBoolean(dr["isManager"]);
+                    admin.IsManeger = Convert.ToInt32(dr["isManager"]);
 
                     allAdmins.Add(admin);
                 }

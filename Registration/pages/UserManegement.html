@@ -14,6 +14,7 @@
     <script src="../JSscripts/UserManagement.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'>
+    <link href="../stylesheets/HeaderNFooter.css" rel="stylesheet" />
     <title>User Manegement</title>
 
     <style>
@@ -49,7 +50,16 @@
 </head>
 
 <body align="right">
-
+    <header class="header">
+        <img class="logoImage" src="../Images/Mindfulness4U Logo.png" />
+        <ul class="main-nav">
+            <li><a href="UserManegement.html">דו"חות וסטטיסטיקות</a></li>
+            <li><a href="AddAdminUser.html">יצירת מנהל חדש</a></li>
+            <li><a href="Registration.html">יצירת משתמש חדש</a></li>
+            <li onclick="CreateNewLesson()"><a href="AddNewLsson.html">יצירת שיעור חדש</a></li>
+            <li><a href="ContentReview.html">ניהול מערך שיעורים</a></li>
+        </ul>
+    </header>
     <h1 style="text-align:center;">דו"חות נתוני משתמשים</h1>
 
     <div style="float:right;width:30%;position:relative;right:0px;left:auto; margin:0px 20px">
@@ -86,9 +96,9 @@
     </div>
     <div style="float:right; height: 400px; width: 45%; margin-top:20px;">
         <h4 class="card-title" style="padding-right:15%; margin-top:30px;">התפלגות רמת ההשכלה לפי משתמשים </h4>
-        <div id="educationPie" ></div>
+        <div id="educationPie"></div>
     </div>
-  
+
     <button class="btn invisible" id="backButton">< Back</button>
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>

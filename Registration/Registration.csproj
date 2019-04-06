@@ -211,6 +211,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\Mindfulness4U Logo.png" />
     <Content Include="Images\trash.png" />
     <Content Include="JSscripts\AddAdmin.js" />
     <Content Include="JSscripts\ContentReview.js" />

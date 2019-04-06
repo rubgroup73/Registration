@@ -1,5 +1,9 @@
-﻿
+﻿@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=Varela+Round&subset=hebrew,latin-ext');
 
+body {
+   background-color: #f4f4f4;
+}
 .align {
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -178,7 +182,7 @@ input {
         }
 
     .login input[type='submit'] {
-        background-color: #ea4c88;
+        background-color: #719fe8;
         color: #eee;
         font-weight: 700;
         text-transform: uppercase;
@@ -202,4 +206,16 @@ p {
     text-align: center;
 }
 
+img{
+    margin-top:25px;
+    width:25%;
+    height:auto;
+}
+
+#logInTitle {
+    color:white;
+    font-family: 'Varela Round', sans-serif;
+    padding-bottom: 5px;
+ 
+}
 
