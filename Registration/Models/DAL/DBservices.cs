@@ -733,6 +733,7 @@ namespace Registration.Models.DAL
 
                         admin.Admin_UserName = (string)(dr["admin_userName"]);
                         admin.Admin_Password = (string)(dr["admin_password"]);
+                        admin.IsManeger = Convert.ToBoolean(dr["IsManeger"]);
                         admin.Found = true;
 
                     }
@@ -747,6 +748,109 @@ namespace Registration.Models.DAL
             }
 
 
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        /**************************************************************************************************/
+        /*************************************Add New Admin To DB******************************************/
+        /**************************************************************************************************/
+
+        public int AddNewAdmin(Admin admin,string tableName,string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect(connectionString); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommandAddAdmin(admin);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
+        private String BuildInsertCommandAddAdmin(Admin admin)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat(" Values('{0}','{1}','{2}','{3}','{4}')", admin.Admin_Firsname,admin.Admin_LastName,admin.Admin_Email,admin.Admin_UserName,admin.Admin_Password);
+            String prefix = "INSERT INTO admin_class " + "( admin_firstName,admin_lastName,admin_email,admin_userName,admin_password)";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+
+        /**************************************************************************************************/
+        /*************************************Get All Admins To DB*****************************************/
+        /**************************************************************************************************/
+
+        public List<Admin> GetAllAdminsFromDb(string tableName, string connectionString)
+        {
+            List<Admin> allAdmins = new List<Admin>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getAdmins = "SELECT *  from " + tableName;
+
+                SqlCommand cmd = new SqlCommand(getAdmins, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Admin admin = new Admin();
+                    admin.Admin_Firsname = (string)(dr["admin_firstName"]);
+                    admin.Admin_LastName = (string)(dr["admin_lastName"]);
+                    admin.Admin_Email = (string)(dr["admin_email"]);
+                    admin.Admin_UserName = (string)(dr["admin_userName"]);
+                    admin.IsManeger = Convert.ToBoolean(dr["isManager"]);
+
+                    allAdmins.Add(admin);
+                }
+
+                return allAdmins;
+            }
             catch (Exception ex)
             {
                 // write to log

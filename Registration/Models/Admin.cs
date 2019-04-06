@@ -15,8 +15,9 @@ namespace Registration.Models
         public string Admin_UserName { get; set; }
         public string Admin_Password { get; set; }
         public bool Found { get; set; }
+        public bool IsManeger { get; set; }
 
-        public Admin(int admin_id, string admin_firsname, string admin_lastName, string admin_email, string admin_userName, string admin_password,bool found)
+        public Admin(int admin_id, string admin_firsname, string admin_lastName, string admin_email, string admin_userName, string admin_password,bool found,bool isManeger=false)
         {
             Admin_Id = admin_id;
             Admin_Firsname = admin_firsname;
@@ -25,11 +26,26 @@ namespace Registration.Models
             Admin_UserName = admin_userName;
             Admin_Password = admin_password;
             Found = found;
+            IsManeger = isManeger;
         }
         public Admin()
         {
 
         }
+
+        public int AddNewAdmin(Admin admin)
+        {
+            DBservices db = new DBservices();
+            return db.AddNewAdmin(admin, "admin_class", "ConnectionStringPerson");
+        }
+
+        public List<Admin> GetAllAdminsFromDb()
+        {
+            DBservices db = new DBservices();
+            return db.GetAllAdminsFromDb("admin_class", "ConnectionStringPerson");
+        }
+
+
         /**************************************************/
         /***********Authenticated an Admin*****************/
         public bool AdminAuthentication(Admin admin)
@@ -50,5 +66,7 @@ namespace Registration.Models
             else
                 return false;
         }
+
+       
     }
 }

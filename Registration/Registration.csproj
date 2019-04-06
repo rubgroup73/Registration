@@ -212,6 +212,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\trash.png" />
+    <Content Include="JSscripts\AddAdmin.js" />
     <Content Include="JSscripts\ContentReview.js" />
     <Content Include="JSscripts\ContentReviewDrag.js" />
     <Content Include="JSscripts\GroupingAlgorithm.js" />
@@ -221,6 +222,7 @@
     <Content Include="JSscripts\SectionEditor.js" />
     <Content Include="JSscripts\UploadFiles.js" />
     <Content Include="JSscripts\UserManagement.js" />
+    <Content Include="pages\AddAdminUser.html" />
     <Content Include="pages\ContentReview.html" />
     <Content Include="pages\GroupSorting.html" />
     <Content Include="pages\LoginPage.html" />
@@ -260,6 +262,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="stylesheets\AddAdmin.css" />
     <Content Include="stylesheets\ContentReview.css" />
     <Content Include="stylesheets\HeaderNFooter.css" />
     <Content Include="stylesheets\LoginPage.css" />

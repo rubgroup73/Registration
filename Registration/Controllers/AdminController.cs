@@ -19,5 +19,21 @@ namespace Registration.Controllers
 
         }
 
+        [HttpPost]
+        [Route("api/admin/addNewAdmin")]
+        public void AddNewAdmin([FromBody]Admin admin)
+        {
+          admin.AddNewAdmin(admin);
+        }
+
+        [HttpGet]
+        [Route("api/admin/getAlladmins")]
+        public List<Admin> GetAllAdmins()
+        {
+            Admin admin = new Admin();
+           return admin.GetAllAdminsFromDb();
+        }
+
+
     }
 }
