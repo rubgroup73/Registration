@@ -3,6 +3,7 @@ $(document).ready(function () {
     $("#registration_form").submit(submitDetails);
 });
 
+//ברגע שהדף מוכן נעשת ולידציה על כל מה שמוכנס לפורם
 $(document).ready(function () {
 
 
@@ -102,6 +103,18 @@ $(document).ready(function () {
     });
   
 });
+//לאחר שלחצו על סבמיט
+//1. submitDetails()
+//2. AddAdmin()
+//3.  ajaxCall("GET", "../api/admin/getAlladmins", "", GetAllAdminSuccess, ErrorAllAdminSuccess)
+//4. if Ajax success then: 
+//5. GetAllAdminSuccess() [Saving all the Admins from DB in a vairable--> allAdminsArr]
+//5.1 Save an 'Admin' object 
+//5.2 Call to function: checkIfUserNameExists(Admin["Admin_UserName"]) --> return True or False
+//5.3 Call to function: checkIfEmailAddressExists(Admin["Admin_Email"])--> return True or False
+//5.4 Only if both of the functions are returning False, just then I call to an AjaxCall
+//5.6 ajaxCall("POST", "../api/admin/addNewAdmin", JSON.stringify(Admin), SuccessAddNewAdmin, ErrorAddNewAdmin)
+//6 Only if Ajax success then a new Admin added to DB.
 
 function submitDetails() {
     AddAdmin();
