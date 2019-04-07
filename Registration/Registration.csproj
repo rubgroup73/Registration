@@ -220,6 +220,7 @@
     <Content Include="JSscripts\LoginPage.js" />
     <Content Include="JSscripts\oursScripts.js" />
     <Content Include="JSscripts\AddNewLesson.js" />
+    <Content Include="JSscripts\Registration.js" />
     <Content Include="JSscripts\SectionEditor.js" />
     <Content Include="JSscripts\UploadFiles.js" />
     <Content Include="JSscripts\UserManagement.js" />

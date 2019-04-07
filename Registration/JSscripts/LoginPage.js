@@ -15,6 +15,11 @@ function CheckAuth() {
     }
     ajaxCall("POST", "../api/loginAuth", JSON.stringify(Admin), AuthSuccess, AuthError);
 }
+
+//*************All Ajax Success And Error Functions**********************************
+
+//ajaxCall("POST", "../api/loginAuth", JSON.stringify(Admin), AuthSuccess, AuthError);
+//************************************************************************************
 function AuthSuccess(data) {
     if (data == true)
         window.location.href = "ContentReview.html";
@@ -23,5 +28,5 @@ function AuthSuccess(data) {
 
 }
 function AuthError() {
-    alert("Error Receiving Admin Details From DB");
+    console.log("Error Receiving Admin Details From DB");
 }

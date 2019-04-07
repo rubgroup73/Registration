@@ -24,7 +24,7 @@
     return false;
 }
 function Success1(data) {
-    alert("Success Adding Files");
+    console.log("Success Adding Files");
 }
 function error() {
     alert("Error Adding Files");

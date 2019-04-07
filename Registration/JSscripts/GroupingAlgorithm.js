@@ -1,26 +1,9 @@
-﻿/*           FullName: document.getElementById("fullname").value,
-                Gender: $("#gender").val(),
-                Status: $("#famstatus").val(),
-                YearsOfEducation: $("#education").val(),
-                UserName: $("#username").val(),
-                Password: $("#password").val(),
-                Residence: $("#residence").val(),
-                Phone: $("#phone").val(),
-                BirthDate: $("#birth").val(),
-                PrefDay1: $("#prefday1").val(),
-                PrefHour1: $("#prefhour1").val(),
-                PrefHour2: $("#prefhour2").val(),
-                Mail: $("#mail").val(),
-                City: $("#city").val()
-
-            }*/
-
+﻿
 /*groupTime: 1-Morning, 2-Noon, 3-Evening*/
 /*educationLevel:1-Fine,2-ok,3-smarties*/
 var groupTime;
 var educationLevel;
 var groupDay;
-
 
 //Checking User Prefhour and convert to groupHour
 function CheckHour() {
@@ -36,6 +19,7 @@ function CheckHour() {
     }
     CheckEducation();
 }
+
 //Checking User YearsOfEducation and convert to Group education Level
 function CheckEducation() {
     if (User.YearsOfEducation == 1 || User.YearsOfEducation == 2) {
@@ -47,11 +31,8 @@ function CheckEducation() {
     else {
         educationLevel = 3;
     }
-
     ajaxCall("GET", "../api/group/getAllGroup?day=" + groupDay + "&grouptime=" + groupTime+"&education=" + educationLevel, "", SuccessGetAllGroup, ErrorGetAllGroup);
 }
-
-
 
 function AddUserToGroup() {
     if (choosenGroup[0].Max_Partcipants > choosenGroup[0].Num_Of_Registered) {
@@ -69,37 +50,47 @@ function OpenNewGroup() {
     choosenGroup[0].Group_Version += 1;
     choosenGroup[0].Num_Of_Registered = 1;
     ajaxCall("POST", "../api/group/insertNewGroup", JSON.stringify(choosenGroup[0]), SuccessAddNewGroup, ErrorAddNewGroup)
-} /*ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);*/
+} 
 
+//***************************All Ajax Success And Error Functions**************************
+
+// ajaxCall("PUT", "../api/group/UpdateGroup", JSON.stringify(choosenGroup[0]), UpdateNumSuccess, UpdateNumError);
+//**************************************************************************************************************
 function UpdateNumSuccess() {
     swal("Updated!", "Group Is Successfully Updated!", "Success");
 }
 function UpdateNumError() {
-    alert("Error update Group");
+    console.log("Error update Group");
 }
-function ErrorAddNewGroup() {
-    alert("sorry update failed");
-}
-function userAddSuccefully(data) {
-    swal("Added!", "User Is Successfully Added!", "Success");
-}
-function userNotAdded(err) {
-    alert("Sorryyyyy");
-}
-function SuccessGetAllGroup(group) {
-    choosenGroup = group;
-    AddUserToGroup();
-}
-function ErrorGetAllGroup() {
-    alert("Error get all groups from DB");
-}
+
+// ajaxCall("POST", "../api/group/insertNewGroup", JSON.stringify(choosenGroup[0]), SuccessAddNewGroup, ErrorAddNewGroup)
+//**************************************************************************************************************
 function SuccessAddNewGroup(data) {
     swal("Add a New To Group!", "A New Group is successfully Added!", "Success");
     User.Group_Version = choosenGroup[0].Group_Version;
     User.Group_Id = choosenGroup[0].Group_Id;
     ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
-
 }
 function ErrorAddNewGroup() {
-    alert("Error Insert New Group");
+    console.log("sorry update failed");
 }
+
+//ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
+//**************************************************************************************
+function userAddSuccefully(data) {
+    swal("Added!", "User Is Successfully Added!", "Success");
+}
+function userNotAdded() {
+    console.log("User Not Add To DB");
+}
+
+// ajaxCall("GET", "../api/group/getAllGroup?day=" + groupDay + "&grouptime=" + groupTime+"&education=" + educationLevel, "", SuccessGetAllGroup, ErrorGetAllGroup);
+//********************************************************************************************
+function SuccessGetAllGroup(group) {
+    choosenGroup = group;
+    AddUserToGroup();
+}
+function ErrorGetAllGroup() {
+    console.log("Error get all groups from DB");
+}
+

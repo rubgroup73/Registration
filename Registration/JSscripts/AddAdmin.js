@@ -117,9 +117,15 @@ $(document).ready(function () {
 //6 Only if Ajax success then a new Admin added to DB.
 
 function submitDetails() {
-    AddAdmin();
-    return false;
- 
+    check = checkNull();
+
+    if (check == -1) {
+        alert("חסרים נתונים");
+    }
+    else {
+        AddAdmin();
+        return false;
+    }
 }
 
 function AddAdmin() {

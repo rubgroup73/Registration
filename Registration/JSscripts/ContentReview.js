@@ -6,41 +6,13 @@ var notReadyClasses;
 var waitingClasses;
 var readyClasses;
 var sectionsToDB = [];
-
-
-
+var counter = 0;
 
 $(document).ready(function () {
 
     ajaxCall("GET", "../api/class", "", getAllClassFromDb, ErrorgetAllClassFromDb);//להביא את כל מערכי השיעורים מהדאטה בייס
     CreateNewLesson();//לנקות את הלוקל סטורא'ג בכל פעם שהדף מסתיים להטען
-
 });
-/************Success and Error Function Get Classes***********/
-function getAllClassFromDb(data) {
-    classes = data;//שמירה של כל מערכי השיעורים במשתנה גלובלי
-    ajaxCall("GET", "../api/section/GetAllClasses", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);//להביא את כל הסקשנים מהדאטה בייס
-    ShowClassesFromDB(data);//מעבירים לפונקציה את כל מערך השיעורים שקיבלנו מהדאטה בייס
-
-}
-function ErrorgetAllClassFromDb() {
-    alert("Error get Classes");
-}
-/************End Success and Error Function Get Classes*********/
-
-
-/************Success and Error Function Get Section***********/
-
-function getAllSectionFromDb(AllSectionData) {
-    sectionArr = AllSectionData;//שמירה של כל הסקשנים במשתנה גלובלי
-    InsertSectionToClass();//הפונקציה מכניסה את כל הסקשנים לשיעורים המתאימים להם- נוצר לנו אובייקט של שיעור יחד עם כל הסקשנים שלו
-    //יש לנו כרגע שני מערכים של הראשון של שיעורים והשני של מקטעים
-
-}
-function ErrorgetAllSectionFromDb() {
-    alert("Error loading section from DB");
-}
-/************End Success and Error Function Get Section**********/
 
 /************InsertSectionToClass Function***************/
 //הכנסה של המקטעים לתוך המערכים של השיעורים המתאימים
@@ -50,22 +22,14 @@ function InsertSectionToClass() {
         classes[i].Sections = new Array();
         for (var j = 0; j < sectionArr.length; j++) {
             if (sectionArr[j].ClassId == classes[i].Id) {
-
                 classes[i].Sections.push(sectionArr[j]);
             }
         }
     }
-
-
-
 }
 
-/************END InsertSectionToClass Function*************/
-
-
-/חלוקה לעמודות המתאימות במסך האינטרנט לפי סטטוס השיעור/
+//חלוקה לעמודות המתאימות במסך האינטרנט לפי סטטוס השיעור
 function ShowClassesFromDB(data) {
-
 
     CheckStatus();// קריאה לפונקציה שתשמור במשתנים גלובליים מערכים של שיעורים מוכנים ושל לא מוכנים
     let status;
@@ -84,7 +48,6 @@ function ShowClassesFromDB(data) {
         temp = list.innerHTML;
         temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button id='editBTN' class='button-secondary pure-button' onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
         list.innerHTML = temp;
-
     }
     //Sorting the Approved classes
     cApprovedOrder = cApprovedOrder.sort((a, b) => (a.Position > b.Position) ? 1 : -1);
@@ -100,7 +63,6 @@ function ShowClassesFromDB(data) {
         temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<button id='editBTN' class='button-secondary pure-button' onclick='getSections(" + id + "," + type + ")'>Edit sections</button></li > ";
         list.innerHTML = temp;
     }
-
 }
 //ממיין את השיעורים למערך של מוכנים ומערך של לא מוכנים
 function CheckStatus() {
@@ -120,9 +82,7 @@ function CheckStatus() {
 }
 
 //עדכון סטטוס לכל השיעורים לפני הכנסתם ל- DB
-
 function SaveLesson() {
-
 
     notReadyClasses = document.getElementById("2").children;
     waitingClasses = document.getElementById("3").children;
@@ -133,11 +93,8 @@ function SaveLesson() {
             if (classes[j].Id == notReadyClasses[i].id) {
                 classes[j].Status = 2;
                 classes[j].Position = -1;
-
             }
-
         }
-
     }
     for (var i = 0; i < waitingClasses.length; i++) {
         for (var j = 0; j < classes.length; j++) {
@@ -145,7 +102,6 @@ function SaveLesson() {
                 classes[j].Status = 3;
                 classes[j].Position = -1;
             }
-
         }
     }
     for (var i = 0; i < readyClasses.length; i++) {
@@ -154,17 +110,10 @@ function SaveLesson() {
                 classes[j].Status = 4;
                 classes[j].Position = i;
             }
-
         }
     }
     Delete();
-
 }
-
-//*****************************************
-var counter = 0;
-
-
 
 //*************Passing Section To Section Page*****************
 
@@ -179,13 +128,11 @@ function getSections(specific_class_id, type) {
             }
         }
     }
-
     else {
         for (var i = 0; i < cApprovedOrder.length; i++) {
             if (cApprovedOrder[i].Id == specific_class_id) {
                 window.localStorage.setItem("classes", JSON.stringify(cApprovedOrder[i])); // Saving
                 window.location = 'SectionEditor.html';
-
             }
         }
     }
@@ -202,31 +149,9 @@ function SaveClassToDB() {
             classes[i].Sections[j].Version = oldVersion + 1;
             sectionsToDB.push(classes[i].Sections[j]);
         }
-    }
-    
+    }  
     ajaxCall("POST", "../api/class/classArray", JSON.stringify(classes), ClassAddSuccess, CalssAddError);//הכנסת כל השיעורים לדאטה בייס
-
 }
-
-//************************************************************
-//***********Ajax success and error function******************
-function ClassAddSuccess(data) {
-    alert("Success add Class");
-    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(sectionsToDB), SuccessfullyAddNewSections, ErrorAddNewSections);
-
-}
-function CalssAddError() {
-    alert("Error add Class");
-}
-
-function SuccessfullyAddNewSections(){
-    location.reload();
-
-}
-function ErrorAddNewSections() {
-    alert("Error add Section with new version");
-}
-
 
 function Empty() {
 
@@ -253,6 +178,49 @@ function Delete() {
             classes.splice(indexToRemove, 1);
         }
     }
+}
 
+//************************************************************************************************
+//**************************All Ajax Success And Error Functions**********************************
+
+/* ajaxCall("GET", "../api/class", "", getAllClassFromDb, ErrorgetAllClassFromDb)*/
+//*****************************************************************************************************
+function getAllClassFromDb(data) {
+    classes = data;//שמירה של כל מערכי השיעורים במשתנה גלובלי
+    ajaxCall("GET", "../api/section/GetAllClasses", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);//להביא את כל הסקשנים מהדאטה בייס
+    ShowClassesFromDB(data);//מעבירים לפונקציה את כל מערך השיעורים שקיבלנו מהדאטה בייס
+}
+function ErrorgetAllClassFromDb() {
+    console.log("Error get Classes");
+}
+
+/*ajaxCall("GET", "../api/section/GetAllClasses", "", getAllSectionFromDb, ErrorgetAllSectionFromDb)*/
+//*****************************************************************************************************
+function getAllSectionFromDb(AllSectionData) {
+    sectionArr = AllSectionData;//שמירה של כל הסקשנים במשתנה גלובלי
+    InsertSectionToClass();//הפונקציה מכניסה את כל הסקשנים לשיעורים המתאימים להם- נוצר לנו אובייקט של שיעור יחד עם כל הסקשנים שלו
+    //יש לנו כרגע שני מערכים של הראשון של שיעורים והשני של מקטעים
+}
+function ErrorgetAllSectionFromDb() {
+    console.log("Error loading section from DB");
+}
+
+// ajaxCall("POST", "../api/class/classArray", JSON.stringify(classes), ClassAddSuccess, CalssAddError)
+//*****************************************************************************************************
+function ClassAddSuccess(data) {
+    console.log("Success add Class");
+    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(sectionsToDB), SuccessfullyAddNewSections, ErrorAddNewSections);
+}
+function CalssAddError() {
+    console.log("Error add Class");
+}
+
+// ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(sectionsToDB), SuccessfullyAddNewSections, ErrorAddNewSections);
+//*****************************************************************************************************
+function SuccessfullyAddNewSections() {
+    location.reload();
+}
+function ErrorAddNewSections() {
+    console.log("Error add Section with new version");
 }
 

@@ -1,6 +1,4 @@
 ﻿
-
-
 dragula([
     document.getElementById('1'),
     document.getElementById('2'),
@@ -44,6 +42,10 @@ var class_status;
 var class_id;
 var allClasses;
 var section_for_edit;
+var notReady;
+var waiting;
+var ready;
+
 //Template for Section
 function Section_Json(id, title, content, status, position, class_version, class_id, file_path) {
     this.Id = id,
@@ -54,13 +56,10 @@ function Section_Json(id, title, content, status, position, class_version, class
         this.Version = class_version,
         this.ClassId = class_id,
         this.FilePath = file_path
-
 }
-        
-
 //הוספת אובייקט ג'ייסון של מקטע חדש לתוך מערך המקטעים הכללי
-
 function AddSection() {
+
     FindMaxSectionId();
     section_status = 2;
     var title = document.getElementById("section-title").value;
@@ -71,8 +70,6 @@ function AddSection() {
     if (ready === true) {
         section_status = 3;
     }
-
-
     //Saving the section details in JSON object
     Section_Json.Id = NewSectionId;
     Section_Json.Description = content;
@@ -109,43 +106,8 @@ function Delete(e,id) {
             generalSectionsArr.splice(indexToRemove, 1);
         }
         e.parentNode.parentNode.removeChild(e.parentNode);
-    } 
-
-    
+    }     
 }
-
-var notReady;
-var waiting;
-var ready;
-
-
-//Printing the sections one by one
-
-/***************************Get Last Id And Save Class*****************************************************/
-
-
-//Error and Success function receiving class Max ID
-function GetClassIDSuccess(classId) {
-    
-    
- //   classMaxId = classId.Id;
-    classMaxVersion = classId.Version;
-   
-}
-
-function GetCalssIDError() {
-    alert("Error Get Id");
-}
-
-
-function SuccessfullyAddNewSections(data) {
-    alert("Successfully Add A new Sections");
-    window.location.href = 'ContentReview.html';
-}
-function ErrorAddNewSections() {
-    alert("Error Add A new Sections");
-}
-
 
 /***************************End Get Last Id And Save Class*****************************************************/
 
@@ -165,50 +127,36 @@ function AddClass(title,description,position,status) {
     for (var i = 0; i < allClasses.length; i++) {
 
         if (allClasses[i].Id == Class.Id) {
-            allClasses[i] = Class;
-            
+            allClasses[i] = Class;      
         }
         else {
             for (var j = 0; j < allClasses[i].Sections.length; j++) {
-           
-                generalSectionsArr.push(allClasses[i].Sections[j]);
                 
+                generalSectionsArr.push(allClasses[i].Sections[j]);             
             }
         }
         allClasses[i].Version += 1;
-
     }
-
     for (var k = 0; k < generalSectionsArr.length; k++) {
         generalSectionsArr[k].Version = classMaxVersion + 1;
     }
-    //ajaxCall("POST", "../api/class/addnewclass", JSON.stringify(Class), SuccessfullyAddNewClass, ErrorAddNewClass);
     ajaxCall("POST", "../api/class/classArray", JSON.stringify(allClasses), ClassAddSuccess, CalssAddError);
 }
-function ClassAddSuccess(data) {
-    alert("Success add Class");
-    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
-}
-function CalssAddError() {
-    alert("Error add Class");
-}
+
 
 //**********************************************************************************************************************
 ///Sorting and Show********************************************************************************************************'
 
 function ShowSectionsFromDB() {
     allClasses = JSON.parse(window.localStorage.getItem("allClasses"));//כל השיעורים בגרסה האחרונה
-
     class_object = JSON.parse(window.localStorage.getItem("classes"));//האובייקט שעושים עליו את השינוי
+
     generalSectionsArr = class_object.Sections;
     class_title = class_object.Title;
     class_desc = class_object.Description;
     class_position = class_object.Position;
     class_status = class_object.Status;
     class_id = class_object.Id;
-
-
-
 
     document.getElementById("class-title").value = class_title;
     document.getElementById("class-desc").value = class_desc;
@@ -218,7 +166,6 @@ function ShowSectionsFromDB() {
     let id;
     let title;
     var list;
-
 
     for (var i = 0; i < sNotApproved.length; i++) {
         status = sNotApproved[i].Status;
@@ -245,8 +192,7 @@ function ShowSectionsFromDB() {
         temp = temp + "<li id=" + id + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this," + id +")' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal' class='button-secondary pure-button' onclick='EditThisSection(" + id + ")'>Edit sections</button></li > ";
        
         list.innerHTML = temp;
-    }
-    
+    }  
 }
 //עדכון סטטוס ומיקום למקטעים חדשים
 function UpdateSectionStatus() {
@@ -262,11 +208,8 @@ function UpdateSectionStatus() {
             if (generalSectionsArr[j].Id == notReady[i].id) {
                 generalSectionsArr[j].Status = 2;
                 generalSectionsArr[j].Position = -1;
-
             }
-
         }
-
     }
     for (var i = 0; i < waiting.length; i++) {
         for (var j = 0; j < generalSectionsArr.length; j++) {
@@ -274,7 +217,6 @@ function UpdateSectionStatus() {
                 generalSectionsArr[j].Status = 3;
                 generalSectionsArr[j].Position = -1;
             }
-
         }
     }
     for (var i = 0; i < ready.length; i++) {
@@ -283,7 +225,6 @@ function UpdateSectionStatus() {
                 generalSectionsArr[j].Status = 4;
                 generalSectionsArr[j].Position = i;
             }
-
         }
     }
     AddClass(class_title, class_desc, class_position, class_status);
@@ -327,6 +268,9 @@ function EditThisSection(section_id) {
     document.getElementById("section-content").value = section_for_edit.Description;
     document.getElementById("pathName").innerHTML = section_for_edit.FilePath;
     document.getElementById("readyDiv").style.display = "none";
+    lastIndex = section_for_edit.FilePath.lastIndexOf("\\") + 1;
+    fileName = section_for_edit.FilePath.substring(lastIndex);
+    document.getElementById("fileImg").src = "../Files/" + fileName;
 
    document.getElementById("SaveBtn").innerHTML = "<button onclick='UpdateSection("+section_for_edit.Id+")' type='button' id='saveImage' class='btn btn-default btn-hover-green' data-action='save' role='button'>שמור</button>";
 }
@@ -348,11 +292,9 @@ function UpdateSection(id) {
             break;
         }
     }
-
 }
 
-$("#section-image").on("input", function () {
-    
+$("#section-image").on("input", function () {    
     document.getElementById("pathName").innerHTML = this.value;
 });
 
@@ -368,4 +310,36 @@ function FindMaxSectionId() {
         NewSectionId++;
     }
     else NewSectionId = 305;
+}
+
+//******************************************All Ajax Success And Error Functions***********************************
+
+// ajaxCall("GET", "../api/class/getid", "", GetClassIDSuccess, GetCalssIDError);
+//****************************************************************************
+function GetClassIDSuccess(classId) {
+    //   classMaxId = classId.Id;
+    classMaxVersion = classId.Version;
+}
+function GetCalssIDError() {
+    console.log("Error Get Id");
+}
+
+//ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
+//****************************************************************************************************************
+function SuccessfullyAddNewSections(data) {
+    console.log("Successfully Add A new Sections");
+    window.location.href = 'ContentReview.html';
+}
+function ErrorAddNewSections() {
+    console.log("Error Add A new Sections");
+}
+
+//ajaxCall("POST", "../api/class/classArray", JSON.stringify(allClasses), ClassAddSuccess, CalssAddError);
+//******************************************************************************************************
+function ClassAddSuccess(data) {
+    console.log("Success add Class");
+    ajaxCall("POST", "../api/section/addnewsection", JSON.stringify(generalSectionsArr), SuccessfullyAddNewSections, ErrorAddNewSections);
+}
+function CalssAddError() {
+    console.log("Error add Class");
 }
