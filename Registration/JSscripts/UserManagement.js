@@ -4,7 +4,9 @@ var allUsersArr = [];
 var allUserInClass = [];
 var allCitiesArr = [];
 var numOfRegisteredPerEducation = [];
-var choosenGroup = [];
+var choosenGroupSmarties = [];
+var choosenGroupOk = [];
+var choosenGroupFine = [];
 var smartPerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu": 0 }];;//Education=3
 var okPerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu": 0 }];;//Education=2
 var finePerDay = [{ "Sun": 0 }, { "Mon": 0 }, { "Tue": 0 }, { "Wed": 0 }, { "Thu": 0 }];//Education=1
@@ -87,40 +89,40 @@ function devideToGroupsSmarties() {
     
     for (var i = 0; i < allGroupsArr.length; i++) {
         if (allGroupsArr[i].Education == educationTypeSmarties) {
-            choosenGroup.push(allGroupsArr[i]);
+            choosenGroupSmarties.push(allGroupsArr[i]);
            
         }
     }
     let groupFinish = 0;
     let groupNotFinish = 0;
-    for (var i = 0; i < choosenGroup.length; i++) {
-        if (choosenGroup[i].IsFinished == true)
+    for (var i = 0; i < choosenGroupSmarties.length; i++) {
+        if (choosenGroupSmarties[i].IsFinished == true)
             groupFinish += 1;
         else
             groupNotFinish += 1;
     }
-    let finishPercentage = (groupFinish / choosenGroup.length) * 100;
-    let notFinishPercentage = (groupNotFinish / choosenGroup.length) * 100;
+    let finishPercentage = (groupFinish / choosenGroupSmarties.length) * 100;
+    let notFinishPercentage = (groupNotFinish / choosenGroupSmarties.length) * 100;
     GroupsPieSmarties(finishPercentage, notFinishPercentage)
 }
 
 function devideToGroupsFine() {
     for (var i = 0; i < allGroupsArr.length; i++) {
         if (allGroupsArr[i].Education == educationTypeFine) {
-            choosenGroup.push(allGroupsArr[i]);
+            choosenGroupFine.push(allGroupsArr[i]);
 
         }
     }
     let groupFinish = 0;
     let groupNotFinish = 0;
-    for (var i = 0; i < choosenGroup.length; i++) {
-        if (choosenGroup[i].IsFinished == true)
+    for (var i = 0; i < choosenGroupFine.length; i++) {
+        if (choosenGroupFine[i].IsFinished == true)
             groupFinish += 1;
         else
             groupNotFinish += 1;
     }
-    let finishPercentage = (groupFinish / choosenGroup.length) * 100;
-    let notFinishPercentage = (groupNotFinish / choosenGroup.length) * 100;
+    let finishPercentage = (groupFinish / choosenGroupFine.length) * 100;
+    let notFinishPercentage = (groupNotFinish / choosenGroupFine.length) * 100;
     GroupsPieFine(finishPercentage, notFinishPercentage)
 }
 
@@ -128,20 +130,20 @@ function devideToGroupsOk() {
     
     for (var i = 0; i < allGroupsArr.length; i++) {
         if (allGroupsArr[i].Education == educationTypeOk) {
-            choosenGroup.push(allGroupsArr[i]);
+            choosenGroupOk.push(allGroupsArr[i]);
 
         }
     }
     let groupFinish = 0;
     let groupNotFinish = 0;
-    for (var i = 0; i < choosenGroup.length; i++) {
-        if (choosenGroup[i].IsFinished == true)
+    for (var i = 0; i < choosenGroupOk.length; i++) {
+        if (choosenGroupOk[i].IsFinished == true)
             groupFinish += 1;
         else
             groupNotFinish += 1;
     }
-    let finishPercentage = (groupFinish / choosenGroup.length) * 100;
-    let notFinishPercentage = (groupNotFinish / choosenGroup.length) * 100;
+    let finishPercentage = (groupFinish / choosenGroupOk.length) * 100;
+    let notFinishPercentage = (groupNotFinish / choosenGroupOk.length) * 100;
     GroupsPieOk(finishPercentage, notFinishPercentage)
 }
 //*************************************************************************************

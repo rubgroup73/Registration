@@ -9,16 +9,16 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="../Scripts/ajaxCall.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="../JSscripts/UploadFiles.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'>
     <link href="../stylesheets/styles.css" rel="stylesheet" />
     <link href="../stylesheets/SectionEditor.css" rel="stylesheet" />
     <link href="../stylesheets/HeaderNFooter.css" rel="stylesheet" />
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:400,700'>
-
+    <script src="../Scripts/ajaxCall.js"></script>
+    <script src="../JSscripts/UploadFiles.js"></script>
     <style class="cp-pen-styles">
     </style>
     <script>
@@ -27,8 +27,8 @@
             if (localStorage["classes"] != null) {
                 ShowSectionsFromDB();
             }
-            
-          
+
+
 
         });
     </script>
@@ -130,9 +130,9 @@
                             <div class="form-group">
                                 <label for="section-image">קובץ מולטימדיה</label>
                                 <label id="pathName"></label>
-                                <input type="file" id="section-image">
+                                <input type="file" id="section-image" onchange="setImg()">
                                 <p class="help-block">בחרי קובץ מולטימדיה</p>
-                                <img id="fileImg" style="width:50px;height:50px" />
+                                <img id="fileImg" style="width:50px;height:50px" src=""/>
                             </div>
                             <div class="checkbox" id="readyDiv">
                                 <label>
@@ -145,10 +145,10 @@
                     <div class="modal-footer" id="modal-footer">
                         <div class="btn-group btn-group-justified" role="group" aria-label="group button">
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" role="button" onclick="document.getElementById('readyDiv').style.display = 'block'">סגור</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" role="button">סגור</button>
                             </div>
                             <div id="SaveBtn" class="btn-group" role="group">
-                                <button onclick="AddSection()" type="button" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">שמור</button>
+                                <button onclick="AddSection()" type="button" id="saveImage" data-dismiss="modal" class="btn btn-default btn-hover-green" data-action="save" role="button">שמור</button>
                             </div>
                         </div>
                     </div>

@@ -59,7 +59,7 @@ function Section_Json(id, title, content, status, position, class_version, class
 }
 //הוספת אובייקט ג'ייסון של מקטע חדש לתוך מערך המקטעים הכללי
 function AddSection() {
-
+    InsertImage();
     FindMaxSectionId();
     section_status = 2;
     var title = document.getElementById("section-title").value;
@@ -78,7 +78,7 @@ function AddSection() {
     Section_Json.Status = section_status;
     Section_Json.Position = -1;
     Section_Json.Version = classMaxVersion;
-     Section_Json.ClassId = class_id;
+    Section_Json.ClassId = class_id;
     var sec = new Section_Json(Section_Json.Id, Section_Json.Title, Section_Json.Description, Section_Json.Status, Section_Json.Position, Section_Json.Version, Section_Json.ClassId, Section_Json.FilePath);
 
     var list = document.getElementById(section_status);
@@ -86,7 +86,10 @@ function AddSection() {
     temp = temp + "<li id=" + NewSectionId + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this,id)' style='width:20px;height:20px;margin:5px;position:absolute;top:2px;left:1px' /><button id='editBTN' data-toggle='modal' data-target='#squarespaceModal'  class='button-secondary pure-button' onclick='EditThisSection(" + NewSectionId + ")'>Edit sections</button></li > ";
     list.innerHTML = temp;
     generalSectionsArr.push(sec);
-    $("#squarespaceModal").modal("hide");
+    
+   $("#squarespaceModal").modal("hide");
+    //document.getElementById('squarespaceModal').hidden = true;
+
 }
 
 //**************************************
@@ -240,8 +243,9 @@ function CheckExistingSections() {
         return;
     }
     UpdateSectionStatus();
-    }
+}
 
+//Check current sections' statuses-(not ready/ready but need approval/approved sections)
 function CheckStatus() {
     for (var i = 0; i < generalSectionsArr.length; i++) {
 
@@ -257,6 +261,8 @@ function CheckStatus() {
         }
     }
 }
+
+//Show specific section on the modal for updating
 function EditThisSection(section_id) {
     for (var i = 0; i < generalSectionsArr.length; i++) {
         if (generalSectionsArr[i].Id == section_id) {
@@ -275,10 +281,12 @@ function EditThisSection(section_id) {
    document.getElementById("SaveBtn").innerHTML = "<button onclick='UpdateSection("+section_for_edit.Id+")' type='button' id='saveImage' class='btn btn-default btn-hover-green' data-action='save' role='button'>שמור</button>";
 }
 
+//Update section details
 function UpdateSection(id) {
+    InsertImage();
     document.getElementById("SaveBtn").innerHTML = "<button onclick='AddSection()' type='button' id='saveImage' class='btn btn-default btn-hover-green' data-action='save' role='button'>שמור</button>";
 
-    document.getElementById("readyDiv").style.display = "block";
+   
     var updated_title = document.getElementById("section-title").value;
     var updated_content = document.getElementById("section-content").value;
     var updated_file_path = document.getElementById("pathName").innerHTML;
@@ -292,12 +300,24 @@ function UpdateSection(id) {
             break;
         }
     }
+    document.getElementById("section-title").value = "";
+    var updated_content = document.getElementById("section-content").value = "";
+    var updated_file_path = document.getElementById("pathName").innerHTML = "";
+}
+
+//Display onchage img
+function setImg() {
+    let pic = document.getElementById("section-image").value;
+    picIndex = pic.lastIndexOf("\\") + 1;
+    pic = pic.substring(picIndex);
+    document.getElementById("fileImg").src = "C:/Users/gavriel.zarka/Desktop/Picturesfor/" + pic;
 }
 
 $("#section-image").on("input", function () {    
     document.getElementById("pathName").innerHTML = this.value;
 });
 
+//Find currnet max Id for sections
 function FindMaxSectionId() {
     if (generalSectionsArr.length > 0) {
         NewSectionId = generalSectionsArr[0].Id;

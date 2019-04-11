@@ -39,7 +39,7 @@ function AddUserToGroup() {
         User.Group_Id = choosenGroup[0].Group_Id;
         User.Group_Version = choosenGroup[0].Group_Version;
         ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
-        ajaxCall("PUT", "../api/group/UpdateGroup", JSON.stringify(choosenGroup[0]), UpdateNumSuccess, UpdateNumError);
+        
     }
     else {
         OpenNewGroup();
@@ -48,7 +48,7 @@ function AddUserToGroup() {
 
 function OpenNewGroup() {
     choosenGroup[0].Group_Version += 1;
-    choosenGroup[0].Num_Of_Registered = 1;
+    choosenGroup[0].Num_Of_Registered = 0;
     ajaxCall("POST", "../api/group/insertNewGroup", JSON.stringify(choosenGroup[0]), SuccessAddNewGroup, ErrorAddNewGroup)
 } 
 
@@ -57,7 +57,7 @@ function OpenNewGroup() {
 // ajaxCall("PUT", "../api/group/UpdateGroup", JSON.stringify(choosenGroup[0]), UpdateNumSuccess, UpdateNumError);
 //**************************************************************************************************************
 function UpdateNumSuccess() {
-    swal("Updated!", "Group Is Successfully Updated!", "Success");
+    console.log("Group Is Successfully Updated");
 }
 function UpdateNumError() {
     console.log("Error update Group");
@@ -66,7 +66,7 @@ function UpdateNumError() {
 // ajaxCall("POST", "../api/group/insertNewGroup", JSON.stringify(choosenGroup[0]), SuccessAddNewGroup, ErrorAddNewGroup)
 //**************************************************************************************************************
 function SuccessAddNewGroup(data) {
-    swal("Add a New To Group!", "A New Group is successfully Added!", "Success");
+    console.log("A New Group is successfully Added!");
     User.Group_Version = choosenGroup[0].Group_Version;
     User.Group_Id = choosenGroup[0].Group_Id;
     ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
@@ -78,7 +78,16 @@ function ErrorAddNewGroup() {
 //ajaxCall("POST", "../api/User", JSON.stringify(User), userAddSuccefully, userNotAdded);
 //**************************************************************************************
 function userAddSuccefully(data) {
-    swal("Added!", "User Is Successfully Added!", "Success");
+    ajaxCall("PUT", "../api/group/UpdateGroup", JSON.stringify(choosenGroup[0]), UpdateNumSuccess, UpdateNumError);
+    Swal.fire({
+        title: 'Success',
+        text: 'Added a New User',
+        imageUrl: "../Images/success.png",
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+        animation: false
+    })
 }
 function userNotAdded() {
     console.log("User Not Add To DB");

@@ -31,33 +31,43 @@
                     }
                 }
             },
-                username: {
-                    validators: {
-                        stringLength: {
-                            min: 6,
-                            message: 'הכנס שם משתמש בין 6 ל 30 תווים',
+            username: {
+                validators: {
+                    stringLength: {
+                        min: 6,
+                        message: 'הכנס שם משתמש בין 6 ל 30 תווים',
 
-                        },
-                        notEmpty: {
-                            message: 'בבקשה הכנס סיסמא'
-                        }
-                    }
-                },
-                phone: {
-                    validators: {
-                        stringLength: {
-                            min: 10,
-                            max: 11,
-                            message: 'מספר הטלפון צריך לכלול 10 ספרות'
-
-                        },
-                        notEmpty: {
-                            message: 'בבקשה הכנס מספר טלפון'
-                        }
+                    },
+                    notEmpty: {
+                        message: 'בבקשה הכנס סיסמא'
                     }
                 }
             },
-        
+            phone: {
+                validators: {
+                    stringLength: {
+                        min: 10,
+                        max: 11,
+                        message: 'מספר הטלפון צריך לכלול 10 ספרות'
+
+                    },
+                    notEmpty: {
+                        message: 'בבקשה הכנס מספר טלפון'
+                    }
+                }
+            },
+            mail: {
+                validators: {
+                    notEmpty: {
+                        message: 'הכנס כתובת אימייל'
+                    },
+
+                    emailAddress: {
+                        message: 'הכנס כתובת אימייל חוקית'
+                    }
+                }
+            }
+        },
                 submitHandler: function (validator, form) {
                     $('#registration_success').slideDown({ opacity: "show" }, "slow");
                     $.post(form.attr('action'), form.serialize(),
@@ -68,6 +78,25 @@
         }   
     });
 });
+
+//function FillAllFileds() {
+//    let dropDown = document.getElementsByTagName("select");
+//    for (var i = 0; i < dropDown.length; i++) {
+//        if (dropDown[i].value == -1) {
+//            dropDown[i].parentElement.style.color = 'red';
+//            Swal.fire({
+//                type: 'נמצאה בעיה',
+//                title: 'שדות לא מסומנים',
+//                text: 'בבקשה למלא את השדה המסומן באדום'
+//            });
+//            return;
+//        }
+//        else {
+//            dropDown[i].parentElement.style.color = 'green';
+//        }
+//    }
+//    AddUser();
+//}
 
 
 

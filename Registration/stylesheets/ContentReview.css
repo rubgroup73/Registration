@@ -240,3 +240,8 @@ h1.title{
 h4.title{
     text-align:right;
 }
+
+span h2.statusCol{
+    text-align: right !important;
+    direction: rtl !important;
+}

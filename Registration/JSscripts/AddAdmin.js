@@ -103,6 +103,7 @@ $(document).ready(function () {
     });
   
 });
+
 //לאחר שלחצו על סבמיט
 //1. submitDetails()
 //2. AddAdmin()
@@ -116,16 +117,9 @@ $(document).ready(function () {
 //5.6 ajaxCall("POST", "../api/admin/addNewAdmin", JSON.stringify(Admin), SuccessAddNewAdmin, ErrorAddNewAdmin)
 //6 Only if Ajax success then a new Admin added to DB.
 
-function submitDetails() {
-    check = checkNull();
-
-    if (check == -1) {
-        alert("חסרים נתונים");
-    }
-    else {
+function submitDetails() { 
         AddAdmin();
         return false;
-    }
 }
 
 function AddAdmin() {
