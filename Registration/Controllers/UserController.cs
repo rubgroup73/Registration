@@ -44,11 +44,13 @@ namespace Registration.Controllers
 
         }
 
-        
-        //public int PostAddUser([FromBody] Group group, [FromBody] User user)
-        //{
-        //    int num = user.InsertToGroup(group, user);
-        //    return num;
-        //}
+
+        [HttpPost]
+        [Route("api/temp/AddUserToGroup")]
+        public int AddNewUser([FromBody] User user)
+        {
+            int num = user.InsertToGroup(user);
+            return num;
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace Registration.Models.DAL
         }
         /**************************************************************************************************/
         /***********************************User Confirmation In React App********************************/
-        /************************************************************************************************/
+        
 
         public User GetUserForConfirmation(string username, string constring, string tableName)
         {
@@ -99,7 +99,7 @@ namespace Registration.Models.DAL
 
         /************************************************************************************************/
         /*************************Build the Insert command User String**********************************/
-        /************************************************************************************************/
+       
 
         private String BuildInsertCommand(User user)
         {
@@ -115,7 +115,7 @@ namespace Registration.Models.DAL
         }
         /**************************************************************************************************/
         /*******************************Insert Class*******************************************************/
-        /*************************************************************************************************/
+       
         public List<User> GetAllUsersFromDB(string tableName,string connectionString)
         {
 
@@ -174,7 +174,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Insert Class*******************************************************/
-        /*************************************************************************************************/
+ 
         public int InsertClassToDB(AppClass appClass)
         {
             SqlConnection con;
@@ -231,8 +231,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Get All Classes From DB********************************************/
-        /*************************************************************************************************/
-
+      
         public List<AppClass> GetAllClassFromDB(string tableName, string connectionString)
         {
              
@@ -280,8 +279,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Get All Sections From DB***************************************/
-        /*************************************************************************************************/
-
+      
         public List<Section> GetAllSectionFromDB(string tableName,string connectionString)
         {
             List<Section> allSection = new List<Section>();
@@ -330,7 +328,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Get Last Class ID From DB******************************************/
-        /*************************************************************************************************/
+       
         public AppClass GetLastId(string tableName,string connectionString)
         {
             AppClass appClass = new AppClass();
@@ -411,7 +409,7 @@ namespace Registration.Models.DAL
         }
         /**************************************************************************************************/
         /*******************************Insert  Class Array with new version*******************************/
-        /*************************************************************************************************/
+     
         public int InsertNewClassArray(List<AppClass> appClasses,string connectionString)
         {
             SqlConnection con;
@@ -458,7 +456,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /**********************************Insert Sections Array*******************************************/
-        /**************************************************************************************************/
+ 
 
         public int InsertNewSessionsToDB(List<Section> sections,string connectionString)
         {
@@ -518,7 +516,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /************************************Get All Cities From DB****************************************/
-        /**************************************************************************************************/
+     
         public List<City> GetAllCitiesFromDB(string tableName,string connectionString)
         {
             List<City> allCities = new List<City>();
@@ -560,7 +558,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /************************************Get All Groups From DB a Specific Group***********************/
-        /**************************************************************************************************/
+        
 
         public List<Group> GetAllGroupsFromDB(int day,int grouptime,int education, string tableName, string connectionString)
         {
@@ -612,7 +610,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /***********************************Insert a New Group Into DB*************************************/
-        /**************************************************************************************************/
+       
 
         public int InsertNewGroupToDB(Group group)
         {
@@ -711,8 +709,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Receiving Admin Credentials From DB********************************/
-        /**************************************************************************************************/
-
+       
         public Admin AdminAuthentication(Admin admin,string tableName,string connectionString)
         {
 
@@ -765,8 +762,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*************************************Add New Admin To DB******************************************/
-        /**************************************************************************************************/
-
+      
         public int AddNewAdmin(Admin admin,string tableName,string connectionString)
         {
             SqlConnection con;
@@ -822,7 +818,6 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*************************************Get All Admins To DB*****************************************/
-        /**************************************************************************************************/
 
         public List<Admin> GetAllAdminsFromDb(string tableName, string connectionString)
         {
@@ -868,7 +863,6 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Return All Groups From DB*****************************************/
-        /**************************************************************************************************/
 
         public List<Group> GetAllGroupsFromDB(string tableName, string connectionString)
         {
@@ -920,7 +914,6 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Return All User In Class From DB**********************************/
-        /**************************************************************************************************/
 
         public List<UserInClass> GetAllUsersInClassFromDb(string tableName, string connectionString)
         {
@@ -973,7 +966,6 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Return All Courses From DB*****************************************/
-        /**************************************************************************************************/
         
             public List<Course> GetCoursesFromDB(string tableName,string connectionString)
         {
@@ -1018,7 +1010,6 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Return Top 5 Cities From DB*****************************************/
-        /**************************************************************************************************/
 
         public List<City> GetAllCitiesFromDB(string connectionString)
         {
@@ -1062,7 +1053,6 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*********************Return All Users Per Education From DB**************************************/
-        /**************************************************************************************************/
 
         public List<User> GetAllUsersPerEducationFromDb(string connectionString)
         {
@@ -1099,6 +1089,9 @@ namespace Registration.Models.DAL
 
             }
         }
+
+        /**************************************************************************************************/
+        /*********************Return A Specific Group Users From DB***************************************/
 
         public Group GetAllGroupsFromDbVer2(string tableName,string connectionString, int prefday, int prefhour, int education)
         {
