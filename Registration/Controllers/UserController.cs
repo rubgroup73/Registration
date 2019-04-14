@@ -44,6 +44,11 @@ namespace Registration.Controllers
 
         }
 
-
+        
+        //public int PostAddUser([FromBody] Group group, [FromBody] User user)
+        //{
+        //    int num = user.InsertToGroup(group, user);
+        //    return num;
+        //}
     }
 }

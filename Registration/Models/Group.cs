@@ -42,11 +42,11 @@ namespace Registration.Models
 
         /***************Get All Group From DB*************************/
         public List<Group> GetAllGroupsFromDB(int day,int grouptime,int education)
-        {
+        {         
             DBservices db = new DBservices();
             return db.GetAllGroupsFromDB(day, grouptime, education, "class_group", "ConnectionStringPerson");
         }
-
+      
         /***************************************************************/
         /********Insert New Group Into DB********************************/
         /***************************************************************/
@@ -75,6 +75,62 @@ namespace Registration.Models
         {
             DBservices db = new DBservices();
             return db.GetAllGroupsFromDB("class_group", "ConnectionStringPerson");
+        }
+
+        public Group GetAllGroupsFromDbVer2(int prefday, int prefhour, int education)
+        {
+            /*groupTime: 1-Morning, 2-Noon, 3-Evening*/
+            /*educationLevel:1-Fine,2-ok,3-smarties*/
+            prefhour = CheckGroupTime(prefhour);
+            education = CheckEducation(education);
+
+            DBservices db = new DBservices();
+            Group group = db.GetAllGroupsFromDbVer2("class_group", "ConnectionStringPerson",prefday,prefhour,education);
+            return group;
+        }
+        //Normalize Hour-time to Group-time
+        public int CheckGroupTime(int PrefHour1)
+        {
+
+
+            int startMorning = 1;//Start Morning Time
+            int endMorning = 9;//End Morning Time
+            int startNoon = 10;//Start Noon Time
+            int endNoon = 17;//End Noon Time
+
+            if (PrefHour1 >= startMorning && PrefHour1 <= endMorning)
+            {
+                return 1;
+            }
+            else if (PrefHour1 >= startNoon && PrefHour1 <= endNoon)
+            {
+                return 2;
+            }
+            else
+            {
+                return 3;
+            }
+        }
+        //Normalize yearsOfEducation to Group-Education
+        public int CheckEducation(int YearsOfEducation)
+        {
+            int educationLevel1 = 1;//No Education
+            int educationLevel2 = 2;//Basic Education
+            int educationLevel3 = 3;//Highschool Education
+
+
+            if (YearsOfEducation == educationLevel1 || YearsOfEducation == educationLevel2)
+            {
+                return 1;
+            }
+            else if (YearsOfEducation == educationLevel3)
+            {
+                return 2;
+            }
+            else
+            {
+                return 3;
+            }
         }
     }
 }

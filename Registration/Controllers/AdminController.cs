@@ -28,10 +28,10 @@ namespace Registration.Controllers
 
         [HttpGet]
         [Route("api/admin/getAlladmins")]
-        public List<Admin> GetAllAdmins()
+        public bool GetAllAdmins(string username,string email)
         {
             Admin admin = new Admin();
-           return admin.GetAllAdminsFromDb();
+           return admin.GetAllAdminsFromDb(username,email);
         }
 
 

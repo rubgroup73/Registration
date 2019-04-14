@@ -186,6 +186,7 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SectionController.cs" />
+    <Compile Include="Controllers\TempController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserInClassController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

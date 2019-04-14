@@ -9,7 +9,7 @@ namespace Registration.Models
     public class User
     {
         
-        public User(int id,string fullName,string gender, int status, int yearsOfEducation,string userName,string password,int residence,int prefDay1,string phone,int city, string birthDate,int prefHour1 , int prefHour2 , string mail, int group_id,int group_version ,int score=0,bool credentials = false)
+        public User(int id,string fullName,string gender, int status, int yearsOfEducation,string userName,string password,int residence,int prefDay1,string phone,int city, string birthDate,int prefHour1 , int prefHour2 , string mail, int group_id,int group_version,Group group ,int score=0,bool credentials = false)
         {
             Id = id;
             FullName = fullName;
@@ -29,6 +29,7 @@ namespace Registration.Models
             Credentials1 = credentials;
             Group_Id = group_id;
             Group_Version = group_version;
+            Group = group;
             Mail = mail;
         }
 
@@ -64,6 +65,7 @@ namespace Registration.Models
         public bool Credentials1 { get; set; }
         public int Group_Id { get; set; }
         public int Group_Version { get; set; }
+        public Group Group { get; set; }
         public string Mail { get; set; }
         
 
@@ -124,6 +126,14 @@ namespace Registration.Models
             return db.GetAllUsersPerEducationFromDb("ConnectionStringPerson");
         }
 
+        public int InsertToGroup(User user)
+        {
+            DBservices db = new DBservices();        
+            user.Group_Id = user.Group.Group_Id;
+            user.Group_Version = user.Group.Group_Version;
+            int numEffected = db.InsertToGroup(user, "AppUser", "class_group", "ConnectionStringPerson");
+            return numEffected;
+        }
 
 
 

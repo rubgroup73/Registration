@@ -104,47 +104,21 @@ $(document).ready(function () {
   
 });
 
-//לאחר שלחצו על סבמיט
-//1. submitDetails()
-//2. AddAdmin()
-//3.  ajaxCall("GET", "../api/admin/getAlladmins", "", GetAllAdminSuccess, ErrorAllAdminSuccess)
-//4. if Ajax success then: 
-//5. GetAllAdminSuccess() [Saving all the Admins from DB in a vairable--> allAdminsArr]
-//5.1 Save an 'Admin' object 
-//5.2 Call to function: checkIfUserNameExists(Admin["Admin_UserName"]) --> return True or False
-//5.3 Call to function: checkIfEmailAddressExists(Admin["Admin_Email"])--> return True or False
-//5.4 Only if both of the functions are returning False, just then I call to an AjaxCall
-//5.6 ajaxCall("POST", "../api/admin/addNewAdmin", JSON.stringify(Admin), SuccessAddNewAdmin, ErrorAddNewAdmin)
-//6 Only if Ajax success then a new Admin added to DB.
-
 function submitDetails() { 
         AddAdmin();
         return false;
 }
 
 function AddAdmin() {
-    ajaxCall("GET", "../api/admin/getAlladmins", "", GetAllAdminSuccess, ErrorAllAdminSuccess)
-   
-}
-
-function checkIfUserNameExists(Admin_UserName) {
-    for (var i = 0; i < allAdminsArr.length; i++) {
-
-        if (allAdminsArr[i].Admin_UserName == Admin_UserName) {
-            return true;
-        }
+    Admin = {
+        Admin_Email: document.getElementById("email").value,     
+        Admin_UserName: document.getElementById("userName").value
     }
-    return false;
+    let userName = Admin["Admin_UserName"];
+    let userEmail = Admin["Admin_Email"];
+    ajaxCall("GET", "../api/admin/getAlladmins?username=" + userName + "&email=" + userEmail, "", GetAllAdminSuccess, ErrorAllAdminSuccess);
 }
-function checkIfEmailAddressExists(Admin_Email) {
-    for (var i = 0; i < allAdminsArr.length; i++) {
 
-        if (allAdminsArr[i].Admin_Email == Admin_Email) {
-            return true;
-        }
-    }
-    return false;
-}
 
 function SuccessAddNewAdmin() {
     console.log("Success Add New Admin To DB");
@@ -155,29 +129,25 @@ function ErrorAddNewAdmin() {
     console.log("Error Add New Admin To DB");
 }
 
-function GetAllAdminSuccess(allAdmins) {
+function GetAllAdminSuccess(adminExists) {
     console.log("Success Get All Admin From DB");
-    allAdminsArr = allAdmins;
-    Admin = {
-        Admin_Firsname: document.getElementById("firstName").value,
-        Admin_LastName: document.getElementById("lastName").value,
-        Admin_Email: document.getElementById("email").value,
-        Admin_Password: document.getElementById("password").value,
-        Admin_UserName: document.getElementById("userName").value
-    }
 
-    let temp1 = checkIfUserNameExists(Admin["Admin_UserName"]);
-    let temp2 = checkIfEmailAddressExists(Admin["Admin_Email"]);
+    if (adminExists != true) {
+        Admin = {
+            Admin_Firsname: document.getElementById("firstName").value,
+            Admin_LastName: document.getElementById("lastName").value,
+            Admin_Email: document.getElementById("email").value,
+            Admin_Password: document.getElementById("password").value,
+            Admin_UserName: document.getElementById("userName").value
+        }
 
-    if (temp1 != true) {
-        if (temp2 != true)
-            ajaxCall("POST", "../api/admin/addNewAdmin", JSON.stringify(Admin), SuccessAddNewAdmin, ErrorAddNewAdmin);
-        else
-            alert("Email All Ready In Use, Please Insert a Different One");
+        ajaxCall("POST", "../api/admin/addNewAdmin", JSON.stringify(Admin), SuccessAddNewAdmin, ErrorAddNewAdmin);
     }
-    else
-        alert("Username All Ready In Use, Please Insert a Different One");
+    else {
+        alert("Email All Ready In Use, Please Insert a Different One");
+    }
 }
+    
 function ErrorAllAdminSuccess() {
     console.log("Error Get All Admin From DB");
 }

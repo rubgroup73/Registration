@@ -44,5 +44,14 @@ namespace Registration.Controllers
             return groupClass.GetAllGroupsFromDB();
 
         }
+
+        [HttpGet]
+        [Route("api/group/NewAlgoritem")]
+        public Group GetAllGroupsFromDbVer2(int prefday,int prefhour,int education)
+        {
+            Group groupClass = new Group();
+            return groupClass.GetAllGroupsFromDbVer2(prefday,prefhour,education);
+
+        }
     }
 }

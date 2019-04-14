@@ -559,7 +559,7 @@ namespace Registration.Models.DAL
         }
 
         /**************************************************************************************************/
-        /************************************Get All Groups From DB****************************************/
+        /************************************Get All Groups From DB a Specific Group***********************/
         /**************************************************************************************************/
 
         public List<Group> GetAllGroupsFromDB(int day,int grouptime,int education, string tableName, string connectionString)
@@ -1098,6 +1098,112 @@ namespace Registration.Models.DAL
                 }
 
             }
+        }
+
+        public Group GetAllGroupsFromDbVer2(string tableName,string connectionString, int prefday, int prefhour, int education)
+        {
+            Group group = new Group();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getGroup = "SELECT *  from " + tableName + " WHERE day1=" + prefday + " AND hour1=" + prefhour + " AND education=" + education + " AND group_version=(select max(group_version) FROM class_group  WHERE day1=" + prefday + " AND hour1=" + prefhour + " AND education=" + education + " )";
+
+                SqlCommand cmd = new SqlCommand(getGroup, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    
+                    group.Group_Id = Convert.ToInt32(dr["group_id"]);
+                    group.Group_Name = (string)(dr["group_name"]);
+                    group.Group_Version = Convert.ToInt32(dr["group_version"]);
+                    group.Hour1 = Convert.ToInt32(dr["hour1"]);
+                    group.Max_Partcipants = Convert.ToInt32(dr["max_participants"]);
+                    group.Num_Of_Registered = Convert.ToInt32(dr["num_of_registered"]);
+                    group.Education = Convert.ToInt32(dr["education"]);
+                    group.Class_Version = Convert.ToInt32(dr["class_version"]);
+                    group.Day1 = Convert.ToInt32(dr["day1"]);
+                    group.IsStarted = Convert.ToBoolean(dr["IsStarted"]);
+                    group.IsFinished = Convert.ToBoolean(dr["IsFinished"]);
+
+                   
+                }
+                if (group.Max_Partcipants > group.Num_Of_Registered)
+                     return group;
+                else
+                {
+                    group.Group_Version += 1;
+                    group.Num_Of_Registered = 0;
+                    con.Close();
+                    InsertNewGroupToDB(group);
+                    return group;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        public int InsertToGroup(User user,string userTableName,string groupTableName,string connectionString)
+        {    
+                SqlConnection con;
+                SqlCommand cmd;
+
+                try
+                {
+                    con = connect(connectionString); // create the connection
+                }
+                catch (Exception ex)
+                {
+                    // write to log
+                    throw (ex);
+                }
+
+                String cStr = BuildInsertCommand(user);      // helper method to build the insert string
+
+                cmd = CreateCommand(cStr, con);             // create the command
+                int numEffected;
+                try
+                {
+                    numEffected = cmd.ExecuteNonQuery(); // execute the command  
+                if (numEffected == 1)
+                {
+                    con.Close();
+                    UpdateGroupParticipant(user.Group, groupTableName, connectionString);
+                    
+                }
+                return numEffected;
+            }
+
+                catch (Exception ex)
+                {
+
+                    throw (ex);
+                }
+         
+
+                finally
+                {
+                    if (con != null)
+                    {
+                        // close the db connection
+                        con.Close();
+                    }
+                }
+            
         }
 
         /*************************************************************************************************/

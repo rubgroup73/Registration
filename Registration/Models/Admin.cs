@@ -8,6 +8,9 @@ namespace Registration.Models
 {
     public class Admin
     {
+        bool newUserName;
+        bool newEmail;
+
         public int Admin_Id { get; set; }
         public string Admin_Firsname { get; set; }
         public string Admin_LastName { get; set; }
@@ -39,12 +42,36 @@ namespace Registration.Models
             return db.AddNewAdmin(admin, "admin_class", "ConnectionStringPerson");
         }
 
-        public List<Admin> GetAllAdminsFromDb()
+        public bool GetAllAdminsFromDb(string username, string email)
         {
             DBservices db = new DBservices();
-            return db.GetAllAdminsFromDb("admin_class", "ConnectionStringPerson");
+            List<Admin> adminsDb = db.GetAllAdminsFromDb("admin_class", "ConnectionStringPerson");
+            return CheckeIfExists(adminsDb, username, email);
         }
 
+       
+        public bool CheckeIfExists(List<Admin> adminsDb, string username,string email)
+        {
+            
+            for (int i = 0; i < adminsDb.Count; i++)
+            {
+                if(adminsDb[i].Admin_UserName == username)
+                {
+                    newUserName = true;
+                }
+            }
+            for (int i = 0; i < adminsDb.Count; i++)
+            {
+                if (adminsDb[i].Admin_Email == email)
+                {
+                    newEmail = true;
+                }
+            }
+            if (newUserName == true || newUserName == true)
+                return true;
+            else
+                return false;
+        }
 
         /**************************************************/
         /***********Authenticated an Admin*****************/
