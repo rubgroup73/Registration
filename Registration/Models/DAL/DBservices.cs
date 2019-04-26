@@ -1127,10 +1127,14 @@ namespace Registration.Models.DAL
                      return group;
                 else
                 {
+                    con.Close();
+                    int maxClassVersion=CheckmaxClassVersion(connectionString);
+                    group.Class_Version = maxClassVersion;
                     group.Group_Version += 1;
                     group.Num_Of_Registered = 0;
                     con.Close();
                     InsertNewGroupToDB(group);
+
                     return group;
 
                 }
@@ -1149,7 +1153,47 @@ namespace Registration.Models.DAL
 
             }
         }
+        //**************************************************************************************************//
+        private int CheckmaxClassVersion(string connectionString)
+        {
 
+            int max_version=0;
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getMax = "select max(class_version) as maxVersion from class;";
+
+                SqlCommand cmd = new SqlCommand(getMax, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {  
+                    max_version = Convert.ToInt32(dr["maxVersion"]);  
+                }
+
+                con.Close();
+                return max_version;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        
+    }
+        //**************************************************************************************************//
+        //**************************************************************************************************//
+        //**************************************************************************************************//
         public int InsertToGroup(User user,string userTableName,string groupTableName,string connectionString)
         {    
                 SqlConnection con;
