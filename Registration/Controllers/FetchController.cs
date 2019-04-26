@@ -11,6 +11,17 @@ namespace Registration.Controllers
 
     public class FetchController : ApiController
     {
+
+
+
+        [HttpPost]
+        [Route("api/Fetch/PostNewUserInClass")]
+        public void InsertNewUserInClass(int userId)
+        {
+            Group groupClass = new Group();
+            groupClass.InserNewUserInClass(userId);
+
+        }
         /***********************************************/
         /*Return True or False - From React login page*/
         /***********************************************/

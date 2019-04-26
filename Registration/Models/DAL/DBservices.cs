@@ -32,11 +32,11 @@ namespace Registration.Models.DAL
             String cStr = BuildInsertCommand(user);      // helper method to build the insert string
 
             cmd = CreateCommand(cStr, con);             // create the command
-
+             
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
+                int userId = (int)cmd.ExecuteScalar(); // execute the command
+                return userId;
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace Registration.Models.DAL
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat(" Values('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9},{10},{11},{12},{13},{14},{15},{16})", user.FullName, user.Gender.ToString(), user.BirthDate, user.Status, user.YearsOfEducation, user.UserName, user.Password, user.Mail, user.Phone, user.Residence, user.City, user.PrefDay1, user.PrefHour1, user.PrefHour2, user.Score,user.Group_Id,user.Group_Version);
-            String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefhour1,prefhour2,score,group_id,group_version)";
+            String prefix = "INSERT INTO AppUser " + "( FullName, Gender,Birthday,Family_Status ,Education, UserName ,User_Password ,Mail,phone,Residence,City,prefday1,prefhour1,prefhour2,score,group_id,group_version) output INSERTED.userid";
             command = prefix + sb.ToString();
 
             return command;
@@ -1168,17 +1168,18 @@ namespace Registration.Models.DAL
                 String cStr = BuildInsertCommand(user);      // helper method to build the insert string
 
                 cmd = CreateCommand(cStr, con);             // create the command
-                int numEffected;
+                int userId;
                 try
                 {
-                    numEffected = cmd.ExecuteNonQuery(); // execute the command  
-                if (numEffected == 1)
+                userId = (int)cmd.ExecuteScalar();
+                   
+                if (userId != 0)
                 {
                     con.Close();
                     UpdateGroupParticipant(user.Group, groupTableName, connectionString);
                     
                 }
-                return numEffected;
+                return userId;
             }
 
                 catch (Exception ex)
@@ -1199,6 +1200,156 @@ namespace Registration.Models.DAL
             
         }
 
+        /********************************************************************************************************/
+        /********************************************************************************************************/
+        public void InserNewUserInClass(int userId)
+        {
+            int classVersion=0;
+            List<AppClass> userInClass = new List<AppClass>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect("ConnectionStringPerson"); // create a connection to the database using the connection String defined in the web config file
+                string getClassVersion = "select class_version from class_group where group_version = (select group_version from appuser where userid = " + userId + ") and group_id = (select group_id from appuser where userid = " + userId + ")";
+
+                SqlCommand cmd = new SqlCommand(getClassVersion, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    classVersion = Convert.ToInt32(dr["class_version"]);
+                   
+                }
+
+                if (classVersion != 0)
+                {
+                    con.Close();
+                    userInClass = GetClassesOfUser(classVersion, "ConnectionStringPerson");
+                    InsertNewUserInClass2(userId, classVersion, userInClass, "userinclass", "ConnectionStringPerson");
+                }
+
+            }
+     
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+      
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        public int InsertNewUserInClass2(int userId, int classVersion,List<AppClass> classesOfVersion, string tableName,string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("ConnectionStringPerson"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertUserInClass(classesOfVersion, userId);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        public List<AppClass> GetClassesOfUser(int classVersion, string connectionString)
+        {
+            List<AppClass> allClass = new List<AppClass>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getClasses = "select * from class where class_version="+classVersion + " order by class_id asc";
+
+                SqlCommand cmd = new SqlCommand(getClasses, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    AppClass appClass = new AppClass();
+                    appClass.Id = Convert.ToInt32(dr["class_id"]);
+                    appClass.Description = (string)(dr["class_desc"]);
+                    appClass.Title = (string)dr["class_title"];
+                    appClass.Status = Convert.ToInt32(dr["class_status"]);           
+                    appClass.Score = Convert.ToInt32(dr["score"]);
+                    appClass.Version = Convert.ToInt32(dr["class_version"]);
+                    allClass.Add(appClass);
+                }
+
+                con.Close();
+                return allClass;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        /*************************************************************************************************/
+        /*************************************BuildInsertUserInClass******************************************/
+        /************************************************************************************************/
+
+        private string BuildInsertUserInClass(List<AppClass> appClasses,int userId)
+        {
+           String command="";
+            
+            for (int i = 0; i < appClasses.Count; i++)
+            {
+                command += "INSERT INTO UserInClass(userId,ClassId,classVersion,startTime,endTime) Values(" + userId + "," + appClasses[i].Id + "," + appClasses[i].Version + ",'1900-01-01','1900-01-01');";
+
+
+            }
+        
+            // use a string builder to create the dynamic string
+            
+
+            return command;
+        }
         /*************************************************************************************************/
         /*************************************Create Sql Command******************************************/
         /************************************************************************************************/

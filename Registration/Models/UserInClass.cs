@@ -13,14 +13,18 @@ namespace Registration.Models
         public int ClassVersion { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public bool IsStarted { get; set; }
+        public bool IsFinished { get; set; }
 
-        public UserInClass(int userId,int classId,int classVersion,DateTime startTime, DateTime endTime)
+        public UserInClass(int userId,int classId,int classVersion,DateTime startTime, DateTime endTime,bool isStarted,bool isFinished)
         {
             UserId = userId;
             ClassId = classId;
             ClassVersion = classVersion;
             StartTime = startTime;
             EndTime = endTime;
+            IsStarted = isStarted;
+            IsFinished = isFinished;
         }
 
         public UserInClass()

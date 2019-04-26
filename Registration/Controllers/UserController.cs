@@ -49,8 +49,8 @@ namespace Registration.Controllers
         [Route("api/temp/AddUserToGroup")]
         public int AddNewUser([FromBody] User user)
         {
-            int num = user.InsertToGroup(user);
-            return num;
+            int userId = user.InsertToGroup(user);
+            return userId;
         }
     }
 }

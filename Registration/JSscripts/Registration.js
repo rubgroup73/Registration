@@ -79,25 +79,6 @@
     });
 });
 
-//function FillAllFileds() {
-//    let dropDown = document.getElementsByTagName("select");
-//    for (var i = 0; i < dropDown.length; i++) {
-//        if (dropDown[i].value == -1) {
-//            dropDown[i].parentElement.style.color = 'red';
-//            Swal.fire({
-//                type: 'נמצאה בעיה',
-//                title: 'שדות לא מסומנים',
-//                text: 'בבקשה למלא את השדה המסומן באדום'
-//            });
-//            return;
-//        }
-//        else {
-//            dropDown[i].parentElement.style.color = 'green';
-//        }
-//    }
-//    AddUser();
-//}
-
 
 
 

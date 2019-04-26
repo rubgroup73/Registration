@@ -53,5 +53,7 @@ namespace Registration.Controllers
             return groupClass.GetAllGroupsFromDbVer2(prefday,prefhour,education);
 
         }
+
+       
     }
 }

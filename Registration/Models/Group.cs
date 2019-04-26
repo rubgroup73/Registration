@@ -132,5 +132,11 @@ namespace Registration.Models
                 return 3;
             }
         }
+
+        public void InserNewUserInClass(int userId)
+        {
+            DBservices db = new DBservices();
+            db.InserNewUserInClass(userId);
+        }
     }
 }

@@ -24,7 +24,7 @@ function ErrorGettingGroups() {
     console.log("Error");
 }
 
-function SuccessAddingUserToGroup(data) {
+function SuccessAddingUserToGroup(userId) {
     console.log("Success adding user to group");
     Swal.fire({
         title: 'Success',
@@ -35,9 +35,18 @@ function SuccessAddingUserToGroup(data) {
         imageAlt: 'Custom image',
         animation: false
     });
+    ajaxCall("POST", "../api/fetch/PostNewUserInClass?userId=" + userId, "", successInsertRow, ErrorInsertRows);
 }
+
+
 function ErrorAddingUserToGroup() {
     console.log("Error adding user to group");
+}
+function successInsertRow(data) {
+    console.log("Success Insert Rows");
+}
+function ErrorInsertRows() {
+    console.log("Error Insert Rows");
 }
 
 

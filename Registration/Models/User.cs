@@ -131,8 +131,8 @@ namespace Registration.Models
             DBservices db = new DBservices();        
             user.Group_Id = user.Group.Group_Id;
             user.Group_Version = user.Group.Group_Version;
-            int numEffected = db.InsertToGroup(user, "AppUser", "class_group", "ConnectionStringPerson");
-            return numEffected;
+            int userId = db.InsertToGroup(user, "AppUser", "class_group", "ConnectionStringPerson");
+            return userId;
         }
 
 
