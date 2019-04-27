@@ -138,5 +138,11 @@ namespace Registration.Models
             DBservices db = new DBservices();
             db.InserNewUserInClass(userId);
         }
+
+        public int GetClassVersionReact(int userId)
+        {
+            DBservices db = new DBservices();
+            int classVersion = db.GetClassVersionReact(userId);
+        }
     }
 }

@@ -74,10 +74,13 @@ namespace Registration.Models.DAL
 
                 while (dr.Read())
                 {   // Read till the end of the data into a row
-
+                    user.Id = Convert.ToInt32(dr["userid"]);
                     user.UserName = (string)(dr["UserName"]);
                     user.Password = (string)(dr["User_password"]);
-     
+                    user.FullName = (string)(dr["fullname"]);
+                    user.Group_Id = Convert.ToInt32(dr["group_id"]);
+                    user.Group_Version = Convert.ToInt32(dr["group_version"]);
+
                 }
 
                 return user;
@@ -1154,6 +1157,8 @@ namespace Registration.Models.DAL
             }
         }
         //**************************************************************************************************//
+        //**************************************Getting the max class version********************************//
+        //**************************************************************************************************//
         private int CheckmaxClassVersion(string connectionString)
         {
 
@@ -1245,6 +1250,7 @@ namespace Registration.Models.DAL
         }
 
         /********************************************************************************************************/
+        /*****************************Getting specific user's (and group) class version***************************************/
         /********************************************************************************************************/
         public void InserNewUserInClass(int userId)
         {
@@ -1338,7 +1344,7 @@ namespace Registration.Models.DAL
             SqlConnection con = null;
             try
             {
-
+                //**********************Getting all classes from specific version***********// 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
                 string getClasses = "select * from class where class_version="+classVersion + " order by class_id asc";
 
@@ -1365,6 +1371,48 @@ namespace Registration.Models.DAL
                 // write to log
                 throw (ex);
             }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        /*************************************************************************************************/
+        /*************************************return group ID******************************************/
+        /************************************************************************************************/
+        public int GetClassVersionReact(int userId)
+        {
+            int classVersion = 0;
+           
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect("ConnectionStringPerson"); // create a connection to the database using the connection String defined in the web config file
+                string getClassVersion = "select class_version from class_group where group_version = (select group_version from appuser where userid = " + userId + ") and group_id = (select group_id from appuser where userid = " + userId + ")";
+
+                SqlCommand cmd = new SqlCommand(getClassVersion, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    classVersion = Convert.ToInt32(dr["class_version"]);
+
+                }
+                return classVersion;
+
+            }
+
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
             finally
             {
                 if (con != null)
