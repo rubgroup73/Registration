@@ -1249,9 +1249,9 @@ namespace Registration.Models.DAL
             
         }
 
-        /********************************************************************************************************/
-        /*****************************Getting specific user's (and group) class version***************************************/
-        /********************************************************************************************************/
+        /********************************************REACT*************************************************/
+        /*****************************Getting specific user's (and group) class version for react***********/
+        /***************************************************************************************************/
         public void InserNewUserInClass(int userId)
         {
             int classVersion=0;
@@ -1338,15 +1338,18 @@ namespace Registration.Models.DAL
 
         }
 
+        //*****************************************************************************************************************************// 
+        //**********************Getting all classes from a specific version*************************************************************// 
+
         public List<AppClass> GetClassesOfUser(int classVersion, string connectionString)
         {
             List<AppClass> allClass = new List<AppClass>();
             SqlConnection con = null;
             try
             {
-                //**********************Getting all classes from specific version***********// 
+                //**********************Getting all classes from a specific version***********// 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getClasses = "select * from class where class_version="+classVersion + " order by class_id asc";
+                string getClasses = "select * from class where class_version="+classVersion + "and class_status=4 order by class_id asc";
 
                 SqlCommand cmd = new SqlCommand(getClasses, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
@@ -1381,7 +1384,7 @@ namespace Registration.Models.DAL
             }
         }
 
-        /*************************************************************************************************/
+        /***************************************REACT***********************************************/
         /*************************************return group ID******************************************/
         /************************************************************************************************/
         public int GetClassVersionReact(int userId)
@@ -1403,6 +1406,7 @@ namespace Registration.Models.DAL
                     classVersion = Convert.ToInt32(dr["class_version"]);
 
                 }
+
                 return classVersion;
 
             }
@@ -1422,6 +1426,108 @@ namespace Registration.Models.DAL
 
             }
         }
+        //******************************************REACT******************************************//
+        //******************************Getting all section of user for react***********************//
+        //***********************************************************************************************//
+
+        public List<Section> GetAllSectionsReact(int classVersion,string tableName, string connectionString)
+        {
+            List<Section> allSection = new List<Section>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getSections = "SELECT * FROM " + tableName + " where class_version=" + classVersion+ "  order by class_id asc";
+
+                SqlCommand cmd = new SqlCommand(getSections, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Section sectionClass = new Section();
+                    sectionClass.Id = Convert.ToInt32(dr["section_id"]);
+                    sectionClass.Description = (string)(dr["section_desc"]);
+                    sectionClass.Title = (string)dr["section_title"];
+                    sectionClass.Status = Convert.ToInt32(dr["section_status"]);
+                    sectionClass.Position = Convert.ToInt32(dr["approved_section_position"]);
+                    sectionClass.Version = Convert.ToInt32(dr["class_version"]);
+                    sectionClass.ClassId = Convert.ToInt32(dr["class_id"]);
+                    sectionClass.HasFeedback = Convert.ToInt32(dr["has_feedback"]);
+                    sectionClass.FilePath = (string)(dr["file_path"]);
+                    //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
+                    allSection.Add(sectionClass);
+                }
+
+                return allSection;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+        //******************************************REACT******************************************//
+        //******************************Getting all classes of user for react***********************//
+        //***********************************************************************************************//
+        public List<AppClass> GetAllClassesReact(int classVersion,string tableName,string connectionString)
+        {
+
+            List<AppClass> allClasses = new List<AppClass>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+
+                string getClasses = "SELECT * FROM " + tableName + " where class_version=" + classVersion;
+
+
+                SqlCommand cmd = new SqlCommand(getClasses, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    AppClass appClass = new AppClass();
+                    appClass.Id = Convert.ToInt32(dr["class_id"]);
+                    appClass.Description = (string)(dr["class_desc"]);
+                    appClass.Title = (string)dr["class_title"];
+                    appClass.Status = Convert.ToInt32(dr["class_status"]);
+                    appClass.Position = Convert.ToInt32(dr["approved_class_position"]);
+                    appClass.Score = Convert.ToInt32(dr["score"]);
+                    appClass.Version = Convert.ToInt32(dr["class_version"]);
+                    //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
+                    allClasses.Add(appClass);
+
+
+                    
+                }
+
+                return allClasses;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
         /*************************************************************************************************/
         /*************************************BuildInsertUserInClass******************************************/
         /************************************************************************************************/
@@ -1442,6 +1548,63 @@ namespace Registration.Models.DAL
 
             return command;
         }
+
+
+       
+    //*******************************************************************************************************//
+    //******************************************Getting all UserInClass for a Specific user - React**********//
+    //*******************************************************************************************************//
+    public List<UserInClass> GetUserInClassReact(int userId,string tableName,string connectionString)
+        {
+            string startTime;
+            string endTime;
+
+
+            List<UserInClass> allUserInClass = new List<UserInClass>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getUserInClass = "select UserInClass.userId, UserInClass.startTime,UserInClass.endTime,UserInClass.isFinished,UserInClass.isStarted, class.class_id,class.class_status,class.approved_class_position,class.class_version from class inner join UserInClass on class.class_version=UserInClass.ClassVersion and class.class_id=UserInClass.classId where class.class_status=4 and UserInClass.userId=" + userId+ " order by approved_class_position asc";
+                    
+
+                SqlCommand cmd = new SqlCommand(getUserInClass, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    UserInClass userInClass = new UserInClass();
+                    userInClass.UserId = Convert.ToInt32(dr["UserId"]);
+                    userInClass.ClassId = Convert.ToInt32(dr["Class_Id"]);
+                    userInClass.ClassVersion = Convert.ToInt32(dr["Class_Version"]);
+                    userInClass.ClassPosition = Convert.ToInt32(dr["approved_class_position"]);
+                    startTime = dr["startTime"].ToString();
+                    endTime = dr["endTime"].ToString();
+                    userInClass.StartTime = DateTime.Parse(endTime);
+                    userInClass.EndTime = DateTime.Parse(startTime);
+                    userInClass.IsStarted=Convert.ToBoolean(dr["isStarted"]);
+                    userInClass.IsFinished = Convert.ToBoolean(dr["isFinished"]);
+                    allUserInClass.Add(userInClass);
+                }
+
+                return allUserInClass;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
         /*************************************************************************************************/
         /*************************************Create Sql Command******************************************/
         /************************************************************************************************/

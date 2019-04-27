@@ -227,6 +227,7 @@
     <Content Include="JSscripts\UserManagement.js" />
     <Content Include="pages\AddAdminUser.html" />
     <Content Include="pages\ContentReview.html" />
+    <Content Include="pages\debugger.html" />
     <Content Include="pages\GroupSorting.html" />
     <Content Include="pages\LoginPage.html" />
     <Content Include="pages\Registration.html" />

@@ -12,7 +12,9 @@ namespace Registration.Controllers
     public class FetchController : ApiController
     {
 
-
+        /***********************************************/
+        /*Part of a proccess when insert a new user*/
+        /***********************************************/
 
         [HttpPost]
         [Route("api/Fetch/PostNewUserInClass")]
@@ -34,8 +36,37 @@ namespace Registration.Controllers
             return p.UserConfirmation(username,password);
         }
         /***********************************************/
+        /*Return classes group for user*/
+        /***********************************************/
+        [HttpGet]
+        [Route("api/Fetch/GetClassVersionReact")]
+        public List<AppClass> GetClassVersionReact(int userId)
+        {
+            Group groupClass = new Group();
+           return groupClass.GetClassVersionReact(userId);
+
+        }
 
         /***********************************************/
+        /*Return user in class from DB*/
+        /***********************************************/
+        [HttpGet]
+        [Route("api/Fetch/GetUserInClassReact")]
+        public List<UserInClass> GetUserInClassReact(int userId)
+        {
+            
+            UserInClass userInClass = new UserInClass();
+            return userInClass.GetUserInClassReact(userId);
+
+        }
+
+        /***********************************************/
+        /*Return user class status*/
+        /***********************************************/
+
+
+
+
 
 
     }

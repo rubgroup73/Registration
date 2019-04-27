@@ -139,10 +139,33 @@ namespace Registration.Models
             db.InserNewUserInClass(userId);
         }
 
-        public int GetClassVersionReact(int userId)
+        public List<AppClass> GetClassVersionReact(int userId)
         {
+            List<AppClass> classes = new List<AppClass>();
+            List<Section> sections = new List<Section>();
             DBservices db = new DBservices();
+
             int classVersion = db.GetClassVersionReact(userId);
+            sections= db.GetAllSectionsReact(classVersion,"section", "ConnectionStringPerson");
+            classes = db.GetAllClassesReact(classVersion,"class", "ConnectionStringPerson");
+            classes=InsertSectionsToClasses(sections,classes);
+            return classes;
+
+
+        }
+        public List<AppClass> InsertSectionsToClasses(List<Section> sections, List<AppClass> classes)
+        {
+            for (int i = 0; i < classes.Count; i++)
+            {
+                classes[i].Sections = new List<Section>();
+                for (int j = 0; j < sections.Count; j++)
+                {
+                    if (sections[j].ClassId == classes[i].Id)
+                        classes[i].Sections.Add(sections[j]);
+                }
+            }
+            
+            return classes;
         }
     }
 }
