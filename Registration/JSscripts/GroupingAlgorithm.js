@@ -18,7 +18,7 @@ function SuccessGettingGroups(groupToInsert) {
 }
 
 function AddNewUser() {
-    ajaxCall("POST", "../api/temp/AddUserToGroup", userToDb, SuccessAddingUserToGroup, ErrorAddingUserToGroup);
+    ajaxCall("POST", "../api/user/AddUserToGroup", userToDb, SuccessAddingUserToGroup, ErrorAddingUserToGroup);
 }
 function ErrorGettingGroups() {
     console.log("Error");

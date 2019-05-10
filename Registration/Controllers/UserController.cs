@@ -46,7 +46,7 @@ namespace Registration.Controllers
 
 
         [HttpPost]
-        [Route("api/temp/AddUserToGroup")]
+        [Route("api/user/AddUserToGroup")]
         public int AddNewUser([FromBody] User user)
         {
             int userId = user.InsertToGroup(user);

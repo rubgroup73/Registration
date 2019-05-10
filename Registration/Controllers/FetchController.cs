@@ -61,11 +61,27 @@ namespace Registration.Controllers
         }
 
         /***********************************************/
-        /*Return user class status*/
+        /*Return user In class Section */
         /***********************************************/
 
-
-
+        [HttpGet]
+        [Route("api/Fetch/GetUserInSectionReact")]
+        public List<UserInSection> GetUserInSectionReact(int userId,int classVersion,int classId)
+        {
+            UserInSection userInSection = new UserInSection();
+            return userInSection.GetUserInSectionReact(userId, classVersion, classId);
+        }
+        /***********************************************/
+        /*POST user In class Section */
+        /***********************************************/
+        [HttpPut]
+        [Route("api/Fetch/UserFeelingsReact")]
+        public int UserFeelingsReact([FromBody]UserInClass userInClass)
+        {
+            UserInClass user = new UserInClass();
+            return user.UserFeelingsReact(userInClass);
+             
+        }
 
 
 

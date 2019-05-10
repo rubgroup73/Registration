@@ -202,6 +202,7 @@
     <Compile Include="Models\Section.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserInClass.cs" />
+    <Compile Include="Models\UserInSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

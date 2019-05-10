@@ -14,14 +14,20 @@
     <title></title>
     <script>
         $(document).ready(function () {
-            ajaxCall("GET", "../api/Fetch/GetUserInClassReact?userId=91", "", SccessGetAllCities, ErrorGetAllCities);
+            
+            ajaxCall("GET", "../api/Fetch/GetUserInSectionReact?userId=96&classVersion=25&classId=206", "", SccessGetAllCities, ErrorGetAllCities);
 
         });
+
+       
+            
+       
+
         function SccessGetAllCities() {
-            console.log("fff");
+            console.log("success");
         }
         function ErrorGetAllCities() {
-            console.log("fff");
+            console.log("failed");
         }
     </script>
 </head>

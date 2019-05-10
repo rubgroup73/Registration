@@ -1319,7 +1319,113 @@ namespace Registration.Models.DAL
             try
             {
                 int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected2 = 0;
+                if (numEffected != 0)
+                {
+                    con.Close();
+
+                    //Get list of section for the classes of this version
+                    List<Section> userSections= GetSectionsList(classesOfVersion, connectionString);
+                    //Insert UserInSection for the sections above
+                    numEffected2= InsertNewUserInSection(userId, userSections, "UserInClass", connectionString);
+                   
+
+                }
+
+                return numEffected2;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+           
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+        //**
+        //GetSectionsList
+        //**
+        public List<Section> GetSectionsList(List<AppClass> classes,string connectionString)
+        {
+            int class_version = classes[0].Version;
+          
+            List<Section> allSection = new List<Section>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                string getSections = "select * from section as s inner join Class as c on s.class_id = c.class_id and c.class_version = s.class_version where c.class_version ="+ class_version+" and c.class_status = 4 and s.section_status = 4 order by c.class_id asc, s.approved_section_position;";
+
+                          SqlCommand cmd = new SqlCommand(getSections, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Section sectionClass = new Section();
+                    sectionClass.Id = Convert.ToInt32(dr["section_id"]);
+                    sectionClass.Description = (string)(dr["section_desc"]);
+                    sectionClass.Title = (string)dr["section_title"];
+                    sectionClass.Status = Convert.ToInt32(dr["section_status"]);
+                    sectionClass.Position = Convert.ToInt32(dr["approved_section_position"]);
+                    sectionClass.Version = Convert.ToInt32(dr["class_version"]);
+                    sectionClass.ClassId = Convert.ToInt32(dr["class_id"]);
+                    sectionClass.HasFeedback = Convert.ToInt32(dr["has_feedback"]);
+                    sectionClass.FilePath = (string)(dr["file_path"]);
+              
+                    allSection.Add(sectionClass);
+                }
+
+                return allSection;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+        public int InsertNewUserInSection(int userId,List<Section> userSections,string tableName,string connectionString)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect(connectionString); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertUserInSection(userSections, userId);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
                 return numEffected;
+
             }
             catch (Exception ex)
             {
@@ -1336,6 +1442,17 @@ namespace Registration.Models.DAL
                 }
             }
 
+        }
+        //*********************************** BuildInsertUserInSection*****************************************************************//
+        private string BuildInsertUserInSection(List<Section> userSections,int userId)
+        { Section section = new Section() ;
+            string str = "";
+            for (int i = 0; i < userSections.Count; i++)
+            {
+                section = userSections[i];
+             str +=   "Insert into userinsection(section_id, class_id, class_version, userId) values("+ section.Id+ ","+section.ClassId+","+section.Version+","+userId+");";
+            }
+            return str;
         }
 
         //*****************************************************************************************************************************// 
@@ -1566,7 +1683,7 @@ namespace Registration.Models.DAL
             {
 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getUserInClass = "select UserInClass.userId, UserInClass.startTime,UserInClass.endTime,UserInClass.isFinished,UserInClass.isStarted, class.class_id,class.class_status,class.approved_class_position,class.class_version from class inner join UserInClass on class.class_version=UserInClass.ClassVersion and class.class_id=UserInClass.classId where class.class_status=4 and UserInClass.userId=" + userId+ " order by approved_class_position asc";
+                string getUserInClass = "select * from class inner join UserInClass on class.class_version=UserInClass.ClassVersion and class.class_id=UserInClass.classId where class.class_status=4 and UserInClass.userId=" + userId+ " order by approved_class_position asc";
                     
 
                 SqlCommand cmd = new SqlCommand(getUserInClass, con);
@@ -1575,6 +1692,7 @@ namespace Registration.Models.DAL
                 while (dr.Read())
                 {   // Read till the end of the data into a row
                     UserInClass userInClass = new UserInClass();
+                    AppClass appClass = new AppClass();
                     userInClass.UserId = Convert.ToInt32(dr["UserId"]);
                     userInClass.ClassId = Convert.ToInt32(dr["Class_Id"]);
                     userInClass.ClassVersion = Convert.ToInt32(dr["Class_Version"]);
@@ -1585,6 +1703,15 @@ namespace Registration.Models.DAL
                     userInClass.EndTime = DateTime.Parse(startTime);
                     userInClass.IsStarted=Convert.ToBoolean(dr["isStarted"]);
                     userInClass.IsFinished = Convert.ToBoolean(dr["isFinished"]);
+                    appClass.Description = (string)(dr["class_desc"]);
+                    appClass.Status = Convert.ToInt32(dr["class_status"]);
+                    appClass.Position = Convert.ToInt32(dr["approved_class_position"]);
+                    appClass.Score = Convert.ToInt32(dr["score"]);
+                    appClass.Version = Convert.ToInt32(dr["class_version"]);
+                    appClass.Title = (string)(dr["class_title"]);
+                    appClass.Id = Convert.ToInt32(dr["Class_Id"]);
+                    userInClass.AppClass = appClass;
+
                     allUserInClass.Add(userInClass);
                 }
 
@@ -1604,6 +1731,112 @@ namespace Registration.Models.DAL
 
             }
         }
+
+        //**
+        //**Return all user's sections instances from DB --> will call from react app
+        //**
+        public List<UserInSection> GetUserInSectionReact(int userId, int classVersion, int classId)
+        {
+            
+            List<UserInSection> userInSections = new List<UserInSection>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect("ConnectionStringPerson"); // create a connection to the database using the connection String defined in the web config file
+                
+                string getUserInSection = "select * from userInSection as uis inner join section as s  on s.section_id=uis.section_id and s.class_id= uis.class_id and s.class_version=uis.class_version ";
+                getUserInSection += "inner join Class as c on s.class_id =c.class_id and s.class_version=c.class_version ";
+                getUserInSection += "where uis.userid=" + userId + " AND uis.class_id=" + classId + " AND uis.class_version=" + classVersion + " and c.class_status=4 and s.section_status=4 order by c.approved_class_position asc,s.approved_section_position asc";
+                SqlCommand cmd = new SqlCommand(getUserInSection, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    UserInSection userInSection = new UserInSection();
+                    userInSection.Class_Id = Convert.ToInt32(dr["class_id"]);
+                    userInSection.Section_Id = Convert.ToInt32(dr["Section_Id"]);
+                    userInSection.Class_Version = Convert.ToInt32(dr["Class_Version"]);
+                    userInSection.UserId = Convert.ToInt32(dr["UserId"]);
+                    userInSection.Play_Clicks = Convert.ToInt32(dr["Play_Clicks"]);
+                    userInSection.Pause_Clicks = Convert.ToInt32(dr["Pause_Clicks"]);
+                    userInSection.Stop_Clicks = Convert.ToInt32(dr["Stop_Clicks"]);
+                    userInSection.Backward_Clicks = Convert.ToInt32(dr["Backward_Clicks"]);
+                    userInSection.Forward_Clicks = Convert.ToInt32(dr["Forward_Clicks"]);
+                    userInSection.Mute_Clicks = Convert.ToInt32(dr["Mute_Clicks"]);
+                    userInSection.Unmute_Click = Convert.ToInt32(dr["Unmute_Click"]);
+                    userInSection.Section_Start_Time = DateTime.Parse(dr["Section_Start_Time"].ToString());
+                    userInSection.Section_End_Time = DateTime.Parse(dr["Section_End_Time"].ToString());
+                    userInSection.Section_Is_Started = Convert.ToBoolean(dr["Section_Is_Started"]);
+                    userInSection.Section_Is_Finished = Convert.ToBoolean(dr["Section_Is_Finished"]);
+                    userInSection.User_Last_Point = (string)(dr["User_Last_Point"]);
+                    userInSection.Pause_Duration = (string)(dr["Pause_Duration"]);
+                    userInSection.Section_Total_Duration = (string)(dr["Section_Total_Duration"]);
+                    userInSection.File_Path = (string)(dr["File_Path"]);
+                    userInSection.Section_Title = (string)(dr["Section_Title"]);
+                    userInSection.Approved_Section_Position = Convert.ToInt32(dr["Approved_Section_Position"]);
+                    userInSection.Repeat_Section_Counter = Convert.ToInt32(dr["Repeat_Section_Counter"]);
+
+                    userInSections.Add(userInSection);
+                }
+                return userInSections;
+
+
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        //**
+        //Update UserInClass status from React
+        //**
+        public int UserFeelingsReact(int feeling,UserInClass userInClass,string tableName)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect("ConnectionStringPerson");
+            String cStr = BuildUpdateFeelingCommand(feeling, userInClass, tableName);
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+
+        public string BuildUpdateFeelingCommand(int feeling, UserInClass userInClass, string tableName)
+        {
+            
+            string updateComand = "UPDATE " + tableName + " ";
+            updateComand += "set user_feeling=" + feeling + " where userId=" + userInClass.UserId + " AND classId=" + userInClass.ClassId;
+            updateComand += " AND classVersion =" + userInClass.ClassVersion;
+            return updateComand;
+        }
+
 
         /*************************************************************************************************/
         /*************************************Create Sql Command******************************************/
