@@ -1710,6 +1710,8 @@ namespace Registration.Models.DAL
                     appClass.Version = Convert.ToInt32(dr["class_version"]);
                     appClass.Title = (string)(dr["class_title"]);
                     appClass.Id = Convert.ToInt32(dr["Class_Id"]);
+                    appClass.Class_File_Path = (string)(dr["Class_File_Path"]);
+
                     userInClass.AppClass = appClass;
 
                     allUserInClass.Add(userInClass);
@@ -1834,6 +1836,169 @@ namespace Registration.Models.DAL
             string updateComand = "UPDATE " + tableName + " ";
             updateComand += "set user_feeling=" + feeling + " where userId=" + userInClass.UserId + " AND classId=" + userInClass.ClassId;
             updateComand += " AND classVersion =" + userInClass.ClassVersion;
+            return updateComand;
+        }
+
+        //**
+        //Update UserInClass status from React
+        //**
+        public int UpdateDataUserInClassReact(UserInSection userInSection,string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect(connectionString);
+            String cStr = BuildUpdateUserDataCommand(userInSection,userInSection.UserId,userInSection.Class_Version,userInSection.Class_Id,userInSection.Section_Id);
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+        public string BuildUpdateUserDataCommand(UserInSection userInSection,int userId,int classVersion,int classId,int sectionId)
+        {
+            //var dateStr = "14:02";
+            //var now = DateTime.Now;
+            //var dateTime = DateTime.ParseExact(dateStr, "mm:ss", null, System.Globalization.DateTimeStyles.None);
+            //var t = "";
+            //if(dateTime.Second<10)
+            //    t= dateTime.Minute + ":0" + dateTime.Second;
+            //else
+            //    t =  dateTime.Minute + ":" + dateTime.Second;
+
+
+            string Section_End_Time = Convert.ToString(userInSection.Section_End_Time);
+            string Section_Start_Time = Convert.ToString(userInSection.Section_Start_Time);
+            
+            string updateComand = "UPDATE userInSection";
+            updateComand += " set Play_Clicks=" + userInSection.Play_Clicks + ",Pause_Clicks=" + userInSection.Pause_Clicks + ",Stop_Clicks=" + userInSection.Stop_Clicks;
+            updateComand += ",Backward_Clicks=" + userInSection.Backward_Clicks + ",Forward_Clicks=" + userInSection.Forward_Clicks;
+            updateComand += ",Mute_Clicks=" + userInSection.Mute_Clicks + ",Unmute_Click= " + userInSection.Unmute_Click + ",Section_Start_Time='" + Section_Start_Time;
+            updateComand += "',Section_End_Time='" + Section_End_Time + "',Section_Is_Started=" + Convert.ToInt32(userInSection.Section_Is_Started);
+            updateComand += ",Section_Is_Finished=" + Convert.ToInt32(userInSection.Section_Is_Finished) + ",Repeat_Section_Counter=" + userInSection.Repeat_Section_Counter;
+            updateComand += ",User_Last_Point='" + userInSection.User_Last_Point.ToString() + "',Pause_Duration='" + userInSection.Pause_Duration.ToString();
+            updateComand += "',Section_Total_Duration='" + userInSection.Section_Total_Duration.ToString();
+            updateComand += "' WHERE UserId=" + userId + " AND Class_Version=" + classVersion + " AND Class_Id=" + classId + " AND Section_Id=" + sectionId;
+            return updateComand;
+        }
+
+        public int UpdateDataUserRepeatSecReact(UserInSection userInSection, string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect(connectionString);
+            String cStr = BuildUpdateUserRepeatSecCommand(userInSection, userInSection.UserId, userInSection.Class_Version, userInSection.Class_Id, userInSection.Section_Id);
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+        public string BuildUpdateUserRepeatSecCommand(UserInSection userInSection, int userId, int classVersion, int classId, int sectionId)
+        {
+           
+            string updateComand = "UPDATE userInSection";
+            updateComand += " set Repeat_Section_Counter=" + userInSection.Repeat_Section_Counter;
+            updateComand += " WHERE UserId=" + userId + " AND Class_Version=" + classVersion + " AND Class_Id=" + classId + " AND Section_Id=" + sectionId;
+            return updateComand;
+        }
+        //**
+        //**update when user finish the class
+        public int UpdateClassStatuscReact(UserInClass userInClass, string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect(connectionString);
+            String cStr = BuildUpdateUserClassStatusCommand(userInClass,userInClass.UserId,userInClass.ClassVersion,userInClass.ClassId);
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+        public string BuildUpdateUserClassStatusCommand(UserInClass userInClass, int userId, int classVersion, int classId)
+        {
+
+            string updateComand = "UPDATE UserInClass";
+            updateComand += " set StartTime='" + userInClass.StartTime + "',EndTime='" + userInClass.EndTime + "',IsFinished=" +Convert.ToInt32(userInClass.IsFinished);
+            updateComand += " WHERE UserId=" + userId + " AND ClassId=" + classId + " AND ClassVersion=" + classVersion;
+            return updateComand;
+        }
+        //**
+        //**update when user start the class
+        public int UpdateClassStartedReact(UserInClass userInClass, string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect(connectionString);
+            String cStr = BuildUpdateClassStartedStatusCommand(userInClass, userInClass.UserId, userInClass.ClassVersion, userInClass.ClassId);
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+        public string BuildUpdateClassStartedStatusCommand(UserInClass userInClass, int userId, int classVersion, int classId)
+        {
+            userInClass.IsStarted = true;
+            string updateComand = "UPDATE UserInClass";
+            updateComand += " set IsStarted=" + Convert.ToInt32(userInClass.IsStarted);
+            updateComand += " WHERE UserId=" + userId + " AND ClassId=" + classId + " AND ClassVersion=" + classVersion;
             return updateComand;
         }
 

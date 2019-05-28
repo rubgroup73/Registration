@@ -83,6 +83,40 @@ namespace Registration.Controllers
              
         }
 
+        [HttpPut]
+        [Route("api/Fetch/UpdateDataUserInClassReact")]
+        public int UpdateDataUserInClassReact([FromBody]UserInSection userInSection)
+        {
+            UserInSection user = new UserInSection();
+            return user.UpdateDataUserInClassReact(userInSection);
+
+        }
+        [HttpPut]
+        [Route("api/Fetch/UpdateDataUserRepeatSecReact")]
+        public int UpdateDataUserRepeatSecReact([FromBody]UserInSection userInSection)
+        {
+            UserInSection user = new UserInSection();
+            return user.UpdateDataUserRepeatSecReact(userInSection);
+
+        }
+
+        [HttpPut]
+        [Route("api/Fetch/UpdateClassStatuscReact")]
+        public int UpdateClassStatuscReact([FromBody]UserInClass userInClass)
+        {
+            UserInClass user = new UserInClass();
+            return user.UpdateClassStatuscReact(userInClass);
+
+        }
+        [HttpPut]
+        [Route("api/Fetch/UpdateClassStartedReact")]
+        public int UpdateClassStartedReact([FromBody]UserInClass userInClass)
+        {
+            UserInClass user = new UserInClass();
+            return user.UpdateClassStartedReact(userInClass);
+
+        }
+
 
 
     }

@@ -16,8 +16,9 @@ namespace Registration.Models
         public int Score { get; set; }
         public int Version { get; set; }
         public List<Section> Sections { get; set; }
+        public string Class_File_Path { get; set; }
 
-        public AppClass(int id,string description,string title,int status,int position,int score,int version,List<Section> sections)
+        public AppClass(int id,string description,string title,int status,int position,int score,int version,List<Section> sections,string class_file_path)
         {
             Id = id;
             Description = description;
@@ -27,6 +28,7 @@ namespace Registration.Models
             Score = score;
             Version = version;
             Sections = sections;
+            Class_File_Path = class_file_path;
         }
         public AppClass()
         {

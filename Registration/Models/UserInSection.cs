@@ -77,5 +77,16 @@ namespace Registration.Models
             userInSections = db.GetUserInSectionReact(userId, classVersion, classId);
             return userInSections;
         }
+
+        public int UpdateDataUserInClassReact(UserInSection userInSection)
+        {
+            DBservices db = new DBservices();
+            return db.UpdateDataUserInClassReact(userInSection, "ConnectionStringPerson");
+        }
+        public int UpdateDataUserRepeatSecReact(UserInSection userInSection)
+        {
+            DBservices db = new DBservices();
+            return db.UpdateDataUserRepeatSecReact(userInSection, "ConnectionStringPerson");
+        }
     }
 }

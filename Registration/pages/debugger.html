@@ -14,10 +14,17 @@
     <title></title>
     <script>
         $(document).ready(function () {
+            UpdateSection();
             
-            ajaxCall("GET", "../api/Fetch/GetUserInSectionReact?userId=96&classVersion=25&classId=206", "", SccessGetAllCities, ErrorGetAllCities);
 
         });
+        function UpdateSection() {
+            //UserInClass = {
+            //    IsStarted:false
+            //}
+            /*JSON.stringify(UserInClass)*/
+            ajaxCall("GET", "../api/Fetch/GetUserInClassReact?userId=101", "", SccessGetAllCities, ErrorGetAllCities);
+        }
 
        
             

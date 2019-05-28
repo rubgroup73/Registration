@@ -133,5 +133,16 @@ namespace Registration.Models
             }
             return -1;
         }
+
+        public int UpdateClassStatuscReact(UserInClass userInClass)
+        {
+            DBservices db = new DBservices();
+            return db.UpdateClassStatuscReact(userInClass, "ConnectionStringPerson");
+        }
+        public int UpdateClassStartedReact(UserInClass userInClass)
+        {
+            DBservices db = new DBservices();
+            return db.UpdateClassStartedReact(userInClass, "ConnectionStringPerson");
+        }
     }
 }
