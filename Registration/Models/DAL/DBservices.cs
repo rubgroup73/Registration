@@ -691,9 +691,17 @@ namespace Registration.Models.DAL
             int currentNum = group.Num_Of_Registered+1;
             int group_id = group.Group_Id;
             int group_version = group.Group_Version;
+            string updateComand;
 
-            string updateComand = "UPDATE " + tableName+" ";
-            updateComand += "set num_of_registered=" + currentNum + " where group_id=" + group_id+" AND group_version="+group_version;
+            updateComand = "UPDATE " + tableName+" ";
+            if (currentNum == 1)
+            {
+                updateComand += "set num_of_registered=" + currentNum+",start_time = '"+group.Start_Time.ToString()+"'" + " where group_id=" + group_id + " AND group_version=" + group_version;
+            }
+            else
+            {
+                updateComand += "set num_of_registered=" + currentNum + " where group_id=" + group_id + " AND group_version=" + group_version;
+            }
             return updateComand;
         }
 
@@ -703,8 +711,8 @@ namespace Registration.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values({0},'{1}',{2},{3},{4},{5},{6},{7},{8}); ", group.Group_Id,group.Group_Name,group.Day1,group.Hour1,group.Max_Partcipants,group.Num_Of_Registered,group.Group_Version,group.Education,group.Class_Version);
-            String prefix = "INSERT INTO class_group " + "( Group_Id,Group_Name,Day1,Hour1,Max_Participants,Num_Of_Registered,Group_Version,Education,Class_Version)";
+            sb.AppendFormat(" Values({0},'{1}',{2},{3},{4},{5},{6},{7},{8},'{9}'); ", group.Group_Id,group.Group_Name,group.Day1,group.Hour1,group.Max_Partcipants,group.Num_Of_Registered,group.Group_Version,group.Education,group.Class_Version,group.Start_Time.ToString());
+            String prefix = "INSERT INTO class_group " + "( Group_Id,Group_Name,Day1,Hour1,Max_Participants,Num_Of_Registered,Group_Version,Education,Class_Version,start_time)";
             command = prefix + sb.ToString();
 
             return command;
@@ -1096,7 +1104,7 @@ namespace Registration.Models.DAL
         /**************************************************************************************************/
         /*********************Return A Specific Group Users From DB***************************************/
 
-        public Group GetAllGroupsFromDbVer2(string tableName,string connectionString, int prefday, int prefhour, int education)
+        public Group GetAllGroupsFromDbVer2(string tableName,string connectionString, int prefday, int prefhour, int education,DateTime next)
         {
             Group group = new Group();
             SqlConnection con = null;
@@ -1123,11 +1131,19 @@ namespace Registration.Models.DAL
                     group.Day1 = Convert.ToInt32(dr["day1"]);
                     group.IsStarted = Convert.ToBoolean(dr["IsStarted"]);
                     group.IsFinished = Convert.ToBoolean(dr["IsFinished"]);
+                    group.Start_Time = DateTime.Parse((dr["Start_Time"]).ToString());
 
                    
                 }
-                if (group.Max_Partcipants > group.Num_Of_Registered)
-                     return group;
+
+                if(group.Start_Time.Year == 1900)
+                {
+                    group.Start_Time = next;
+                }
+
+                
+                if (group.Max_Partcipants > group.Num_Of_Registered && group.Start_Time>= DateTime.Now)
+                    return group;
                 else
                 {
                     con.Close();
@@ -1254,6 +1270,7 @@ namespace Registration.Models.DAL
         /***************************************************************************************************/
         public void InserNewUserInClass(int userId)
         {
+            DateTime start_time=DateTime.Now;
             int classVersion=0;
             List<AppClass> userInClass = new List<AppClass>();
             SqlConnection con = null;
@@ -1261,7 +1278,7 @@ namespace Registration.Models.DAL
             {
 
                 con = connect("ConnectionStringPerson"); // create a connection to the database using the connection String defined in the web config file
-                string getClassVersion = "select class_version from class_group where group_version = (select group_version from appuser where userid = " + userId + ") and group_id = (select group_id from appuser where userid = " + userId + ")";
+                string getClassVersion = "select class_version,start_time from class_group where group_version = (select group_version from appuser where userid = " + userId + ") and group_id = (select group_id from appuser where userid = " + userId + ")";
 
                 SqlCommand cmd = new SqlCommand(getClassVersion, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
@@ -1269,6 +1286,7 @@ namespace Registration.Models.DAL
                 while (dr.Read())
                 {   // Read till the end of the data into a row
                     classVersion = Convert.ToInt32(dr["class_version"]);
+                    start_time = DateTime.Parse(dr["start_time"].ToString());
                    
                 }
 
@@ -1276,7 +1294,7 @@ namespace Registration.Models.DAL
                 {
                     con.Close();
                     userInClass = GetClassesOfUser(classVersion, "ConnectionStringPerson");
-                    InsertNewUserInClass2(userId, classVersion, userInClass, "userinclass", "ConnectionStringPerson");
+                    InsertNewUserInClass2(userId, classVersion, userInClass,start_time, "userinclass", "ConnectionStringPerson");
                 }
 
             }
@@ -1297,7 +1315,7 @@ namespace Registration.Models.DAL
             }
         }
 
-        public int InsertNewUserInClass2(int userId, int classVersion,List<AppClass> classesOfVersion, string tableName,string connectionString)
+        public int InsertNewUserInClass2(int userId, int classVersion,List<AppClass> classesOfVersion, DateTime start_time,string tableName,string connectionString)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -1312,7 +1330,7 @@ namespace Registration.Models.DAL
                 throw (ex);
             }
 
-            String cStr = BuildInsertUserInClass(classesOfVersion, userId);      // helper method to build the insert string
+            String cStr = BuildInsertUserInClass(classesOfVersion, userId,start_time);      // helper method to build the insert string
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -1649,14 +1667,14 @@ namespace Registration.Models.DAL
         /*************************************BuildInsertUserInClass******************************************/
         /************************************************************************************************/
 
-        private string BuildInsertUserInClass(List<AppClass> appClasses,int userId)
+        private string BuildInsertUserInClass(List<AppClass> appClasses,int userId,DateTime start_time)
         {
            String command="";
             
             for (int i = 0; i < appClasses.Count; i++)
             {
-                command += "INSERT INTO UserInClass(userId,ClassId,classVersion,startTime,endTime) Values(" + userId + "," + appClasses[i].Id + "," + appClasses[i].Version + ",'1900-01-01','1900-01-01');";
-
+                command += "INSERT INTO UserInClass(userId,ClassId,classVersion,startTime,endTime,should_start_time) Values(" + userId + "," + appClasses[i].Id + "," + appClasses[i].Version + ",'1900-01-01','1900-01-01','"+start_time.ToString()+"');";
+                start_time = start_time.AddDays(7);
 
             }
         

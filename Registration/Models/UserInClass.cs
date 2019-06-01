@@ -20,6 +20,7 @@ namespace Registration.Models
         public AppClass AppClass { get; set; }
         public Section [] Section { get; set;}
         public string User_Feeling { get; set; }
+        public DateTime ShouldStart { get; set; }
         public bool IsNextLesson { get; set; }
 
         Dictionary<string, int> feelingStatus = new Dictionary<string, int>
@@ -32,7 +33,8 @@ namespace Registration.Models
             };
 
         public UserInClass(int userId, int classId, int classVersion, DateTime startTime, DateTime endTime, bool isStarted, bool isFinished, 
-            int classPosition,AppClass appClass,Section [] section,string user_feeling,bool isNextLesson = false, int nextLessonInReact=-20)
+            int classPosition,AppClass appClass,Section [] section,string user_feeling,DateTime shouldStart
+            ,bool isNextLesson = false, int nextLessonInReact=-20)
         {
             UserId = userId;
             ClassId = classId;
@@ -46,6 +48,7 @@ namespace Registration.Models
             AppClass = appClass;
             Section = section;
             User_Feeling = user_feeling;
+            ShouldStart = shouldStart;
             IsNextLesson = isNextLesson;
         }
 
@@ -62,6 +65,7 @@ namespace Registration.Models
 
         public List<UserInClass> GetUserInClassReact(int userId)
         {
+            //DateTime.Now.DayOfWeek.ToString();
             UserInClass nextUserInClass = new UserInClass();
             List<UserInClass> userInClass = new List<UserInClass>();
             List<Section> section = new List<Section>();

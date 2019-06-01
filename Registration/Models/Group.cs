@@ -18,9 +18,20 @@ namespace Registration.Models
         public int Group_Version { get; set; }
         public int Education { get; set; }
         public bool IsFinished { get; set; }
+        public DateTime Start_Time { get; set;}
         public bool IsStarted { get; set; }
 
-        public Group(int class_version,int group_id,string group_name,int day1,int hour1,int max_partcipants,int num_of_registered,int group_version,int education,bool isFinished,bool isStarted=false)
+        Dictionary<int,string> daysWeek = new Dictionary<int,string>
+            {
+                {1,"Sunday"},
+                {2,"Monday" },
+                {3,"Tuesday" },
+                {4,"Wednesday" },
+                {5,"Thursday"}
+            };
+
+        public Group(int class_version,int group_id,string group_name,int day1,int hour1,int max_partcipants,int num_of_registered,int group_version,int education
+            ,bool isFinished,DateTime start_time,bool isStarted=false)
         {
             Class_Version = class_version;
             Group_Id = group_id;
@@ -32,6 +43,7 @@ namespace Registration.Models
             Group_Version = group_version;
             Education = education;
             IsFinished = isFinished;
+            Start_Time = start_time;
             IsStarted = isStarted;
         }
 
@@ -79,15 +91,34 @@ namespace Registration.Models
 
         public Group GetAllGroupsFromDbVer2(int prefday, int prefhour, int education)
         {
+            string prefdayNum = daysWeek[prefday];
+
+       
             /*groupTime: 1-Morning, 2-Noon, 3-Evening*/
             /*educationLevel:1-Fine,2-ok,3-smarties*/
             prefhour = CheckGroupTime(prefhour);
             education = CheckEducation(education);
-
+            //DateTime.Now.DayOfWeek.ToString();
             DBservices db = new DBservices();
-            Group group = db.GetAllGroupsFromDbVer2("class_group", "ConnectionStringPerson",prefday,prefhour,education);
+            DateTime next =  Next(((DayOfWeek)Enum.Parse(typeof(DayOfWeek), prefdayNum)));
+            Group group = db.GetAllGroupsFromDbVer2("class_group", "ConnectionStringPerson",prefday,prefhour,education,next);
             return group;
         }
+        //Calculate the day the user should start the course.
+        //return a datetime object
+        public static DateTime Next(DayOfWeek dayOfWeek)
+        {
+            DateTime from = DateTime.Now;
+            int start = (int)from.DayOfWeek;
+            int target = (int)dayOfWeek;
+            if (target <= start)
+                target += 7;
+            int between = target - start;
+            if (between < 5)
+                between = between + 7;
+            return from.AddDays(between);
+        }
+
         //Normalize Hour-time to Group-time
         public int CheckGroupTime(int PrefHour1)
         {
