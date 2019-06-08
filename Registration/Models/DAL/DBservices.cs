@@ -1729,6 +1729,7 @@ namespace Registration.Models.DAL
                     appClass.Title = (string)(dr["class_title"]);
                     appClass.Id = Convert.ToInt32(dr["Class_Id"]);
                     appClass.Class_File_Path = (string)(dr["Class_File_Path"]);
+                    userInClass.ShouldStart = DateTime.Parse(dr["should_Start_time"].ToString());
 
                     userInClass.AppClass = appClass;
 
@@ -1821,12 +1822,12 @@ namespace Registration.Models.DAL
         //**
         //Update UserInClass status from React
         //**
-        public int UserFeelingsReact(int feeling,UserInClass userInClass,string tableName)
+        public int UserFeelingsReact(int feeling,UserInClass userInClass,string tableName,string userFeelingForDB)
         {
             SqlConnection con;
             SqlCommand cmd;
             con = connect("ConnectionStringPerson");
-            String cStr = BuildUpdateFeelingCommand(feeling, userInClass, tableName);
+            String cStr = BuildUpdateFeelingCommand(feeling, userInClass, tableName, userFeelingForDB);
             cmd = CreateCommand(cStr, con);
 
             try
@@ -1848,11 +1849,11 @@ namespace Registration.Models.DAL
             }
         }
 
-        public string BuildUpdateFeelingCommand(int feeling, UserInClass userInClass, string tableName)
+        public string BuildUpdateFeelingCommand(int feeling, UserInClass userInClass, string tableName,string userFeelingForDB)
         {
             
             string updateComand = "UPDATE " + tableName + " ";
-            updateComand += "set user_feeling=" + feeling + " where userId=" + userInClass.UserId + " AND classId=" + userInClass.ClassId;
+            updateComand += "set "+ userFeelingForDB+"=" + feeling + " where userId=" + userInClass.UserId + " AND classId=" + userInClass.ClassId;
             updateComand += " AND classVersion =" + userInClass.ClassVersion;
             return updateComand;
         }

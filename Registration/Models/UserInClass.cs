@@ -20,6 +20,8 @@ namespace Registration.Models
         public AppClass AppClass { get; set; }
         public Section [] Section { get; set;}
         public string User_Feeling { get; set; }
+        public string User_Feeling_Finish { get; set;}
+        public bool BeforeClass { get; set; }
         public DateTime ShouldStart { get; set; }
         public bool IsNextLesson { get; set; }
 
@@ -33,7 +35,7 @@ namespace Registration.Models
             };
 
         public UserInClass(int userId, int classId, int classVersion, DateTime startTime, DateTime endTime, bool isStarted, bool isFinished, 
-            int classPosition,AppClass appClass,Section [] section,string user_feeling,DateTime shouldStart
+            int classPosition,AppClass appClass,Section [] section,string user_feeling, string user_feeling_finish, bool beforeClass,DateTime shouldStart
             ,bool isNextLesson = false, int nextLessonInReact=-20)
         {
             UserId = userId;
@@ -48,6 +50,8 @@ namespace Registration.Models
             AppClass = appClass;
             Section = section;
             User_Feeling = user_feeling;
+            User_Feeling_Finish = user_feeling_finish;
+            BeforeClass = beforeClass;
             ShouldStart = shouldStart;
             IsNextLesson = isNextLesson;
         }
@@ -115,11 +119,16 @@ namespace Registration.Models
        
         public int UserFeelingsReact(UserInClass userInClass)
         {
+            string userFeelingForDB = "";
             DBservices db = new DBservices();
+            if (userInClass.BeforeClass != true)
+                userFeelingForDB = "user_feeling_finish";
+            else
+                userFeelingForDB = "user_feeling";
             int feeling = SetUserFeeling(userInClass);
             if (feeling != -1)
             {
-                return db.UserFeelingsReact(feeling, userInClass, "UserInClass");
+                return db.UserFeelingsReact(feeling, userInClass, "UserInClass", userFeelingForDB);
             }
             else
                 return 0;
