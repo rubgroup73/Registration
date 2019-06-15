@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -2021,7 +2022,7 @@ namespace Registration.Models.DAL
             return updateComand;
         }
 
-
+      
         /*************************************************************************************************/
         /*************************************Create Sql Command******************************************/
         /************************************************************************************************/

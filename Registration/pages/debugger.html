@@ -14,24 +14,35 @@
     <title></title>
     <script>
         $(document).ready(function () {
-            UpdateSection();
-            
+            //UpdateSection();
+
 
         });
-        function UpdateSection() {
-            //UserInClass = {
-            //    IsStarted:false
-            //}
-            /*JSON.stringify(UserInClass)*/
-            ajaxCall("GET", "../api/Fetch/GetUserInClassReact?userId=101", "", SccessGetAllCities, ErrorGetAllCities);
+
+        var filename;
+        function FileName(num) {
+             filename = document.getElementById("filename").value;
+            ajaxCall("GET", "../api/reports/getAllUsersFromDbExcel?fileName=" + filename+"&num="+num, "", SccessGetAllCities, ErrorGetAllCities);
+
         }
+        //function UpdateSection() {
+        //    //UserInClass = {
+        //    //    IsStarted:false
+        //    //}
+        //    /*JSON.stringify(UserInClass)*/
+        //    //ajaxCall("GET", "../api/Fetch/GetUserInClassReact?userId=101", "", SccessGetAllCities, ErrorGetAllCities);
+        //}
 
        
             
        
 
-        function SccessGetAllCities() {
+        function SccessGetAllCities(data) {
+            var host = "http://proj.ruppin.ac.il/bgroup73/test1/tar4/reports/";
+            var fileToDownload = host + filename + ".csv";
+            window.open(fileToDownload);
             console.log("success");
+            console.log(data);
         }
         function ErrorGetAllCities() {
             console.log("failed");
@@ -39,6 +50,9 @@
     </script>
 </head>
 <body>
-
+    File name:<br>
+    <input type="text" name="filename" id="filename"><br>
+    <button onclick="FileName(1)">PRESSSSSSSS</button>
+    <button onclick="FileName(2)">PRESSSSSSSS</button>
 </body>
 </html>

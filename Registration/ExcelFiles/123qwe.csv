@@ -1,0 +1,40 @@
+UserID,FullName,Gender,Birthday,Family_Status,Education,UserName,User_Password,Mail,Phone,Residence,City,Prefday1,Prefday2,Prefhour1,prefhour2,Score,group_id,group_version
+44,גבריאל זרקה,1,1990-04-11,2,4,gavrizr,qwe123,gavri1411@gmail.com,0987654321,1,1032,1,,1,1,0,1,1
+45,הדר מאייר,2,1994-06-11,1,4,hadarki,qwe123,hadarki@gmail.com,0984444321,2,1032,1,,1,1,0,1,1
+46,מני קוקלר,1,1994-06-11,1,4,meniko,qwe123,meniko@gmail.com,0984444321,2,949,1,,1,1,0,1,2
+47,רון בן עזרא,2,1994-04-11,1,2,rona14,qwe123,rona14@gmail.com,0984444321,1,949,1,,1,1,0,31,1
+48,הילה מנשה,2,1994-11-09,1,2,hilush,qwe123,hilush@gmail.com,5644444321,1,949,2,,10,19,0,35,1
+49,ניצן איךוז,2,1994-11-09,1,3,Nitzush,qwe123,Nitzush@gmail.com,5644444321,1,933,2,,10,19,0,20,1
+50,אביב לוי,2,1996-01-09,2,4,avivush,qwe123,avivush@gmail.com,5644444321,2,1032,1,,20,18,0,3,1
+51,ליהי שפירא,2,1996-01-09,2,2,lilush,qwe123,lilush@gmail.com,5644444321,1,1032,1,,20,18,0,33,1
+52,עדן שפירא,2,1996-01-09,2,3,ednush,qwe123,ednush@gmail.com,5644444321,1,288,1,,20,18,0,18,1
+53,אורנה בנאי,2,1996-11-09,1,3,ornush,qwe123,ornush@gmail.com,5644444321,1,288,3,,7,17,0,22,1
+54,אסף ארגס,1,1996-11-09,2,3,asafush,qwe123,asafush@gmail.com,5644444321,1,288,4,,7,17,0,25,1
+55,מור כץ,1,1996-11-09,2,3,murush,qwe123,murush@gmail.com,5644444321,2,288,5,,15,17,0,29,1
+56,שגב לבסקי,1,1996-11-09,1,4,segevlev,qwe123,segevlev@gmail.com,5644444321,2,285,4,,12,17,0,11,1
+57,שני יוסף,2,2000-04-12,1,4,shaninu,qwe123,shaninu@gmail.com,0987654321,1,1032,1,,1,1,0,1,3
+58,אלי מתנה,1,1995-04-18,1,4,elushh,qwe123,elushh@gmail.com,0987654321,1,1032,1,,1,5,0,1,4
+59,גבריאל זרקה,1,2006-04-12,1,4,gavriii,qwe123,gavriii@gmail.com,0987654321,1,19,1,,1,1,0,1,4
+62,שגב הדג,1,2019-04-18,1,4,sadasdasdasd,qwe123,gavri1122@gmail.com,3454654745,1,1,1,,1,1,0,1,5
+63,שולי ארגס,1,2019-04-10,1,1,shully,qwe123,shully@walla.com,9878965456,1,1032,5,,21,2,0,45,1
+64,ליהי רונן,1,2019-04-25,1,4,ronenlihi,qwe123,ronenlihi@walla.com,6767553453,1,1,5,,16,17,0,14,1
+65,אליקו אוחנה,1,2019-04-04,1,3,eliko12,qwe123,eliko12@gmail.com,1234324565,1,1,1,,8,1,0,16,1
+66,יוסי כהן,1,2019-04-17,3,1,yossiiiii,1111111111,jhjhjh@gmail.com,0502235552,1,10,3,,7,9,0,37,1
+67,איציק ביציק,1,2019-04-10,1,4,itzik12,qwe123,itzik12@gmail.com,0343434321,1,2,1,,2,1,0,1,5
+68,עדי לוי,1,2019-04-12,1,4,adilevi,qwe123,adilevi@gmail.com,0000000001,1,18,1,,1,1,0,1,6
+69,adiel levi,1,2019-04-06,1,2,adiellevi,qwe123,adiellevi@gmail.com,0986666621,1,22,3,,5,15,0,37,1
+70,vladimir,1,2019-04-05,1,4,vladimir,qwe123,vladimir@gmail.com,0111111222,1,1,1,,9,1,0,1,6
+71,vladimir,1,2019-04-05,1,4,vladimir12,qwe123,vladimir12@gmail.com,0112111222,1,1,1,,9,1,0,1,7
+72,vlady,1,2019-04-12,3,4,vlady123,qwe123,vlady123@gmail.com,0984444441,1,19,1,,14,12,0,2,1
+73,יהויכין,1,2019-04-04,3,1,iiiyoch,dfyjghj,dd@f.com,0525544322,2,17,2,,12,12,0,35,1
+74,digital,1,2019-04-13,1,2,digital,qwe123,digital@d.com,0502232311,2,19,1,,16,3,0,32,1
+75,gavriel zzz,1,2019-04-05,1,1,gavriel1111,qwe123,gavriel1111@ff.com,0533324432,1,19,2,,17,1,0,35,2
+77,yosiii,1,2019-04-12,2,1,yosiii12,qwe123,yosiii12@gg.com,0502234341,1,18,2,,18,13,0,36,1
+78,filterim,2,11/11/1988,2,2,filterim12,qwe123,filterim12@dd.com,6764542435,3,1,2,,14,13,0,35,2
+79,shuki,1,2019-04-10,1,2,shukii,22222ewr,josh@gmail.com,8765432234,2,12,3,,15,14,0,38,1
+80,מיצי גלאם,2,2019-04-18,1,3,mitush,44334343,joshee@gmail.com,0585556369,1,1,4,,18,10,0,27,1
+82,njdfhjfhjh,1,2019-04-05,1,1,jdvkmsjkhfjk,sjfkjfkdjk,jhjghjg@kjk.com,0509999887,2,1,5,,18,18,0,45,1
+83,poiuytrew,1,2019-04-05,1,1,poiuytrew,qwe123,poiuytrew@ff.com,4443434332,1,1,4,,14,7,0,41,1
+84,צאבי הרננדס,1,2019-04-11,4,2,פםפםפםפםפ,jhjhjhjhjnenmnnm,jhjghfhgh@kjkihj.com,0509898983,3,1,3,,12,15,0,38,1
+85,jjhhjhjhj,1,2019-04-11,3,1,hghghgjhg,mhmhjhjhj,hbbhvhghg@j.com,0988888977,1,1,3,,9,16,0,37,2
+86,jhwjhwujhujh,2,2019-04-24,3,2,rgggggggggggg,jhjhjhjh,jkhjh@kj.com,08

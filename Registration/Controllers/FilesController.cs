@@ -32,7 +32,7 @@ namespace Registration.Controllers
                     if (httpPostedFile != null)
                     {
                         // Construct file save path  
-                        //var fileSavePath = Path.Combine(HostingEnvironment.MapPath(ConfigurationManager.AppSettings["fileUploadFolder"]), httpPostedFile.FileName);
+                        //var fileSavePath = Path.Combine(HostingEnvironment.MapPffilesath(ConfigurationManager.AppSettings["fileUploadFolder"]), httpPostedFile.FileName);
                         string fname = httpPostedFile.FileName.Split('\\').Last();
                         var fileSavePath = Path.Combine(HostingEnvironment.MapPath("~/Files"), fname);
                         // Save the uploaded file 
