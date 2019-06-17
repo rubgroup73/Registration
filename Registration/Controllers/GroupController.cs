@@ -10,14 +10,14 @@ namespace Registration.Controllers
 {
     public class GroupController : ApiController
     {
-        [HttpPost]
-        [Route("api/group/insertNewGroup")]
-        public int AddNewGroup([FromBody]Group group)
-        {
+        //[HttpPost]
+        //[Route("api/group/insertNewGroup")]
+        //public int AddNewGroup([FromBody]Group group)
+        //{
 
-            int numEffected = group.insert();
-            return numEffected;
-        }
+        //    int numEffected = group.insert();
+        //    return numEffected;
+        //}
 
         [HttpGet]
         [Route("api/group/getAllGroup")]

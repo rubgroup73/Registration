@@ -8,17 +8,19 @@ namespace Registration.Models
 {
     public class AppClass
     {
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public string Title { get; set; }
-        public int Status { get; set; }
-        public int Position { get; set; }
-        public int Score { get; set; }
-        public int Version { get; set; }
-        public List<Section> Sections { get; set; }
-        public string Class_File_Path { get; set; }
+        public int Id {get; set;}
+        public string Description {get; set;}
+        public string Title {get; set;}
+        public int Status {get; set;}
+        public int Position {get; set;}
+        public int Score {get; set;}
+        public int Version {get; set;}
+        public List<Section> Sections {get; set;}
+        public string Class_File_Path {get; set;}
+        public HomeWork HomeWork {get; set;}
 
-        public AppClass(int id,string description,string title,int status,int position,int score,int version,List<Section> sections,string class_file_path)
+        public AppClass(int id,string description,string title,int status,int position,int score,int version,
+            List<Section> sections,string class_file_path,HomeWork homeWork)
         {
             Id = id;
             Description = description;
@@ -29,6 +31,7 @@ namespace Registration.Models
             Version = version;
             Sections = sections;
             Class_File_Path = class_file_path;
+            HomeWork = homeWork;
         }
         public AppClass()
         {

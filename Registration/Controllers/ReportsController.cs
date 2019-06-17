@@ -19,7 +19,6 @@ namespace Registration.Controllers
             string dest = HttpContext.Current.Server.MapPath("~") + "\\reports\\" + text + ".csv";
             ExcelData user = new ExcelData();
             return user.GetAllUsersFromDbExcel("ConnectionStringPerson", "userinclass", dest);
-           
         }
     }
 

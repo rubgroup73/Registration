@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -201,6 +202,13 @@ namespace Registration.Models.DAL
             try
             {
                 int numEffected = cmd.ExecuteNonQuery(); // execute the command
+
+                if (numEffected == 1)
+                {
+                    con.Close();
+                    InsertHomeWorkToDB(appClass.HomeWork);
+                
+                }
                 return numEffected;
             }
             catch (Exception ex)
@@ -219,15 +227,67 @@ namespace Registration.Models.DAL
             }
         }
 
+        public int InsertHomeWorkToDB(HomeWork homeWork)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
 
+            try
+            {
+                con = connect("ConnectionStringPerson"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = BuildInsertCommandHomeWork(homeWork);      // helper method to build the insert string
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the comman
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
         private String BuildInsertCommandClass(AppClass appClass)
         {
             String command;
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values({0},'{1}','{2}',{3},{4},{5},{6}); ", appClass.Id,appClass.Description,appClass.Title,appClass.Status,appClass.Position,appClass.Score,appClass.Version);
-            String prefix = "INSERT INTO Class " + "( class_id,class_desc,class_title,class_status,approved_class_position,score,class_version)";
+            sb.AppendFormat(" Values({0},'{1}','{2}',{3},{4},{5},{6},'{7}'); ", appClass.Id,appClass.Description,appClass.Title,appClass.Status,appClass.Position,appClass.Score,appClass.Version,appClass.Class_File_Path);
+            String prefix = "INSERT INTO Class " + "( class_id,class_desc,class_title,class_status,approved_class_position,score,class_version,class_file_path)";
+            command = prefix + sb.ToString();
+
+            return command;
+        }
+    
+        /*******************************Insert Homewok********************************************/
+        private String BuildInsertCommandHomeWork(HomeWork homework)
+        {
+            String command;
+
+            StringBuilder sb = new StringBuilder();
+            // use a string builder to create the dynamic string
+            sb.AppendFormat(" Values({0},{1},'{2}','{3}','{4}','{5}'); ", homework.Class_Id, homework.Class_Version, homework.Homework_Name, homework.Homework_Desc, homework.Homework_Image, homework.Homework_Audio);
+            String prefix = "INSERT INTO homework " + "( class_id,Class_Version,Homework_Name,Homework_Desc ,Homework_Image,Homework_Audio)";
             command = prefix + sb.ToString();
 
             return command;
@@ -235,7 +295,7 @@ namespace Registration.Models.DAL
 
         /**************************************************************************************************/
         /*******************************Get All Classes From DB********************************************/
-      
+
         public List<AppClass> GetAllClassFromDB(string tableName, string connectionString)
         {
              
@@ -616,7 +676,7 @@ namespace Registration.Models.DAL
         /***********************************Insert a New Group Into DB*************************************/
        
 
-        public int InsertNewGroupToDB(Group group)
+        public int InsertNewGroupToDB(Group group,DateTime next)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -631,7 +691,7 @@ namespace Registration.Models.DAL
                 throw (ex);
             }
 
-            String cStr = BuildInsertCommandNewGroup(group);      // helper method to build the insert string
+            String cStr = BuildInsertCommandNewGroup(group, next);      // helper method to build the insert string
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -695,24 +755,19 @@ namespace Registration.Models.DAL
             string updateComand;
 
             updateComand = "UPDATE " + tableName+" ";
-            if (currentNum == 1)
-            {
-                updateComand += "set num_of_registered=" + currentNum+",start_time = '"+group.Start_Time.ToString()+"'" + " where group_id=" + group_id + " AND group_version=" + group_version;
-            }
-            else
-            {
-                updateComand += "set num_of_registered=" + currentNum + " where group_id=" + group_id + " AND group_version=" + group_version;
-            }
+            updateComand += "set num_of_registered=" + currentNum + " where group_id=" + group_id + " AND group_version=" + group_version;
+            
+            
             return updateComand;
         }
 
-        private String BuildInsertCommandNewGroup(Group group)
+        private String BuildInsertCommandNewGroup(Group group, DateTime next)
         {
             String command;
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat(" Values({0},'{1}',{2},{3},{4},{5},{6},{7},{8},'{9}'); ", group.Group_Id,group.Group_Name,group.Day1,group.Hour1,group.Max_Partcipants,group.Num_Of_Registered,group.Group_Version,group.Education,group.Class_Version,group.Start_Time.ToString());
+            sb.AppendFormat(" Values({0},'{1}',{2},{3},{4},{5},{6},{7},{8},'{9}'); ", group.Group_Id,group.Group_Name,group.Day1,group.Hour1,group.Max_Partcipants,group.Num_Of_Registered,group.Group_Version,group.Education,group.Class_Version, next.ToString());
             String prefix = "INSERT INTO class_group " + "( Group_Id,Group_Name,Day1,Hour1,Max_Participants,Num_Of_Registered,Group_Version,Education,Class_Version,start_time)";
             command = prefix + sb.ToString();
 
@@ -1137,13 +1192,19 @@ namespace Registration.Models.DAL
                    
                 }
 
-                if(group.Start_Time.Year == 1900)
+                var groupStartTime = group.Start_Time.Date.ToString("MM/dd/yyyy");
+                var parameterDate = DateTime.ParseExact(groupStartTime, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                var todaysDate = DateTime.Today;
+
+                //if (groupStartTimeY >= currentDayY && groupStartTimeM >= currentDayM)
+                //    createNewGroup = false;
+
+                if (group.Start_Time.Year == 1900)
                 {
                     group.Start_Time = next;
                 }
-
                 
-                if (group.Max_Partcipants > group.Num_Of_Registered && group.Start_Time>= DateTime.Now)
+                if (group.Max_Partcipants > group.Num_Of_Registered&& parameterDate>= todaysDate)
                     return group;
                 else
                 {
@@ -1153,7 +1214,7 @@ namespace Registration.Models.DAL
                     group.Group_Version += 1;
                     group.Num_Of_Registered = 0;
                     con.Close();
-                    InsertNewGroupToDB(group);
+                    InsertNewGroupToDB(group,next);
 
                     return group;
 
@@ -1296,6 +1357,7 @@ namespace Registration.Models.DAL
                     con.Close();
                     userInClass = GetClassesOfUser(classVersion, "ConnectionStringPerson");
                     InsertNewUserInClass2(userId, classVersion, userInClass,start_time, "userinclass", "ConnectionStringPerson");
+                    InsertNewUserInHomeWork2(userId, classVersion, userInClass, start_time, "userinclass", "ConnectionStringPerson");
                 }
 
             }
@@ -1315,26 +1377,21 @@ namespace Registration.Models.DAL
 
             }
         }
-
+        //*
+        //*Insert User In classes for new user
+        //*
         public int InsertNewUserInClass2(int userId, int classVersion,List<AppClass> classesOfVersion, DateTime start_time,string tableName,string connectionString)
         {
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("ConnectionStringPerson"); // create the connection
-            }
+            {con = connect("ConnectionStringPerson");}
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            {throw (ex);}
 
-            String cStr = BuildInsertUserInClass(classesOfVersion, userId,start_time);      // helper method to build the insert string
-
-            cmd = CreateCommand(cStr, con);             // create the command
-
+            String cStr = BuildInsertUserInClass(classesOfVersion, userId,start_time,2);
+            cmd = CreateCommand(cStr, con);
             try
             {
                 int numEffected = cmd.ExecuteNonQuery(); // execute the command
@@ -1342,33 +1399,54 @@ namespace Registration.Models.DAL
                 if (numEffected != 0)
                 {
                     con.Close();
-
                     //Get list of section for the classes of this version
                     List<Section> userSections= GetSectionsList(classesOfVersion, connectionString);
                     //Insert UserInSection for the sections above
                     numEffected2= InsertNewUserInSection(userId, userSections, "UserInClass", connectionString);
-                   
-
                 }
-
                 return numEffected2;
             }
             catch (Exception ex)
-            {
-
-                throw (ex);
-            }
+            {throw (ex);}
            
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
+                { con.Close();}
             }
 
         }
+        //*
+        //*Insert User In HomeWork for new user
+        //*
+        public int InsertNewUserInHomeWork2(int userId, int classVersion, List<AppClass> classesOfVersion, DateTime start_time, string tableName, string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {con = connect("ConnectionStringPerson"); }
+            catch (Exception ex)
+            {throw (ex);}
+
+            String cStr = BuildInsertUserInClass(classesOfVersion, userId, start_time,1); 
+            cmd = CreateCommand(cStr, con);
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command            
+                return numEffected;
+            }
+            catch (Exception ex)
+            {throw (ex);}
+
+            finally
+            {
+                if (con != null)
+                {con.Close();}
+            }
+
+        }
+
         //**
         //GetSectionsList
         //**
@@ -1668,21 +1746,31 @@ namespace Registration.Models.DAL
         /*************************************BuildInsertUserInClass******************************************/
         /************************************************************************************************/
 
-        private string BuildInsertUserInClass(List<AppClass> appClasses,int userId,DateTime start_time)
+        private string BuildInsertUserInClass(List<AppClass> appClasses,int userId,DateTime start_time,int ClassOrHomeWork)
         {
-           String command="";
-            
-            for (int i = 0; i < appClasses.Count; i++)
+            //int ClassOrHomeWork
+            //HomeWork = 1
+            //Class = 2
+            String command ="";
+            if (ClassOrHomeWork == 1)
             {
-                command += "INSERT INTO UserInClass(userId,ClassId,classVersion,startTime,endTime,should_start_time) Values(" + userId + "," + appClasses[i].Id + "," + appClasses[i].Version + ",'1900-01-01','1900-01-01','"+start_time.ToString()+"');";
-                start_time = start_time.AddDays(7);
-
+                for (int i = 0; i < appClasses.Count; i++)
+                { 
+                        command += "INSERT INTO userInHomeWork(userId,class_id,class_version,start_Time,end_Time,is_Started,is_Finished,should_start_time,user_feeling_start,user_feeling_finish) Values(";
+                        command += userId + "," + appClasses[i].Id + "," + appClasses[i].Version + ",'1900-01-01','1900-01-01',0,0,'" + start_time.ToString() + "',-1,-1);";
+                        start_time = start_time.AddDays(7);     
+                }
+                return command;
             }
-        
-            // use a string builder to create the dynamic string
-            
-
-            return command;
+            else
+            {
+                for (int i = 0; i < appClasses.Count; i++)
+                {
+                    command += "INSERT INTO UserInClass(userId,ClassId,classVersion,startTime,endTime,should_start_time) Values(" + userId + "," + appClasses[i].Id + "," + appClasses[i].Version + ",'1900-01-01','1900-01-01','" + start_time.ToString() + "');";
+                    start_time = start_time.AddDays(7);
+                }
+                return command;
+            }
         }
 
 

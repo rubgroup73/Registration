@@ -42,8 +42,8 @@ var waiting;
 var ready;
 
 //Template for Section
-function Section_Json(id, title, content, status,position,class_version,class_id,file_path) {
-        this.Id =id ,
+function Section_Json(id, title, content, status, position, class_version, class_id, file_path) {
+    this.Id = id,
         this.Title = title,
         this.Description = content,
         this.Status = status,
@@ -51,7 +51,7 @@ function Section_Json(id, title, content, status,position,class_version,class_id
         this.Version = class_version,
         this.ClassId = class_id,
         this.FilePath = file_path
-        
+
 }
 
 //הוספת אובייקט ג'ייסון של מקטע חדש לתוך מערך המקטעים הכללי
@@ -75,12 +75,12 @@ function AddSection() {
     Section_Json.Status = section_status;
     Section_Json.Position = -1;
     Section_Json.Version = classMaxVersion,
-    Section_Json.ClassId = classMaxId +1
+        Section_Json.ClassId = classMaxId + 1
     var sec = new Section_Json(Section_Json.Id, Section_Json.Title, Section_Json.Description, Section_Json.Status, Section_Json.Position, Section_Json.Version, Section_Json.ClassId, Section_Json.FilePath);
 
     var list = document.getElementById(section_status);
     temp = list.innerHTML;
-    temp = temp + "<li id=" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this,"+counter+") ' style='width: 20px; height: 20px; margin: 5px; position: absolute; top: 2px; left: 1px' /></li > ";
+    temp = temp + "<li id=" + counter + " class='drag-item' style='position:relative;text-align:right'> " + title + "<img src='../Images/trash.png' onclick='Delete(this," + counter + ") ' style='width: 20px; height: 20px; margin: 5px; position: absolute; top: 2px; left: 1px' /></li > ";
     list.innerHTML = temp;
     counter++;
     generalSectionsArr.push(sec);
@@ -89,16 +89,25 @@ function AddSection() {
 
 /***************************End Get Last Id And Save Class*****************************************************/
 
-function AddClass(title, description) {
-    
+function AddClass(title, description, image, homeworkTitle, homeworkDesc, homeworkFile) {
+    HomeWork = {
+        Class_Id: classMaxId + 1,
+        Class_Version: classMaxVersion,
+        Homework_Name: homeworkTitle,
+        Homework_Desc: homeworkDesc,
+        Homework_Image: image,
+        Homework_Audio: homeworkFile,
+    }
     Class = {
         Id: classMaxId + 1,
         Description: description,
         Title: title,
-        Status:3,
+        Status: 3,
         Position: -1,
         Score: 50,
-        Version: classMaxVersion
+        Version: classMaxVersion,
+        Class_File_Path: image,
+        HomeWork: HomeWork,
         //Sections: generalSectionsArr
     }
     ajaxCall("POST", "../api/class/addnewclass", JSON.stringify(Class), SuccessfullyAddNewClass, ErrorAddNewClass);
@@ -107,9 +116,20 @@ function AddClass(title, description) {
 
 //עדכון סטטוס ומיקום למקטעים חדשים
 function UpdateSectionStatus() {
-  
+    InsertImageToClass();
+    InsertAudioToHomework();
     var ct = document.getElementById("class-title").value;
     var cd = document.getElementById("class-desc").value;
+    var ci = document.getElementById("class-image").value;
+    var classImageNameIndex = ci.lastIndexOf('\\');
+    ci ="..\\Files"+ ci.substring(classImageNameIndex);
+
+    var ht = document.getElementById("homework-title").value;
+    var hd = document.getElementById("homework-desc").value;
+    var hf = document.getElementById("homework-file").value;
+    var homeworkImageNameIndex = hf.lastIndexOf('\\');
+    hf = "..\\Files" + hf.substring(homeworkImageNameIndex);
+
     notReady = document.getElementById("2").children;
     waiting = document.getElementById("3").children;
     ready = document.getElementById("4").children;
@@ -138,7 +158,7 @@ function UpdateSectionStatus() {
             }
         }
     }
-    AddClass(ct, cd);
+    AddClass(ct, cd, ci,ht,hd,hf);
 }
 //בודק שקיימים סקשנים בשיעור החדש
 function CheckExistingSections() {
@@ -151,7 +171,7 @@ function CheckExistingSections() {
         return;
     }
     UpdateSectionStatus();
-    }
+}
 
 function CheckStatus() {
     for (var i = 0; i < generalSectionsArr.length; i++) {

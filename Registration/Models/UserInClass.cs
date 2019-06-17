@@ -23,6 +23,7 @@ namespace Registration.Models
         public string User_Feeling_Finish { get; set;}
         public bool BeforeClass { get; set; }
         public DateTime ShouldStart { get; set; }
+        public UserInHomeWork UserInHomeWork { get; set;}
         public bool IsNextLesson { get; set; }
 
         Dictionary<string, int> feelingStatus = new Dictionary<string, int>
@@ -34,9 +35,10 @@ namespace Registration.Models
                 {"מופתע",5 }
             };
 
-        public UserInClass(int userId, int classId, int classVersion, DateTime startTime, DateTime endTime, bool isStarted, bool isFinished, 
-            int classPosition,AppClass appClass,Section [] section,string user_feeling, string user_feeling_finish, bool beforeClass,DateTime shouldStart
-            ,bool isNextLesson = false, int nextLessonInReact=-20)
+        public UserInClass(int userId, int classId, int classVersion, DateTime startTime, DateTime endTime, bool isStarted,
+            bool isFinished,int classPosition,AppClass appClass,Section [] section,string user_feeling, 
+            string user_feeling_finish,bool beforeClass,DateTime shouldStart,UserInHomeWork userInHomeWork,
+             bool isNextLesson = false, int nextLessonInReact=-20)
         {
             UserId = userId;
             ClassId = classId;
@@ -53,6 +55,7 @@ namespace Registration.Models
             User_Feeling_Finish = user_feeling_finish;
             BeforeClass = beforeClass;
             ShouldStart = shouldStart;
+            UserInHomeWork = userInHomeWork;
             IsNextLesson = isNextLesson;
         }
 

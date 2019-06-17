@@ -115,6 +115,7 @@ function Delete(e,id) {
 /***************************End Get Last Id And Save Class*****************************************************/
 
 function AddClass(title,description,position,status) {
+
     
     Class = {
         Id: class_id,
@@ -124,7 +125,8 @@ function AddClass(title,description,position,status) {
         Position: position,
         Score: 50,
         Version: classMaxVersion,
-        Sections: generalSectionsArr
+        Sections: generalSectionsArr,
+  
     }
 
     for (var i = 0; i < allClasses.length; i++) {

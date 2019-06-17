@@ -62,12 +62,12 @@ namespace Registration.Models
         /***************************************************************/
         /********Insert New Group Into DB********************************/
         /***************************************************************/
-        public int insert()
-        {
-            DBservices dbs = new DBservices();
-            int numEffected = dbs.InsertNewGroupToDB(this);
-            return numEffected;
-        }
+        //public int insert()
+        //{
+        //    DBservices dbs = new DBservices();
+        //    int numEffected = dbs.InsertNewGroupToDB(this);
+        //    return numEffected;
+        //}
 
         /***************************************************************/
         /********Update Group Participant Number***********************/

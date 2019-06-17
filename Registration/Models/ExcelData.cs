@@ -34,6 +34,7 @@ public class ExcelData
 
         }
         connection.Close();
+
         return destinationFile;
     }
     private IEnumerable<string> GetColumnNames(IDataReader reader)
