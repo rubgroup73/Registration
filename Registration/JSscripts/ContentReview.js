@@ -145,6 +145,7 @@ function SaveClassToDB() {
     let oldVersion = classes[0].Version;
     for (var i = 0; i < classes.length; i++) {
         classes[i].Version = oldVersion + 1;
+        classes[i].HomeWork.Class_Version = oldVersion + 1;
         for (var j = 0; j < classes[i].Sections.length; j++) {
             classes[i].Sections[j].Version = oldVersion + 1;
             sectionsToDB.push(classes[i].Sections[j]);
@@ -187,6 +188,7 @@ function Delete() {
 //*****************************************************************************************************
 function getAllClassFromDb(data) {
     classes = data;//שמירה של כל מערכי השיעורים במשתנה גלובלי
+    console.log(classes);
     ajaxCall("GET", "../api/section/GetAllClasses", "", getAllSectionFromDb, ErrorgetAllSectionFromDb);//להביא את כל הסקשנים מהדאטה בייס
     ShowClassesFromDB(data);//מעבירים לפונקציה את כל מערך השיעורים שקיבלנו מהדאטה בייס
 }

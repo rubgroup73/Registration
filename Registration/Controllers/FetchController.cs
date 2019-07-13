@@ -117,6 +117,18 @@ namespace Registration.Controllers
 
         }
 
+        /***********************************************/
+        /*Return user In class HomeWork */
+        /***********************************************/
+
+        [HttpGet]
+        [Route("api/Fetch/GetUserInHomeWorkReact")]
+        public List<UserInHomeWork> GetUserInHomeWorkReact(int userId, int classVersion, int classId)
+        {
+            UserInHomeWork userInHomeWork = new UserInHomeWork();
+            return userInHomeWork.GetUserInHomeWorkReact(userId, classVersion, classId);
+        }
+
 
 
     }

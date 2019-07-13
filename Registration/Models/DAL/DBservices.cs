@@ -278,7 +278,8 @@ namespace Registration.Models.DAL
 
             return command;
         }
-    
+       
+
         /*******************************Insert Homewok********************************************/
         private String BuildInsertCommandHomeWork(HomeWork homework)
         {
@@ -305,14 +306,24 @@ namespace Registration.Models.DAL
             {
 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getClasses = "SELECT * FROM " + tableName +" where class_version = (select max(class_version) from "+ tableName+");" ;
+                                                 //string getClasses2 = "SELECT * FROM " + tableName +" where class_version = (select max(class_version) from "+ tableName+");" ;
+
+                string getClasses= "SELECT* FROM class inner join homework on Class.class_id=HomeWork.class_id and class.class_version=HomeWork.class_version where class.class_version = (select max(class_version) from class);";
                     
                 SqlCommand cmd = new SqlCommand(getClasses, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
 
                 while (dr.Read())
                 {   // Read till the end of the data into a row
+             
                     AppClass appClass = new AppClass();
+                    appClass.HomeWork = new HomeWork();
+                    appClass.HomeWork.Class_Id= Convert.ToInt32(dr["class_id"]);
+                    appClass.HomeWork.Class_Version= Convert.ToInt32(dr["class_version"]);
+                    appClass.HomeWork.Homework_Desc= (string)dr["homework_desc"];
+                    appClass.HomeWork.Homework_Image= (string)dr["homework_image"];
+                    appClass.HomeWork.Homework_Audio= (string)dr["homework_audio"];
+                    appClass.HomeWork.Homework_Name = (string)dr["homework_name"];
                     appClass.Id = Convert.ToInt32(dr["class_id"]);
                     appClass.Description = (string)(dr["class_desc"]);
                     appClass.Title = (string)dr["class_title"];
@@ -320,6 +331,7 @@ namespace Registration.Models.DAL
                     appClass.Position = Convert.ToInt32(dr["approved_class_position"]);
                     appClass.Score = Convert.ToInt32(dr["score"]);
                     appClass.Version = Convert.ToInt32(dr["class_version"]);
+                    
                     //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
                     allClass.Add(appClass);
                 }
@@ -499,7 +511,10 @@ namespace Registration.Models.DAL
             try
             {
                 int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
+                if(con != null)
+                {con.Close();}
+                int numEffected2 = InsertNewHomeWorkArray(appClasses, connectionString);
+                return numEffected2;
             }
             catch (Exception ex)
             {
@@ -517,10 +532,47 @@ namespace Registration.Models.DAL
             }
         }
 
+        //*
+        //*insert updated homework version after push the "shmor shinueem"
+        public int InsertNewHomeWorkArray(List<AppClass> appClasses, string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            String cStr = "";
+            try
+            {
+                con = connect(connectionString); // create the connection
+            }
+            catch (Exception ex)
+            {throw (ex); }
+            for (int i = 0; i < appClasses.Count; i++)
+            {
+                cStr += BuildInsertCommandHomeWork(appClasses[i].HomeWork);
+            }
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            {throw (ex);}
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+
 
         /**************************************************************************************************/
         /**********************************Insert Sections Array*******************************************/
- 
+
 
         public int InsertNewSessionsToDB(List<Section> sections,string connectionString)
         {
@@ -1751,14 +1803,21 @@ namespace Registration.Models.DAL
             //int ClassOrHomeWork
             //HomeWork = 1
             //Class = 2
-            String command ="";
+            int numOfDays = 6;
+            String command = "";
+           
             if (ClassOrHomeWork == 1)
             {
                 for (int i = 0; i < appClasses.Count; i++)
-                { 
-                        command += "INSERT INTO userInHomeWork(userId,class_id,class_version,start_Time,end_Time,is_Started,is_Finished,should_start_time,user_feeling_start,user_feeling_finish) Values(";
-                        command += userId + "," + appClasses[i].Id + "," + appClasses[i].Version + ",'1900-01-01','1900-01-01',0,0,'" + start_time.ToString() + "',-1,-1);";
-                        start_time = start_time.AddDays(7);     
+                {
+                    for (int j = 1; j <= numOfDays; j++)
+                    {
+                        command += "INSERT INTO userInHomeWork(homeworkid,userId,class_id,class_version,start_Time,end_Time,is_Started,is_Finished,should_start_time,user_feeling_start,user_feeling_finish) Values(";
+                        command += j + "," + userId + "," + appClasses[i].Id + "," + appClasses[i].Version + ",'1900-01-01','1900-01-01',0,0,'" + start_time.AddDays(j).ToString() + "',-1,-1);";
+                      
+                    }
+                    start_time = start_time.AddDays(7);
+
                 }
                 return command;
             }
@@ -1770,6 +1829,7 @@ namespace Registration.Models.DAL
                     start_time = start_time.AddDays(7);
                 }
                 return command;
+             
             }
         }
 
@@ -1904,6 +1964,62 @@ namespace Registration.Models.DAL
                 {
                     con.Close();
                 }
+
+            }
+        }
+
+        //**
+        //**Return all user's HomeWork instances from DB --> will call from react app
+        //**
+        public List<UserInHomeWork> GetUserInHomeWorkReact(int userId, int classVersion, int classId)
+        {
+
+            List<UserInHomeWork> userInHomeWorks = new List<UserInHomeWork>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect("ConnectionStringPerson"); // create a connection to the database using the connection String defined in the web config file
+
+                string getUserInHomeWork = "SELECT* FROM userInHomeWork as uihw inner join HomeWork as hw on uihw.class_id = hw.class_id and uihw.class_version = hw.class_version";
+                getUserInHomeWork += " where userId=" + userId + " and uihw.class_id=" + classId + " and uihw.class_version=" + classVersion;
+                getUserInHomeWork += " order by uihw.class_id asc, uihw.homeworkid asc;";
+
+                SqlCommand cmd = new SqlCommand(getUserInHomeWork, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    UserInHomeWork userInHomeWork = new UserInHomeWork();
+                    userInHomeWork.Class_Id = Convert.ToInt32(dr["class_id"]);
+                    userInHomeWork.HomeWorkId = Convert.ToInt32(dr["HomeWorkId"]);
+                    userInHomeWork.Class_Version = Convert.ToInt32(dr["Class_Version"]);
+                    userInHomeWork.UserId = Convert.ToInt32(dr["UserId"]);
+                    userInHomeWork.Start_Time = DateTime.Parse(dr["start_time"].ToString());
+                    userInHomeWork.End_Time = DateTime.Parse(dr["End_Time"].ToString());
+                    userInHomeWork.Should_Start_Time = DateTime.Parse(dr["Should_Start_Time"].ToString());
+                    userInHomeWork.Is_Started = Convert.ToBoolean(dr["Is_Started"]);
+                    userInHomeWork.Is_Finished = Convert.ToBoolean(dr["Is_Finished"]);
+                    userInHomeWork.User_Feeling_Start = Convert.ToInt32(dr["User_Feeling_Start"]);
+                    userInHomeWork.User_Feeling_Finish = Convert.ToInt32(dr["User_Feeling_Finish"]);
+                    userInHomeWork.HomeWork_Name= (string)(dr["HomeWork_Name"]);
+                    userInHomeWork.HomeWork_Desc = (string)(dr["HomeWork_Desc"]);
+                    userInHomeWork.HomeWork_Image = (string)(dr["HomeWork_Image"]);
+                    userInHomeWork.HomeWork_Audio = (string)(dr["HomeWork_Audio"]);
+ 
+                    userInHomeWorks.Add(userInHomeWork);
+                }
+                return userInHomeWorks;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {con.Close();}
 
             }
         }
