@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../JSscripts/oursScripts.js"></script>
+
+    <script src="../Scripts/ajaxCall.js"></script>
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+    <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
+    <title>ייצוא דוחות</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <meta charset="utf-8" />
+    <script>
+        var filename;
+        function FileName(filename, num) {
+            filename = document.getElementById(filename).innerHTML;
+            ajaxCall("GET", "../api/reports/getAllUsersFromDbExcel?text=" + filename + "&num=" + num, "", SccessGetAllCities, ErrorGetAllCities);
+
+        }
+     
+        function SccessGetAllCities(data) {
+
+            var host = "http://proj.ruppin.ac.il/bgroup73/test1/tar4/reports/";
+            indexofname = data.lastIndexOf('\\');
+            var fileToDownload = host + data.substring(indexofname);
+            window.open(fileToDownload);
+            console.log("success");
+            console.log(data);
+        }
+        function ErrorGetAllCities() {
+            console.log("failed");
+        }
+    </script>
+    <style>
+
+        body {
+            direction: rtl;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+            background: #E2E3E9;
+            font-size: 14px;
+        }
+
+        body {
+            font-family: "Roboto", "Franklin Gothic Medium", Tahoma, sans-serif;
+            line-height: 1.5;
+            height: 100%;
+            font-size: 1rem;
+        }
+
+        @media screen and (min-width: 960px) {
+            body {
+                height: 100vh;
+                border: 1.5rem solid #F7F8F9;
+                overflow: hidden;
+            }
+        }
+
+        h1, h2, h3, p, li, ul {
+            margin: 0 0 1.5rem;
+            color: #3F4948;
+        }
+
+        h1 {
+            font-size: 40px;
+            font-weight: 900;
+            margin: 0;
+        }
+
+        h1, h2 {
+            padding-bottom: 1.5rem;
+            position: relative;
+            margin: 0;
+        }
+
+            h1:after, h2:after {
+                content: '';
+                height: 0.35rem;
+                width: 2.25rem;
+                background: #46C1DA;
+                display: block;
+                position: absolute;
+                bottom: 0.8rem;
+                -webkit-transform: skewX(-15deg);
+                transform: skewX(-15deg);
+            }
+
+        h2 {
+            font-size: 1rem;
+            line-height: 2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        p, li {
+            line-height: 1.5;
+            margin: 0 0 1.5rem;
+            opacity: 0.7;
+        }
+
+        small {
+            opacity: 0.35;
+            font-size: 0.8rem;
+            line-height: 1.25rem;
+            display: block;
+            color: #3F4948;
+        }
+
+        .highlight {
+            color: #46C1DA;
+        }
+
+        .col {
+            margin: 1.5rem;
+        }
+
+        @media screen and (min-width: 960px) {
+            .col {
+                height: 100%;
+            }
+        }
+
+        .card {
+            opacity: 0.7;
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            margin: 0 0 1.5rem;
+            background: #F7F8F9;
+            box-shadow: 1px 2px 12px 2px rgba(123, 178, 200, 0.15), 3px 8px 8px -2px rgba(173, 177, 195, 0.3);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            transition: all 0.325s ease-in;
+        }
+
+            .card:hover {
+                opacity: 1;
+                box-shadow: 1px 2px 18px 3px gba(#69a8c1, 0.2), 4px 9px 12px -1px rgba(159, 163, 184, 0.35);
+                -webkit-transform: translate3d(0, 0, 0) scale(1.025);
+                transform: translate3d(0, 0, 0) scale(1.025);
+            }
+
+            .card.flat {
+                box-shadow: none;
+                background: transparent;
+                opacity: 1;
+            }
+
+        .dashboard {
+            display: block;
+            overflow-x: scroll;
+        }
+
+        @media screen and (min-width: 960px) {
+            .dashboard {
+                height: 100vh;
+                padding: 3rem;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                display: grid;
+                grid-template-columns: 5fr 4fr 4fr;
+                grid-gap: 1.5rem;
+            }
+
+                .dashboard::before, .dashboard::after {
+                    content: '';
+                    background: white;
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    withd: 100%;
+                    height: 15rem;
+                }
+
+                .dashboard::after {
+                    top: initial;
+                    bottom: 0;
+                }
+
+                .dashboard .col {
+                    margin: 0;
+                    display: flex;
+                    flex-flow: column nowrap;
+                    align-items: stretch;
+                    justify-content: space-between;
+                }
+
+                    .dashboard .col .card {
+                        display: flex;
+                        flex-flow: column nowrap;
+                        flex-grow: 2;
+                    }
+
+                        .dashboard .col .card:last-child {
+                            margin: 0;
+                        }
+
+                        .dashboard .col .card.small {
+                            flex-grow: 1;
+                        }
+
+                        .dashboard .col .card.large {
+                            flex-grow: 4;
+                        }
+
+                        .dashboard .col .card.xl {
+                            flex-grow: 6;
+                        }
+
+                        .dashboard .col .card small {
+                            align-self: flex-end;
+                        }
+        }
+
+        .bordered {
+            padding-top: 7px;
+            font-size: 20px;
+            list-style: none;
+            text-align: center;
+            height: 45px;
+            border: 1px solid #3F4948;
+            -webkit-box-shadow: 0 10px 6px -6px #777;
+            -moz-box-shadow: 0 10px 6px -6px #777;
+            box-shadow: 0 10px 6px -6px #777;
+        }
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="col">
+            <div class="card flat small">
+                <h1>ייצוא נתונים <span class="highlight">.</span></h1>
+                <p>להורדת נתוני המערכת לחצי על הכרטיס הרצוי והקובץ יישמר אוטומטית</p>
+               <!--<small>This Week in Review content is king engagement Romenesko RSS Wikipedia, data visualization advertising privacy discuss</small>-->
+            </div>
+            <div class="card xl">
+                <h2>נתונים כלליים</h2>
+                <ul class="keys">
+                    <li id="report1" class=" bordered" onclick="FileName(this.id,1)">נתוני משתמשים</li>
+                    <li id="report2" class=" bordered" onclick="FileName(this.id,2)">נתוני קבוצות</li>
+                    <li id="report3" class=" bordered" onclick="FileName(this.id,3)">נתוני שיעורים</li>
+                    <li id="report4" class=" bordered" onclick="FileName(this.id,4)">נתוני מקטעים</li>
+                    
+                </ul>
+                      <!--<small>Paul Steiger hackgate community perfect for starting a campfire The Work of Art in the Age of Mechanical Reproduction SEO newspaper 5% corruption meme Journal Register Neil Postman</small>--> 
+            </div>
+        </div>
+        <div class="col">
+            <div class="card small"  onclick="FileName('report5',5)">
+                <h2 id="report5">נתוני שיעורים לכל משתמש</h2>
+            </div>
+            <div  class="card large"  onclick="FileName('report6',6)">
+                <h2 id="report6">נתוני שיעורי בית לכל משתמש</h2>
+            </div>
+            <div class="card"  onclick="FileName('report7',7)">
+                <h2 id="report7"> ערים ויישובים לפי משתמשים</h2>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card"  onclick="FileName('report8',8)">
+                <h2 id="report8">נתוני שיעורים לא מאושרים</h2>
+            </div>
+            <div class="card"  onclick="FileName('report9',9)">
+                <h2 id="report9">נתוני שיעורים לא מוכנים</h2>
+            </div>
+            <div class="card large"  onclick="FileName('report10',10)">
+                <h2 id="report10">נתוני מסיימי הקורס</h2>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
