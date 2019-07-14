@@ -80,7 +80,7 @@ namespace Registration.Controllers
         {
             UserInClass user = new UserInClass();
             return user.UserFeelingsReact(userInClass);
-             
+    
         }
 
         [HttpPut]
@@ -89,7 +89,6 @@ namespace Registration.Controllers
         {
             UserInSection user = new UserInSection();
             return user.UpdateDataUserInClassReact(userInSection);
-
         }
         [HttpPut]
         [Route("api/Fetch/UpdateDataUserRepeatSecReact")]
@@ -127,6 +126,31 @@ namespace Registration.Controllers
         {
             UserInHomeWork userInHomeWork = new UserInHomeWork();
             return userInHomeWork.GetUserInHomeWorkReact(userId, classVersion, classId);
+        }
+
+        [HttpGet]
+        [Route("api/Fetch/returnhomeworkforuser")]
+        public UserInHomeWork UpdateDataUserInClassReact(int userId)
+        {
+            UserInHomeWork userInHomeWork = new UserInHomeWork();
+            return userInHomeWork.GetUserInHomeWorkFromDb(userId);
+        }
+
+        [HttpPut]
+        [Route("api/Fetch/UpdateDataUserInHomeWork")]
+        public int UpdateHomeWorkFinishedReact([FromBody]UserInHomeWork userInHomeWork)
+        {
+            UserInHomeWork user = new UserInHomeWork();
+            return user.UpdateHomeWorkFinishedReact(userInHomeWork);
+
+        }
+        [HttpPut]
+        [Route("api/Fetch/userStartHomeWork")]
+        public int UpdateUserStartHomeWork([FromBody]UserInHomeWork userInHomeWork)
+        {
+            UserInHomeWork user = new UserInHomeWork();
+            return user.UpdateUserStartHomeWork(userInHomeWork);
+
         }
 
 

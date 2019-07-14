@@ -23,10 +23,12 @@ namespace Registration.Models
         public string HomeWork_Desc { get; set; }
         public string HomeWork_Image { get; set; }
         public string HomeWork_Audio { get; set; }
+        public bool IsHomeWork { get; set; }
 
         public UserInHomeWork(int userId,int class_id, int class_version,int homeWorkId,DateTime start_time,
             DateTime end_time, bool is_started,bool is_finished,DateTime should_start_time,
-            int user_feeling_start, int user_feeling_finish,string homeWork_name,string homeWork_desc,string homeWork_image,string homeWork_audio)
+            int user_feeling_start, int user_feeling_finish,string homeWork_name,string homeWork_desc,string homeWork_image,string homeWork_audio,
+            bool isHomeWork)
         {
             UserId = userId;
             Class_Id = class_id;
@@ -43,6 +45,7 @@ namespace Registration.Models
             HomeWork_Desc = homeWork_desc;
             HomeWork_Image = homeWork_image;
             HomeWork_Audio = homeWork_audio;
+            IsHomeWork = isHomeWork;
         }
         public UserInHomeWork()
         {
@@ -55,6 +58,22 @@ namespace Registration.Models
             DBservices db = new DBservices();
             userInHomeWork = db.GetUserInHomeWorkReact(userId, classVersion, classId);
             return userInHomeWork;
+        }
+        public UserInHomeWork GetUserInHomeWorkFromDb(int userId)
+        {
+            DBservices db = new DBservices();
+             return db.GetUserInHomeWorkFromDb(userId, "ConnectionStringPerson");
+            
+        }
+        public int UpdateHomeWorkFinishedReact(UserInHomeWork userInHomeWork)
+        {
+            DBservices db = new DBservices();
+            return db.UpdateHomeWorkFinishedReact(userInHomeWork, "ConnectionStringPerson");
+        }
+        public int UpdateUserStartHomeWork(UserInHomeWork userInHomeWork)
+        {
+            DBservices db = new DBservices();
+            return db.UpdateUserStartHomeWork(userInHomeWork, "ConnectionStringPerson");
         }
     }
 }

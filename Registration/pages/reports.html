@@ -34,6 +34,9 @@
         function ErrorGetAllCities() {
             console.log("failed");
         }
+        function goBack() {
+            window.history.back()
+        }
     </script>
     <style>
 
@@ -240,12 +243,15 @@
     <title></title>
 </head>
 <body>
+    <button onclick="goBack()">Go Back</button>
+
+   
     <div class="dashboard">
         <div class="col">
             <div class="card flat small">
                 <h1>ייצוא נתונים <span class="highlight">.</span></h1>
                 <p>להורדת נתוני המערכת לחצי על הכרטיס הרצוי והקובץ יישמר אוטומטית</p>
-               <!--<small>This Week in Review content is king engagement Romenesko RSS Wikipedia, data visualization advertising privacy discuss</small>-->
+                <!--<small>This Week in Review content is king engagement Romenesko RSS Wikipedia, data visualization advertising privacy discuss</small>-->
             </div>
             <div class="card xl">
                 <h2>נתונים כלליים</h2>
@@ -254,30 +260,30 @@
                     <li id="report2" class=" bordered" onclick="FileName(this.id,2)">נתוני קבוצות</li>
                     <li id="report3" class=" bordered" onclick="FileName(this.id,3)">נתוני שיעורים</li>
                     <li id="report4" class=" bordered" onclick="FileName(this.id,4)">נתוני מקטעים</li>
-                    
+
                 </ul>
-                      <!--<small>Paul Steiger hackgate community perfect for starting a campfire The Work of Art in the Age of Mechanical Reproduction SEO newspaper 5% corruption meme Journal Register Neil Postman</small>--> 
+                <!--<small>Paul Steiger hackgate community perfect for starting a campfire The Work of Art in the Age of Mechanical Reproduction SEO newspaper 5% corruption meme Journal Register Neil Postman</small>-->
             </div>
         </div>
         <div class="col">
-            <div class="card small"  onclick="FileName('report5',5)">
+            <div class="card small" onclick="FileName('report5',5)">
                 <h2 id="report5">נתוני שיעורים לכל משתמש</h2>
             </div>
-            <div  class="card large"  onclick="FileName('report6',6)">
+            <div class="card large" onclick="FileName('report6',6)">
                 <h2 id="report6">נתוני שיעורי בית לכל משתמש</h2>
             </div>
-            <div class="card"  onclick="FileName('report7',7)">
+            <div class="card" onclick="FileName('report7',7)">
                 <h2 id="report7"> ערים ויישובים לפי משתמשים</h2>
             </div>
         </div>
         <div class="col">
-            <div class="card"  onclick="FileName('report8',8)">
+            <div class="card" onclick="FileName('report8',8)">
                 <h2 id="report8">נתוני שיעורים לא מאושרים</h2>
             </div>
-            <div class="card"  onclick="FileName('report9',9)">
+            <div class="card" onclick="FileName('report9',9)">
                 <h2 id="report9">נתוני שיעורים לא מוכנים</h2>
             </div>
-            <div class="card large"  onclick="FileName('report10',10)">
+            <div class="card large" onclick="FileName('report10',10)">
                 <h2 id="report10">נתוני מסיימי הקורס</h2>
             </div>
         </div>

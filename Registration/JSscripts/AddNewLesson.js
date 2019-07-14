@@ -61,6 +61,11 @@ function AddSection() {
     var title = document.getElementById("section-title").value;
     var content = document.getElementById("section-content").value;
     var file_path = document.getElementById("section-image").value;
+   
+    var classImageNameIndex = file_path.lastIndexOf('\\');
+    file_path = "..\\Files" + file_path.substring(classImageNameIndex);
+
+
     var ready = document.getElementById("ready").checked;
 
     if (ready === true) {

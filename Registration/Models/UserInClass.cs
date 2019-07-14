@@ -28,11 +28,11 @@ namespace Registration.Models
 
         Dictionary<string, int> feelingStatus = new Dictionary<string, int>
             {
-                {"מודאג" , 1},
+                {"קודר" , 1},
                 {"עצוב",2 },
-                {"חזק",3 },
+                {"בסדר",3 },
                 {"שמח",4 },
-                {"מופתע",5 }
+                {"מאושר",5 }
             };
 
         public UserInClass(int userId, int classId, int classVersion, DateTime startTime, DateTime endTime, bool isStarted,

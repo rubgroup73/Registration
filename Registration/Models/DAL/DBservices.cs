@@ -1615,7 +1615,7 @@ namespace Registration.Models.DAL
             {
                 //**********************Getting all classes from a specific version***********// 
                 con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
-                string getClasses = "select * from class where class_version="+classVersion + "and class_status=4 order by class_id asc";
+                string getClasses = "select * from class where class_version="+classVersion + "and class_status=4 order by approved_class_position asc";
 
                 SqlCommand cmd = new SqlCommand(getClasses, con);
                 SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
@@ -2226,7 +2226,140 @@ namespace Registration.Models.DAL
             return updateComand;
         }
 
-      
+        //******************************************REACT******************************************//
+        //******************************Getting HomeWork of user for react***********************//
+        //***********************************************************************************************//
+        public UserInHomeWork GetUserInHomeWorkFromDb(int userId,string connectionString)
+        {
+
+            UserInHomeWork userInHomeWork = new UserInHomeWork();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+
+                string getClasses = "select uihw.homeworkid,uihw.userId,uihw.class_id,uihw.class_version,uihw.start_Time,uihw.end_Time,uihw.is_Started,uihw.is_Finished,uihw.should_start_time" +
+                    ",uihw.user_feeling_start,uihw.user_feeling_finish,hw.homework_name,hw.homework_desc,hw.homework_image,hw.homework_audio from userInHomeWork as uihw inner join homework as" +
+                    " hw on uihw.class_id=hw.class_id and uihw.class_version=hw.class_version where " +
+                    "userid="+userId+" and Convert(date,should_start_time)= Convert(date, getdate());";
+
+
+
+                SqlCommand cmd = new SqlCommand(getClasses, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+                if (dr.HasRows != false)
+                {
+                    while (dr.Read())
+                    {   // Read till the end of the data into a row
+                        userInHomeWork.IsHomeWork = true;
+                        userInHomeWork.UserId = Convert.ToInt32(dr["userId"]);
+                        userInHomeWork.Class_Id = Convert.ToInt32(dr["class_id"]);
+                        userInHomeWork.Class_Version = Convert.ToInt32(dr["class_version"]);
+                        userInHomeWork.HomeWork_Desc = (string)(dr["homework_desc"]);
+                        userInHomeWork.HomeWork_Audio = (string)(dr["homework_audio"]);
+                        userInHomeWork.HomeWork_Name = (string)dr["homework_name"];
+                        userInHomeWork.HomeWork_Image = (string)dr["homework_image"];
+                        userInHomeWork.Start_Time = DateTime.Parse(dr["start_Time"].ToString());
+                        userInHomeWork.End_Time = DateTime.Parse(dr["end_Time"].ToString());
+                        userInHomeWork.Is_Started = Convert.ToBoolean(dr["is_Started"]);
+                        userInHomeWork.Is_Finished = Convert.ToBoolean(dr["is_Finished"]);
+                        userInHomeWork.Should_Start_Time = DateTime.Parse(dr["should_start_time"].ToString());
+                        userInHomeWork.User_Feeling_Start = Convert.ToInt32(dr["user_feeling_start"]);
+                        userInHomeWork.User_Feeling_Finish = Convert.ToInt32(dr["user_feeling_finish"]);
+
+                    }
+                }
+                else { userInHomeWork.IsHomeWork = false; }
+
+                return userInHomeWork;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        //**
+        //**update when user start the class
+        public int UpdateHomeWorkFinishedReact(UserInHomeWork userInHomeWork, string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect(connectionString);
+            String cStr = BuildUpdateClassStartedStatusCommand2(userInHomeWork, userInHomeWork.UserId, userInHomeWork.Class_Version, userInHomeWork.Class_Id,false);
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+        public int UpdateUserStartHomeWork(UserInHomeWork userInHomeWork, string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect(connectionString);
+            String cStr = BuildUpdateClassStartedStatusCommand2(userInHomeWork, userInHomeWork.UserId, userInHomeWork.Class_Version, userInHomeWork.Class_Id, true);
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+        public string BuildUpdateClassStartedStatusCommand2(UserInHomeWork userInHomeWork, int userId, int Class_Version, int Class_Id, bool start)
+        {
+            if (start == true) {
+                userInHomeWork.Is_Started = true;
+            string updateComand = "UPDATE UserInHomeWork";
+            updateComand += " set Is_Started=" + Convert.ToInt32(userInHomeWork.Is_Started);
+            updateComand += " WHERE UserId=" + userId + " AND Class_Id=" + Class_Id + " AND Class_Version=" + Class_Version;
+            return updateComand; }
+        
+        else{
+                userInHomeWork.Is_Finished = true;
+                string updateComand = "UPDATE UserInHomeWork";
+                updateComand += " set Is_Finished=" + Convert.ToInt32(userInHomeWork.Is_Finished);
+                updateComand += " WHERE UserId=" + userId + " AND Class_Id=" + Class_Id + " AND Class_Version=" + Class_Version;
+                return updateComand;
+            }
+        }
         /*************************************************************************************************/
         /*************************************Create Sql Command******************************************/
         /************************************************************************************************/

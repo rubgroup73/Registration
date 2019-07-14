@@ -220,7 +220,6 @@
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DAL\DBservices.cs" />
     <Compile Include="Models\ExcelData.cs" />
-    <Compile Include="Models\ExcelData1.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\HomeWork.cs" />
     <Compile Include="Models\Media.cs" />
@@ -259,6 +258,7 @@
     <Content Include="pages\LoginPage.html" />
     <Content Include="pages\Registration.html" />
     <Content Include="pages\AddNewLsson.html" />
+    <Content Include="pages\reports.html" />
     <Content Include="pages\SectionEditor.html" />
     <Content Include="pages\UserManegement.html" />
     <Content Include="Scripts\ajaxCall.js" />
