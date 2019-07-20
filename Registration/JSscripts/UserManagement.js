@@ -37,14 +37,14 @@ function GetAllGroupsSuccess(groupsFromDb)
    
 }
 function ErrorGetAllGroups() {
-    alert("Error get all groups from DB");
+    console.log("Error get all groups from DB");
 }
 function GetAllUsersSuccess(allUsers) {
     allUsersArr = allUsers;
     ajaxCall("GET", "../api/userinclass/getAllUserInClass", "", GetAllUsersInClassSuccess, ErrorGetAllUserInClass);
 }
 function ErrorGetAllUsers() {
-    alert("Error get all Users from DB");
+    console.log("Error get all Users from DB");
 }
 function GetAllUsersInClassSuccess(usersInClass) {
     allUserInClass = usersInClass;
@@ -53,7 +53,7 @@ function GetAllUsersInClassSuccess(usersInClass) {
     
 }
 function ErrorGetAllUserInClass() {
-    alert("Error get all Users In Class from DB");
+    console.log("Error get all Users In Class from DB");
 }
 
 function GetAllCitiesSuccess(allCities) {
@@ -63,7 +63,7 @@ function GetAllCitiesSuccess(allCities) {
 
 }
 function ErrorGetAllCities() {
-    alert("Error Return All Cities From DB");
+    console.log("Error Return All Cities From DB");
 }
 
 function GetAllRegisteredSuccess(registered) {
@@ -72,7 +72,7 @@ function GetAllRegisteredSuccess(registered) {
 }
 
 function ErrorGetAllRegistered() {
-    alert("Error Return All Registered From DB");
+    console.log("Error Return All Registered From DB");
 }
 
 function allGraphs() {

@@ -228,6 +228,7 @@ namespace Registration.Models.DAL
             }
         }
 
+        //Insert only one home work, when creating a new class
         public int InsertHomeWorkToDB(HomeWork homeWork,int upgradeVer)
         {
             SqlConnection con;
@@ -244,6 +245,50 @@ namespace Registration.Models.DAL
             }
 
             String cStr = BuildInsertCommandHomeWork(homeWork,upgradeVer);      // **
+
+            cmd = CreateCommand(cStr, con);             // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the comman
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
+        //multiple classes
+        public int InsertHomeWorkToDBMultiple(List<AppClass> appClasses, int upgradeVer)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("ConnectionStringPerson"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            String cStr = "";
+            for (int i = 0; i < appClasses.Count; i++)
+            {
+                cStr += BuildInsertCommandHomeWork(appClasses[i].HomeWork, upgradeVer);
+            }
+                  // **
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -564,10 +609,10 @@ namespace Registration.Models.DAL
             try
             {
                 numEffected = cmd.ExecuteNonQuery(); // execute the command
-                if (numEffected == 1)
+                if (numEffected != 0)
                 {
                     con.Close();
-                    numEffected2 = InsertHomeWorkToDB(appClasses[0].HomeWork,2);//2= upgrade version
+                    numEffected2 = InsertHomeWorkToDBMultiple(appClasses,2);//2= upgrade version
                     
                 }
                 return numEffected2;

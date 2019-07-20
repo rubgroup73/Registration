@@ -5,23 +5,27 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../JSscripts/oursScripts.js"></script>
-
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'>
     <script src="../Scripts/ajaxCall.js"></script>
-
-
+    <link href="../stylesheets/HeaderNFooter.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
     <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
     <title>ייצוא דוחות</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <meta charset="utf-8" />
+
     <script>
+        function goBack() {
+            window.history.back();
+        }
         var filename;
         function FileName(filename, num) {
             filename = document.getElementById(filename).innerHTML;
             ajaxCall("GET", "../api/reports/getAllUsersFromDbExcel?text=" + filename + "&num=" + num, "", SccessGetAllCities, ErrorGetAllCities);
 
         }
-     
+
         function SccessGetAllCities(data) {
 
             var host = "http://proj.ruppin.ac.il/bgroup73/test1/tar4/reports/";
@@ -34,15 +38,12 @@
         function ErrorGetAllCities() {
             console.log("failed");
         }
-        function goBack() {
-            window.history.back()
-        }
     </script>
     <style>
 
-        body {
-            direction: rtl;
-        }
+
+
+
 
         * {
             box-sizing: border-box;
@@ -51,21 +52,20 @@
         html {
             height: 100%;
             background: #E2E3E9;
-            font-size: 14px;
         }
 
-        body {
+        .body {
             font-family: "Roboto", "Franklin Gothic Medium", Tahoma, sans-serif;
             line-height: 1.5;
             height: 100%;
             font-size: 1rem;
+            direction: rtl;
+            position: relative;
         }
 
         @media screen and (min-width: 960px) {
-            body {
-                height: 100vh;
+            .body {
                 border: 1.5rem solid #F7F8F9;
-                overflow: hidden;
             }
         }
 
@@ -238,53 +238,62 @@
             -moz-box-shadow: 0 10px 6px -6px #777;
             box-shadow: 0 10px 6px -6px #777;
         }
-        }
     </style>
     <title></title>
 </head>
 <body>
-    <button onclick="goBack()">Go Back</button>
+    <header class="header">
+        <img class="logoImage" src="../Images/Mindfulness4U Logo.png" />
+        <ul class="main-nav">
+            <li><a href="reports.html">ייצוא דו"חות לאקסל</a></li>
+            <li><a href="UserManegement.html">דו"חות וסטטיסטיקות</a></li>
+            <li><a href="AddAdminUser.html">יצירת מנהל חדש</a></li>
+            <li><a href="Registration.html">יצירת משתמש חדש</a></li>
+            <li onclick="CreateNewLesson()"><a href="AddNewLsson.html">יצירת שיעור חדש</a></li>
+            <li><a href="ContentReview.html">ניהול מערך שיעורים</a></li>
+        </ul>
 
-   
-    <div class="dashboard">
-        <div class="col">
-            <div class="card flat small">
-                <h1>ייצוא נתונים <span class="highlight">.</span></h1>
-                <p>להורדת נתוני המערכת לחצי על הכרטיס הרצוי והקובץ יישמר אוטומטית</p>
-                <!--<small>This Week in Review content is king engagement Romenesko RSS Wikipedia, data visualization advertising privacy discuss</small>-->
+    </header>
+    <div class="body">
+        <div class="dashboard">
+            <div class="col">
+                <div class="card flat small">
+                    <h1>ייצוא נתונים <span class="highlight">.</span></h1>
+                    <p>להורדת נתוני המערכת לחצי על הכרטיס הרצוי והקובץ יישמר אוטומטית</p>
+                    <!--<small>This Week in Review content is king engagement Romenesko RSS Wikipedia, data visualization advertising privacy discuss</small>-->
+                </div>
+                <div class="card xl">
+                    <h2>נתונים כלליים</h2>
+                    <ul class="keys">
+                        <li id="report1" class=" bordered" onclick="FileName(this.id,1)">נתוני משתמשים</li>
+                        <li id="report2" class=" bordered" onclick="FileName(this.id,2)">נתוני קבוצות</li>
+                        <li id="report3" class=" bordered" onclick="FileName(this.id,3)">נתוני שיעורים</li>
+                        <li id="report4" class=" bordered" onclick="FileName(this.id,4)">נתוני מקטעים</li>
+                    </ul>
+                    <!--<small>Paul Steiger hackgate community perfect for starting a campfire The Work of Art in the Age of Mechanical Reproduction SEO newspaper 5% corruption meme Journal Register Neil Postman</small>-->
+                </div>
             </div>
-            <div class="card xl">
-                <h2>נתונים כלליים</h2>
-                <ul class="keys">
-                    <li id="report1" class=" bordered" onclick="FileName(this.id,1)">נתוני משתמשים</li>
-                    <li id="report2" class=" bordered" onclick="FileName(this.id,2)">נתוני קבוצות</li>
-                    <li id="report3" class=" bordered" onclick="FileName(this.id,3)">נתוני שיעורים</li>
-                    <li id="report4" class=" bordered" onclick="FileName(this.id,4)">נתוני מקטעים</li>
-
-                </ul>
-                <!--<small>Paul Steiger hackgate community perfect for starting a campfire The Work of Art in the Age of Mechanical Reproduction SEO newspaper 5% corruption meme Journal Register Neil Postman</small>-->
+            <div class="col">
+                <div class="card small" onclick="FileName('report5',5)">
+                    <h2 id="report5">נתוני שיעורים לכל משתמש</h2>
+                </div>
+                <div class="card large" onclick="FileName('report6',6)">
+                    <h2 id="report6">נתוני שיעורי בית לכל משתמש</h2>
+                </div>
+                <div class="card" onclick="FileName('report7',7)">
+                    <h2 id="report7"> ערים ויישובים לפי משתמשים</h2>
+                </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card small" onclick="FileName('report5',5)">
-                <h2 id="report5">נתוני שיעורים לכל משתמש</h2>
-            </div>
-            <div class="card large" onclick="FileName('report6',6)">
-                <h2 id="report6">נתוני שיעורי בית לכל משתמש</h2>
-            </div>
-            <div class="card" onclick="FileName('report7',7)">
-                <h2 id="report7"> ערים ויישובים לפי משתמשים</h2>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card" onclick="FileName('report8',8)">
-                <h2 id="report8">נתוני שיעורים לא מאושרים</h2>
-            </div>
-            <div class="card" onclick="FileName('report9',9)">
-                <h2 id="report9">נתוני שיעורים לא מוכנים</h2>
-            </div>
-            <div class="card large" onclick="FileName('report10',10)">
-                <h2 id="report10">נתוני מסיימי הקורס</h2>
+            <div class="col">
+                <div class="card" onclick="FileName('report8',8)">
+                    <h2 id="report8">נתוני שיעורים לא מאושרים</h2>
+                </div>
+                <div class="card" onclick="FileName('report9',9)">
+                    <h2 id="report9">נתוני שיעורים לא מוכנים</h2>
+                </div>
+                <div class="card large" onclick="FileName('report10',10)">
+                    <h2 id="report10">נתוני מסיימי הקורס</h2>
+                </div>
             </div>
         </div>
     </div>

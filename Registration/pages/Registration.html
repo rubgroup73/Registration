@@ -90,17 +90,18 @@
     </script>
 
 </head>
-<body>
-    <header class="header">
+<body style="font-size:16px;">
+    <header class="header" style="font-size:16px;">
         <img class="logoImage" src="../Images/Mindfulness4U Logo.png" />
         <ul class="main-nav">
+            <li><a href="reports.html">ייצוא דו"חות לאקסל</a></li>
             <li><a href="UserManegement.html">דו"חות וסטטיסטיקות</a></li>
             <li><a href="AddAdminUser.html">יצירת מנהל חדש</a></li>
             <li><a href="Registration.html">יצירת משתמש חדש</a></li>
             <li onclick="CreateNewLesson()"><a href="AddNewLsson.html">יצירת שיעור חדש</a></li>
             <li><a href="ContentReview.html">ניהול מערך שיעורים</a></li>
-            <li><a href="reports.html">ייצוא דו"חות לאקסל</a></li>
         </ul>
+
     </header>
     <div class="container">
         <h1 class="well">רישום משתמש חדש</h1>
@@ -117,7 +118,6 @@
                                 <label>שם מלא</label>
                                 <input id="fullname" name="fullname" maxlength="30" placeholder="שם מלא" type="text" class="form-control" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode>=1488 && event.charCode<=1514)||(event.charCode==32)">
                             </div>
-
                         </div>
                     </div>
                     <div class="row">
@@ -130,15 +130,12 @@
                             <input id="username" name="username" maxlength="30" type="text" placeholder="הכנס שם משתמש כאן" class="form-control">
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-sm-6 form-group ui-widget">
                             <label for="city">עיר</label>
-
                             <select id="city" name="city" type="text" placeholder="הכנס שם משתמש כאן" class="form-control" autocomplete="on">
                                 <!--all cities will be here-->
                             </select>
-
                         </div>
                         <div class="form-group col-sm-6">
                             <label for="residence">סוג דיור</label>
@@ -147,7 +144,6 @@
                                 <option value="1">בית אבות</option>
                                 <option value="2">דיור מוגן</option>
                                 <option value="3">פרטי</option>
-
                             </select>
                         </div>
                     </div>
@@ -191,9 +187,7 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="row">
-
                         <div class="form-group col-sm-6">
                             <label for="prefday1">יום מועדף ראשון</label>
                             <select id="prefday1" class="form-control">
@@ -209,11 +203,8 @@
                             <label for="prefhour1">שעה מועדפת</label>
                             <select id="prefhour1" value="-1" class="form-control"></select>
                         </div>
-
                     </div>
-
                     <div class="row">
-
                         <div class=" rightToLeftDiv col-sm-6 form-group">
                             <label for="prefhour2"> שעה מועדפת לשיעורי בית</label>
                             <select id="prefhour2" class="form-control"></select>
@@ -227,11 +218,11 @@
                 <label class="col-md-4 control-label"></label>
                 <div class="col-md-4">
                     <button type="submit" class="btn btn-lg btn-info">שלח</button>
-                    </div>
                 </div>
+            </div>
         </form>
     </div>
-    
+
     <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js'></script>
     <script src="https://static.codepen.io/assets/editor/live/css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a75406858d92924b4938bf.js"></script>
 </body>

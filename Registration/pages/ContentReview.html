@@ -21,13 +21,14 @@
     <header class="header">
         <img class="logoImage" src="../Images/Mindfulness4U Logo.png" />
         <ul class="main-nav">
+            <li><a href="reports.html">ייצוא דו"חות לאקסל</a></li>
             <li><a href="UserManegement.html">דו"חות וסטטיסטיקות</a></li>
             <li><a href="AddAdminUser.html">יצירת מנהל חדש</a></li>
             <li><a href="Registration.html">יצירת משתמש חדש</a></li>
             <li onclick="CreateNewLesson()"><a href="AddNewLsson.html">יצירת שיעור חדש</a></li>
             <li><a href="ContentReview.html">ניהול מערך שיעורים</a></li>
-            <li><a href="reports.html">ייצוא דו"חות לאקסל</a></li>
         </ul>
+
     </header>
     <div class="container">
         <div class="row">
@@ -36,7 +37,6 @@
                 <h4 class="title">לחצי על השיעור הרצוי והעבירי אותו למיקום המתאים</h4>
             </div>
         </div>
-
         <div class="row">
             <div class="col-sm-12">
                 <div class="drag-container">
@@ -49,10 +49,9 @@
                             <div class="drag-options" id="options6"></div>
                             <ul class="drag-inner-list" id="6"></ul>
                         </li>
-
                         <li class="drag-column drag-column-in-progress">
                             <span style="direction:rtl" class="drag-column-header">
-                                <h2 >שיעורים לא מוכנים</h2>
+                                <h2>שיעורים לא מוכנים</h2>
                                 <svg class="drag-header-more" data-target="options2" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
                             </span>
                             <div class="drag-options" id="options2"></div>
@@ -60,7 +59,7 @@
                         </li>
                         <li class="drag-column drag-column-needs-review">
                             <span style="direction:rtl" class="drag-column-header">
-                                <h2 >שיעורים מוכנים </h2>
+                                <h2>שיעורים מוכנים </h2>
                                 <svg data-target="options3" class="drag-header-more" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
                             </span>
                             <div class="drag-options" id="options3"></div>
@@ -76,17 +75,13 @@
                         </li>
                     </ul>
                 </div>
-
                 <!--ברגע שלוחצים על 'שמור שינויים' הפונציה של השמירה של דאטה בייס מופעלת בעמוד של הג'אווה סיקריפט'-->
                 <button class="button-secondary pure-button" onclick="SaveClassToDB()">שמור שינויים</button>
             </div>
         </div>
     </div>
 
-
-
     <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/45226/dragula.min.js'></script>
     <script src="../JSscripts/ContentReviewDrag.js"></script>
-
 </body>
 </html>
