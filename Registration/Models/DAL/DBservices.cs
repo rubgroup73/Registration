@@ -82,6 +82,7 @@ namespace Registration.Models.DAL
                     user.FullName = (string)(dr["fullname"]);
                     user.Group_Id = Convert.ToInt32(dr["group_id"]);
                     user.Group_Version = Convert.ToInt32(dr["group_version"]);
+                    user.Token = (string)(dr["Token"]);
 
                 }
 
@@ -178,7 +179,7 @@ namespace Registration.Models.DAL
         }
 
         /**************************************************************************************************/
-        /*******************************Insert Class*******************************************************/
+        /*******************************Insert new Class - Add new class*******************************************************/
  
         public int InsertClassToDB(AppClass appClass)
         {
@@ -206,7 +207,7 @@ namespace Registration.Models.DAL
                 if (numEffected == 1)
                 {
                     con.Close();
-                    InsertHomeWorkToDB(appClass.HomeWork);
+                    InsertHomeWorkToDB(appClass.HomeWork,1);//1 = not upgrade version
                 
                 }
                 return numEffected;
@@ -227,7 +228,7 @@ namespace Registration.Models.DAL
             }
         }
 
-        public int InsertHomeWorkToDB(HomeWork homeWork)
+        public int InsertHomeWorkToDB(HomeWork homeWork,int upgradeVer)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -242,7 +243,7 @@ namespace Registration.Models.DAL
                 throw (ex);
             }
 
-            String cStr = BuildInsertCommandHomeWork(homeWork);      // helper method to build the insert string
+            String cStr = BuildInsertCommandHomeWork(homeWork,upgradeVer);      // **
 
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -281,10 +282,13 @@ namespace Registration.Models.DAL
        
 
         /*******************************Insert Homewok********************************************/
-        private String BuildInsertCommandHomeWork(HomeWork homework)
+        private String BuildInsertCommandHomeWork(HomeWork homework,int upgradeVer)//**
         {
             String command;
-
+            if (upgradeVer == 2)
+            {
+                homework.Class_Version += 1;
+            }
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
             sb.AppendFormat(" Values({0},{1},'{2}','{3}','{4}','{5}'); ", homework.Class_Id, homework.Class_Version, homework.Homework_Name, homework.Homework_Desc, homework.Homework_Image, homework.Homework_Audio);
@@ -331,7 +335,7 @@ namespace Registration.Models.DAL
                     appClass.Position = Convert.ToInt32(dr["approved_class_position"]);
                     appClass.Score = Convert.ToInt32(dr["score"]);
                     appClass.Version = Convert.ToInt32(dr["class_version"]);
-                    
+                    appClass.Class_File_Path= (string)dr["Class_File_Path"];
                     //appClass.CreationDate = Convert.ToDateTime(dr["class_timestamp"]);
                     allClass.Add(appClass);
                 }
@@ -531,6 +535,60 @@ namespace Registration.Models.DAL
                 }
             }
         }
+        //*********************************************************************************
+        //************Insert Class Array with new version*****
+        public int InsertNewClassArray2(List<AppClass> appClasses, string connectionString)
+        {
+            int numEffected = 0;
+            int numEffected2 = 0;
+            SqlConnection con;
+            SqlCommand cmd;
+            String cStr = "";
+            
+            try
+            {
+                con = connect(connectionString); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            for (int i = 0; i < appClasses.Count; i++)
+            {
+                cStr += BuildInsertCommandClass(appClasses[i]);
+            }
+
+            cmd = CreateCommand(cStr, con);             // create the command
+            
+            try
+            {
+                numEffected = cmd.ExecuteNonQuery(); // execute the command
+                if (numEffected == 1)
+                {
+                    con.Close();
+                    numEffected2 = InsertHomeWorkToDB(appClasses[0].HomeWork,2);//2= upgrade version
+                    
+                }
+                return numEffected2;
+
+            }
+            
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+        }
 
         //*
         //*insert updated homework version after push the "shmor shinueem"
@@ -547,7 +605,7 @@ namespace Registration.Models.DAL
             {throw (ex); }
             for (int i = 0; i < appClasses.Count; i++)
             {
-                cStr += BuildInsertCommandHomeWork(appClasses[i].HomeWork);
+                cStr += BuildInsertCommandHomeWork(appClasses[i].HomeWork,2);//**
             }
             cmd = CreateCommand(cStr, con);             // create the command
 
@@ -598,7 +656,8 @@ namespace Registration.Models.DAL
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery();
+                
                 return numEffected;
             }
             catch (Exception ex)
@@ -2358,6 +2417,127 @@ namespace Registration.Models.DAL
                 updateComand += " set Is_Finished=" + Convert.ToInt32(userInHomeWork.Is_Finished);
                 updateComand += " WHERE UserId=" + userId + " AND Class_Id=" + Class_Id + " AND Class_Version=" + Class_Version;
                 return updateComand;
+            }
+        }
+
+        //**
+        //**create token for user, when login first time in React
+        public int UpdateUserStartHomeWork(string username, string token,string connectionString)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+            con = connect(connectionString);
+            String cStr = "UPDATE AppUser SET token=" + token + " WHERE UserName=" + username;
+            cmd = CreateCommand(cStr, con);
+
+            try
+            {
+                int numAffected = cmd.ExecuteNonQuery();
+                return numAffected;
+
+            }
+            catch (Exception ex)
+            {
+                return 0;
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                { con.Close(); }
+            }
+        }
+
+        /*************************************************************************************************/
+        /*****************************Get All Messages from DB React**************************************/
+         
+        public List<Messages> GetAllMessagesDb(int groupId,int groupVersion,string connectionString)
+        {
+
+            List<Messages> messages = new List<Messages>();
+            SqlConnection con = null;
+            try
+            {
+
+                con = connect(connectionString); // create a connection to the database using the connection String defined in the web config file
+                //string getUsers = "SELECT * FROM " + tableName + " where group_id = -1; ";
+                string getMessages = "SELECT * FROM group_chat as gc inner join appuser as au on gc.userId = au.UserID where gc.group_version =" + groupVersion + " and gc.group_id =" + groupId + " order by gc.SentDate desc;";
+
+
+                SqlCommand cmd = new SqlCommand(getMessages, con);
+                SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+                while (dr.Read())
+                {   // Read till the end of the data into a row
+                    Messages message = new Messages();
+                    message.UserId = Convert.ToInt32(dr["userId"]);
+                    message.Full_Name = (string)(dr["fullname"]);
+                    message.Group_Id = Convert.ToInt32(dr["group_id"]);
+                    message.Group_Version= Convert.ToInt32(dr["Group_Version"]);
+                    message.SentDate = DateTime.Parse(dr["sentdate"].ToString());
+                    message.Content= (string)(dr["Content"]);
+
+                    messages.Add(message);
+                }
+
+                return messages;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+
+            }
+
+        }
+        /*************************************************************************************************/
+        /*****************************React-Insert New Message**************************************/
+        public int UpdateMessagesDb(Messages message)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("ConnectionStringPerson"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            String cStr = "insert into Group_Chat(userId,group_id,group_version,SentDate,content) VALUES(" + message.UserId + "," + message.Group_Id + "," + message.Group_Version + ",'" + message.SentDate.ToString() + "','" + message.Content + "');";
+
+            cmd = CreateCommand(cStr, con); // create the command
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
             }
         }
         /*************************************************************************************************/

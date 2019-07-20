@@ -63,5 +63,11 @@ namespace Registration.Models
             return db.InsertNewClassArray(appClass,"ConnectionStringPerson");
              
         }
+        public int InsertNewClassArray2(List<AppClass> appClass)
+        {
+            DBservices db = new DBservices();
+            return db.InsertNewClassArray2(appClass, "ConnectionStringPerson");
+
+        }
     }
 }

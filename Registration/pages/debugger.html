@@ -15,26 +15,16 @@
     <script>
         $(document).ready(function () {
             //UpdateSection();
-            UserInHomeWork = 
-                {
-                Class_Id: 248,
-       Class_Version: 118,
-End_Time: "1900-01-01T00:00:00",
-HomeWorkId: 0,
-HomeWork_Audio: "http://proj.ruppin.ac.il/bgroup73/test1/tar4/mediafiles/big.mp3",
-HomeWork_Desc: "GAVRI",
-HomeWork_Image: "..\Files\iniesta.jpg",
-HomeWork_Name: "גברי",
-IsHomeWork: true,
-Is_Finished: false,
-Is_Started: false,
-Should_Start_Time: "2019-07-14T12:31:56",
-Start_Time: "2019-07-14 17:10:18",
-UserId: 161,
-User_Feeling_Finish: -1,
-User_Feeling_Start: -1
-                }
-            ajaxCall("PUT", "../api/Fetch/userStartHomeWork", JSON.stringify(UserInHomeWork), SccessGetAllCities, ErrorGetAllCities);
+            Messages = {
+   
+                "UserId": 161,
+                 "Full_Name": "גברי",
+                 "Group_Id": 26,
+                  "Group_Version": 2,
+                  "SentDate": "2012-08-07 15:22:00",
+                  "Content": "מני קוקלר וגברי זרקה"
+            }
+            ajaxCall("POST", "../api/Fetch/UpdateMessagesDb", JSON.stringify(Messages), SccessGetAllCities, ErrorGetAllCities);
 
         });
 

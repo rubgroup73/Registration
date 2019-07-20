@@ -41,13 +41,21 @@ namespace Registration.Controllers
         /**********Insert Class Array to DB*********/
         [HttpPost]
         [Route("api/class/classArray")]
-        public int InsertNewClassArray(List<AppClass> appClass)
+        public int InsertNewClassArray([FromBody]List<AppClass> appClass)
         {
             AppClass app = new AppClass();
             int numEffected = app.InsertNewClassArray(appClass);
             return numEffected;
         }
+        [HttpPost]
+        [Route("api/class/updateClassArray")]
+        public int InsertNewClassArray2([FromBody]List<AppClass> appClass)
+        {
+            AppClass app = new AppClass();
+            int numEffected = app.InsertNewClassArray2(appClass);
+            return numEffected;
+        }
 
- 
+
     }
 }

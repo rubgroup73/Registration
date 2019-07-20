@@ -45,7 +45,8 @@ var section_for_edit;
 var notReady;
 var waiting;
 var ready;
-
+var class_file_path;
+var homework;
 //Template for Section
 function Section_Json(id, title, content, status, position, class_version, class_id, file_path) {
     this.Id = id,
@@ -114,7 +115,7 @@ function Delete(e,id) {
 
 /***************************End Get Last Id And Save Class*****************************************************/
 
-function AddClass(title,description,position,status) {
+function AddClass(title,description,position,status,image,homework) {
 
     
     Class = {
@@ -126,6 +127,8 @@ function AddClass(title,description,position,status) {
         Score: 50,
         Version: classMaxVersion,
         Sections: generalSectionsArr,
+        Class_File_Path: image,
+        HomeWork: homework
   
     }
 
@@ -145,7 +148,7 @@ function AddClass(title,description,position,status) {
     for (var k = 0; k < generalSectionsArr.length; k++) {
         generalSectionsArr[k].Version = classMaxVersion + 1;
     }
-    ajaxCall("POST", "../api/class/classArray", JSON.stringify(allClasses), ClassAddSuccess, CalssAddError);
+    ajaxCall("POST", "../api/class/updateClassArray", JSON.stringify(allClasses), ClassAddSuccess, CalssAddError);
 }
 
 
@@ -162,10 +165,11 @@ function ShowSectionsFromDB() {
     class_position = class_object.Position;
     class_status = class_object.Status;
     class_id = class_object.Id;
-
+    class_file_path = class_object.Class_File_Path;
+    homework = class_object.HomeWork;
     document.getElementById("class-title").value = class_title;
     document.getElementById("class-desc").value = class_desc;
-
+    
     CheckStatus();
     let status;
     let id;
@@ -203,7 +207,8 @@ function ShowSectionsFromDB() {
 function UpdateSectionStatus() {
   
      class_title = document.getElementById("class-title").value;
-     class_desc = document.getElementById("class-desc").value;
+    class_desc = document.getElementById("class-desc").value;
+    
     notReady = document.getElementById("2").children;
     waiting = document.getElementById("3").children;
     ready = document.getElementById("4").children;
@@ -232,7 +237,7 @@ function UpdateSectionStatus() {
             }
         }
     }
-    AddClass(class_title, class_desc, class_position, class_status);
+    AddClass(class_title, class_desc, class_position, class_status, class_file_path, homework);
 }
 //בודק שקיימים סקשנים בשיעור החדש
 function CheckExistingSections() {

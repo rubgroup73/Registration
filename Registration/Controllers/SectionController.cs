@@ -31,7 +31,7 @@ namespace Registration.Controllers
         /*******Insert a new class into DB*******/
         [HttpPost]
         [Route("api/section/addnewsection")]
-        public int InsertClass(List<Section> Sections)
+        public int InsertClass([FromBody]List<Section> Sections)
         {
             Section section = new Section();
             int numEffected = section.InsertNewSessionsToDB(Sections);

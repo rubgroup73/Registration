@@ -9,7 +9,9 @@ namespace Registration.Models
     public class User
     {
         
-        public User(int id,string fullName,string gender, int status, int yearsOfEducation,string userName,string password,int residence,int prefDay1,string phone,int city, string birthDate,int prefHour1 , int prefHour2 , string mail, int group_id,int group_version,Group group ,int score=0,bool credentials = false)
+        public User(int id,string fullName,string gender, int status, int yearsOfEducation,string userName,string password,int residence
+            ,int prefDay1,string phone,int city, string birthDate,int prefHour1 , int prefHour2 , 
+            string mail, int group_id,int group_version,Group group,string token ,int score=0,bool credentials = false)
         {
             Id = id;
             FullName = fullName;
@@ -30,6 +32,7 @@ namespace Registration.Models
             Group_Id = group_id;
             Group_Version = group_version;
             Group = group;
+            Token = token;
             Mail = mail;
         }
 
@@ -66,6 +69,7 @@ namespace Registration.Models
         public int Group_Id { get; set; }
         public int Group_Version { get; set; }
         public Group Group { get; set; }
+        public string Token { get; set; }
         public string Mail { get; set; }
         
 
@@ -133,6 +137,14 @@ namespace Registration.Models
             user.Group_Version = user.Group.Group_Version;
             int userId = db.InsertToGroup(user, "AppUser", "class_group", "ConnectionStringPerson");
             return userId;
+        }
+
+        public int UpdateUserStartHomeWork(string username, string token)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.UpdateUserStartHomeWork(username, token, "ConnectionStringPerson");
+
+
         }
 
     }

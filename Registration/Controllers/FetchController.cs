@@ -80,7 +80,6 @@ namespace Registration.Controllers
         {
             UserInClass user = new UserInClass();
             return user.UserFeelingsReact(userInClass);
-    
         }
 
         [HttpPut]
@@ -152,8 +151,29 @@ namespace Registration.Controllers
             return user.UpdateUserStartHomeWork(userInHomeWork);
 
         }
+        [HttpPut]
+        [Route("api/fetch/createToken")]
+        public int UpdateUserStartHomeWork(string username, string token)
+        {
+            User user = new User();
+            return user.UpdateUserStartHomeWork(username, token);
 
+        }
 
+        [HttpGet]
+        [Route("api/Fetch/GetAllMessagesDb")]
+        public List<Messages> GetAllMessagesDb(int groupId,int groupVersion)
+        {
+            Messages messages = new Messages();
+            return messages.GetAllMessagesDb(groupId, groupVersion);
+        }
+        [HttpPost]
+        [Route("api/Fetch/UpdateMessagesDb")]
+        public int UpdateMessagesDb([FromBody]Messages message)
+        {
+            Messages m = new Messages();
+            return m.UpdateMessagesDb(message);
+        }
 
     }
 }
