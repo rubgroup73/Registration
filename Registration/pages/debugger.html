@@ -15,16 +15,26 @@
     <script>
         $(document).ready(function () {
             //UpdateSection();
-            Messages = {
+            UserInClass = {
    
-                "UserId": 161,
-                 "Full_Name": "גברי",
-                 "Group_Id": 26,
-                  "Group_Version": 2,
-                  "SentDate": "2012-08-07 15:22:00",
-                  "Content": "מני קוקלר וגברי זרקה"
+        BeforeClass: false,
+ClassId:248,
+ClassPosition: 0,
+ClassVersion: 118,
+EndTime: "2019-12-01T00:00:00",
+IsFinished: false,
+IsNextLesson: false,
+IsStarted: true,
+NextLessonInReact: 248,
+Section: null,
+ShouldStart: "2019-07-20",
+StartTime: "2019-07-01T00:00:00",
+UserId: 165,
+UserInHomeWork: null,
+User_Feeling: null,
+User_Feeling_Finish: null,
             }
-            ajaxCall("POST", "../api/Fetch/UpdateMessagesDb", JSON.stringify(Messages), SccessGetAllCities, ErrorGetAllCities);
+            ajaxCall("PUT", "../api/Fetch/UpdateClassStartedReact", JSON.stringify(UserInClass), SccessGetAllCities, ErrorGetAllCities);
 
         });
 

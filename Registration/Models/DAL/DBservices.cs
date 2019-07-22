@@ -2325,7 +2325,7 @@ namespace Registration.Models.DAL
         {
             userInClass.IsStarted = true;
             string updateComand = "UPDATE UserInClass";
-            updateComand += " set IsStarted=" + Convert.ToInt32(userInClass.IsStarted);
+            updateComand += " set IsStarted=" + Convert.ToInt32(userInClass.IsStarted)+" and startTime="+userInClass.StartTime;
             updateComand += " WHERE UserId=" + userId + " AND ClassId=" + classId + " AND ClassVersion=" + classVersion;
             return updateComand;
         }
