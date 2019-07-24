@@ -34,7 +34,7 @@ UserInHomeWork: null,
 User_Feeling: null,
 User_Feeling_Finish: null,
             }
-            ajaxCall("PUT", "../api/Fetch/UpdateClassStartedReact", JSON.stringify(UserInClass), SccessGetAllCities, ErrorGetAllCities);
+            ajaxCall("GET", "../api/Fetch/returnhomeworkforuser?userId=165", "", SccessGetAllCities, ErrorGetAllCities);
 
         });
 
